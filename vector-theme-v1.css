@@ -1,0 +1,127 @@
+/* Health+ / VECTOR LOOP — light/dark theme layer */
+:root{color-scheme:dark}
+html[data-vector-theme="light"]{color-scheme:light;background:#eef3fc}
+html[data-vector-theme="dark"]{color-scheme:dark;background:#0e1836}
+
+/* Persistent theme switch in the app header */
+.vector-theme-toggle{position:absolute;right:76px;top:calc(15px + env(safe-area-inset-top));z-index:30;width:40px;height:40px;padding:0;border-radius:14px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.045);color:#b7c0d9;display:grid;place-items:center;font-size:18px;line-height:1;box-shadow:none;transition:transform .18s cubic-bezier(.2,.8,.2,1),background .24s ease,color .24s ease,border-color .24s ease}
+.vector-theme-toggle:active{transform:scale(.92)}
+.vector-theme-toggle .theme-sun,.vector-theme-toggle .theme-moon{position:absolute;transition:opacity .24s ease,transform .35s cubic-bezier(.2,.82,.2,1)}
+html[data-vector-theme="dark"] .vector-theme-toggle .theme-sun{opacity:1;transform:scale(1) rotate(0)}
+html[data-vector-theme="dark"] .vector-theme-toggle .theme-moon{opacity:0;transform:scale(.65) rotate(-30deg)}
+html[data-vector-theme="light"] .vector-theme-toggle .theme-sun{opacity:0;transform:scale(.65) rotate(30deg)}
+html[data-vector-theme="light"] .vector-theme-toggle .theme-moon{opacity:1;transform:scale(1) rotate(0)}
+
+/* LIGHT PALETTE */
+html[data-vector-theme="light"] .app{
+  --bg:#f4f7fd;--bg2:#eaf0fa;--panel:#ffffff;--panel2:#f5f7fc;--text:#16213e;--muted:#6d7894;--line:rgba(41,55,91,.11);--accent:#7568ee;--cyan:#3cb9ed;--good:#2aa77c;--warn:#c58a28;
+  color:var(--text)!important;
+  background:radial-gradient(circle at 72% -4%,rgba(124,142,255,.16),transparent 29%),radial-gradient(circle at 18% 8%,rgba(115,210,255,.14),transparent 25%),linear-gradient(180deg,#f8faff 0%,#eef3fb 58%,#e8eef8 100%)!important;
+}
+html[data-vector-theme="light"] .app[data-period="morning"]{background:radial-gradient(circle at 20% 0%,rgba(255,191,151,.22),transparent 26%),radial-gradient(circle at 80% 4%,rgba(91,198,255,.18),transparent 30%),linear-gradient(180deg,#fbfcff,#eef4fb)!important}
+html[data-vector-theme="light"] .app[data-period="day"]{background:radial-gradient(circle at 65% -2%,rgba(96,196,255,.19),transparent 31%),linear-gradient(180deg,#f8fbff,#edf3fb)!important}
+html[data-vector-theme="light"] .app[data-period="evening"]{background:radial-gradient(circle at 72% 0%,rgba(255,166,145,.19),transparent 28%),radial-gradient(circle at 28% 8%,rgba(150,124,255,.15),transparent 30%),linear-gradient(180deg,#fbf7fb,#eef1fa)!important}
+html[data-vector-theme="light"] .app[data-period="night"]{background:radial-gradient(circle at 70% -4%,rgba(114,126,225,.14),transparent 31%),linear-gradient(180deg,#f5f7fd,#e9eff9)!important}
+
+html[data-vector-theme="light"] .app-header{background:linear-gradient(180deg,rgba(248,250,255,.96),rgba(248,250,255,.76) 72%,transparent)!important}
+html[data-vector-theme="light"] .brand b{color:#17203d!important}
+html[data-vector-theme="light"] .brand small{color:#7b86a2!important}
+html[data-vector-theme="light"] .header-status{background:rgba(255,255,255,.58)!important;border-color:rgba(37,51,85,.1)!important;color:#6e7892!important}
+html[data-vector-theme="light"] .vector-theme-toggle{background:rgba(255,255,255,.72);border-color:rgba(37,51,85,.11);color:#6b5fe0;box-shadow:0 8px 22px rgba(50,67,103,.08)}
+
+html[data-vector-theme="light"] .bottom-nav{background:rgba(249,251,255,.96)!important;border-color:rgba(39,54,91,.11)!important;box-shadow:0 -16px 38px rgba(61,74,109,.10)!important}
+html[data-vector-theme="light"] .bottom-nav button{color:#74809b!important}
+html[data-vector-theme="light"] .bottom-nav button.active{color:#6c5ee7!important}
+html[data-vector-theme="light"] .bottom-nav button.active:before{background:#41b9ed!important;box-shadow:0 0 12px rgba(65,185,237,.32)!important}
+html[data-vector-theme="light"] .vq-mini-core{box-shadow:0 0 0 8px rgba(240,244,252,.96),0 12px 28px rgba(75,74,166,.18),0 0 28px rgba(123,116,255,.19)!important}
+
+/* Main cards */
+html[data-vector-theme="light"] .one-action,
+html[data-vector-theme="light"] .recalc-banner,
+html[data-vector-theme="light"] .route-peek,
+html[data-vector-theme="light"] .camera-hero,
+html[data-vector-theme="light"] .analytics-entry,
+html[data-vector-theme="light"] .route-list,
+html[data-vector-theme="light"] .route-message,
+html[data-vector-theme="light"] .route-philosophy,
+html[data-vector-theme="light"] .dose-card,
+html[data-vector-theme="light"] .ladder,
+html[data-vector-theme="light"] .program,
+html[data-vector-theme="light"] .food-result,
+html[data-vector-theme="light"] .food-day,
+html[data-vector-theme="light"] .meal-row,
+html[data-vector-theme="light"] .experiment,
+html[data-vector-theme="light"] .learning,
+html[data-vector-theme="light"] .me-card,
+html[data-vector-theme="light"] .profile-card,
+html[data-vector-theme="light"] details{
+  background:rgba(255,255,255,.78)!important;
+  border-color:rgba(39,54,91,.10)!important;
+  color:#18213e!important;
+  box-shadow:0 18px 45px rgba(55,68,104,.07)!important;
+}
+html[data-vector-theme="light"] .one-action{background:linear-gradient(145deg,rgba(255,255,255,.94),rgba(246,248,254,.92))!important}
+html[data-vector-theme="light"] .one-action.calm{background:rgba(255,255,255,.66)!important}
+html[data-vector-theme="light"] .screen h1,
+html[data-vector-theme="light"] .screen h2,
+html[data-vector-theme="light"] .screen h3,
+html[data-vector-theme="light"] .screen b,
+html[data-vector-theme="light"] .screen strong{color:#17203c}
+html[data-vector-theme="light"] .screen p,
+html[data-vector-theme="light"] .screen .empty,
+html[data-vector-theme="light"] .screen .hold-note,
+html[data-vector-theme="light"] .screen .silence-note{color:#6e7894!important}
+html[data-vector-theme="light"] .now-copy small,
+html[data-vector-theme="light"] .page-title small,
+html[data-vector-theme="light"] .one-action>small,
+html[data-vector-theme="light"] .section-head small,
+html[data-vector-theme="light"] .dose-copy small,
+html[data-vector-theme="light"] .ladder>small{color:#6d60e7!important}
+html[data-vector-theme="light"] .route-dot{background:#f5f7fc!important;border-color:#a9b1c4!important}
+html[data-vector-theme="light"] .route-row:not(:last-child):after{background:rgba(41,55,91,.10)!important}
+html[data-vector-theme="light"] .route-row time{color:#77829b!important}
+html[data-vector-theme="light"] .route-row small{color:#7d879f!important}
+html[data-vector-theme="light"] .program>span,
+html[data-vector-theme="light"] .camera-hero>span{background:rgba(113,99,235,.08)!important;border-color:rgba(113,99,235,.13)!important;color:#6d61e3!important}
+html[data-vector-theme="light"] .action-primary{color:#fff!important;box-shadow:0 12px 28px rgba(94,78,207,.18)!important}
+
+/* The hero sphere remains saturated; its quote becomes a soft light bubble. */
+html[data-vector-theme="light"] .state-sphere{box-shadow:0 24px 52px rgba(99,91,190,.19),0 0 38px rgba(113,120,244,.14),inset 0 0 28px rgba(255,255,255,.18)!important}
+html[data-vector-theme="light"] .vector-quote{background:rgba(255,255,255,.94)!important;border-color:rgba(39,54,91,.10)!important;color:#25304b!important;box-shadow:0 18px 40px rgba(55,68,104,.12)!important}
+html[data-vector-theme="light"] .vector-quote.deep{background:linear-gradient(145deg,#ffffff,#f2f4fc)!important;color:#17203c!important}
+
+/* QUICK ACTIONS — light version */
+html[data-vector-theme="light"] .vector-quick-v3{color:#17203c}
+html[data-vector-theme="light"] .vq-backdrop{background:rgba(225,232,246,.68)!important}
+html[data-vector-theme="light"] .vq-panel{background:radial-gradient(circle at 50% 91%,rgba(126,105,244,.14),transparent 23%),radial-gradient(circle at 76% 31%,rgba(80,190,244,.13),transparent 29%),linear-gradient(180deg,rgba(248,250,255,.98),rgba(233,239,249,.99))!important}
+html[data-vector-theme="light"] .vq-head small{color:#7b86a1!important}
+html[data-vector-theme="light"] .vq-head h2{color:#17203c!important}
+html[data-vector-theme="light"] .vq-close{background:rgba(255,255,255,.76)!important;border-color:rgba(39,54,91,.10)!important;color:#65718c!important}
+html[data-vector-theme="light"] .vq-action{color:#202a46!important}
+html[data-vector-theme="light"] .vq-action small{color:#7b86a0!important}
+html[data-vector-theme="light"] .vq-action>span{background:rgba(255,255,255,.82)!important;border-color:rgba(39,54,91,.10)!important;box-shadow:0 10px 24px rgba(57,70,105,.09)!important}
+html[data-vector-theme="light"] .vq-page-switch{background:rgba(255,255,255,.76)!important;border-color:rgba(39,54,91,.09)!important;color:#69748e!important}
+html[data-vector-theme="light"] .vq-page-switch i{background:#bac1d1!important}
+html[data-vector-theme="light"] .vq-page-switch i.active{background:#7467ec!important}
+html[data-vector-theme="light"] .vq-bottom-core{box-shadow:0 0 0 12px rgba(239,243,252,.92),0 0 0 24px rgba(112,93,220,.06),0 16px 38px rgba(67,61,156,.18)!important}
+
+/* Utility sheets — timer, breathing, reminder, feeling, AI */
+html[data-vector-theme="light"] .vector-action-utility{color:#17203c}
+html[data-vector-theme="light"] .vau-backdrop{background:rgba(222,229,243,.68)!important}
+html[data-vector-theme="light"] .vau-card{background:linear-gradient(155deg,#ffffff,#f0f4fb)!important;border-color:rgba(39,54,91,.10)!important;box-shadow:0 28px 65px rgba(50,63,98,.17)!important}
+html[data-vector-theme="light"] .vau-x{background:rgba(34,49,83,.055)!important;color:#6c7690!important}
+html[data-vector-theme="light"] .vau-card h2{color:#17203c!important}
+html[data-vector-theme="light"] .vau-card p{color:#727d98!important}
+html[data-vector-theme="light"] .vau-presets button,
+html[data-vector-theme="light"] .vau-feelings button{background:rgba(255,255,255,.74)!important;border-color:rgba(39,54,91,.09)!important;color:#293450!important}
+html[data-vector-theme="light"] .vau-input{background:#fff!important;border-color:rgba(39,54,91,.12)!important;color:#1c2744!important}
+html[data-vector-theme="light"] .vau-input::placeholder{color:#9aa4b9!important}
+html[data-vector-theme="light"] .vau-ai-answer{background:rgba(255,255,255,.74)!important;color:#33405e!important}
+
+/* Generic onboarding/light overlays used by VECTOR LOOP */
+html[data-vector-theme="light"] [class*="ob-"][class*="card"],
+html[data-vector-theme="light"] [class*="sheet"],
+html[data-vector-theme="light"] [class*="modal-card"]{border-color:rgba(39,54,91,.10)}
+
+@media(max-width:390px){.vector-theme-toggle{right:69px;width:38px;height:38px;top:calc(16px + env(safe-area-inset-top))}}
+@media(prefers-reduced-motion:reduce){.vector-theme-toggle,.vector-theme-toggle *{transition:none!important}}

@@ -2,7 +2,7 @@
   "use strict";
   const app = document.getElementById("app");
   if (!app) return;
-  const VERSION = "20260904-8";
+  const VERSION = "20260904-9";
 
   function period() {
     const hour = new Date().getHours();
@@ -48,8 +48,11 @@
   styleOnce("experience-v2-css-loader", "./experience-v2.css");
   styleOnce("cleanup-v3-css-loader", "./cleanup-v3.css");
   styleOnce("onboarding-css-loader", "./onboarding.css");
+  styleOnce("shell-v4-css-loader", "./shell-v4.css");
+
   scriptOnce("final-ui-js-loader", "./final-ui.js")
     .then(() => scriptOnce("experience-v2-js-loader", "./experience-v2.js"))
+    .then(() => scriptOnce("shell-v4-js-loader", "./shell-v4.js"))
     .then(() => scriptOnce("onboarding-js-loader", "./onboarding.js"))
     .catch(error => console.error("Health+ UI loader error", error));
 

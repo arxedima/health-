@@ -1,17 +1,19 @@
-const CACHE = "vector-health-v6-unified-minimal";
-const V = "20260904-4";
+const CACHE = "vector-health-v7-final-minimal";
+const V = "20260904-5";
 const ASSETS = [
   "./",
   "./index.html",
-  `./styles.css?v=${V}`,
-  `./healthplus.css?v=${V}`,
-  `./minimal-redesign.css?v=${V}`,
-  `./unified-minimal.css?v=${V}`,
-  `./app.js?v=${V}`,
-  `./healthplus.js?v=${V}`,
-  `./minimal-redesign.js?v=${V}`,
-  `./unified-minimal.js?v=${V}`,
-  `./manifest.webmanifest?v=${V}`,
+  "./styles.css?v=20260904-4",
+  "./healthplus.css?v=20260904-4",
+  "./minimal-redesign.css?v=20260904-4",
+  "./unified-minimal.css?v=20260904-4",
+  "./final-ui.css?v=20260904-5",
+  "./app.js?v=20260904-4",
+  "./healthplus.js?v=20260904-4",
+  "./minimal-redesign.js?v=20260904-4",
+  "./unified-minimal.js?v=20260904-4",
+  "./final-ui.js?v=20260904-5",
+  "./manifest.webmanifest?v=20260904-4",
   "./assets/vector.svg",
   "./assets/balanced-meal.webp"
 ];
@@ -39,7 +41,5 @@ self.addEventListener("fetch", event => {
     );
     return;
   }
-  event.respondWith(
-    caches.match(event.request).then(cached => cached || fetch(event.request).then(updateCache))
-  );
+  event.respondWith(caches.match(event.request).then(cached => cached || fetch(event.request).then(updateCache)));
 });

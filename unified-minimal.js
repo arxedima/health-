@@ -2,7 +2,7 @@
   "use strict";
   const app = document.getElementById("app");
   if (!app) return;
-  const VERSION = "20260904-10";
+  const VERSION = "20260904-11";
 
   function period() {
     const hour = new Date().getHours();
@@ -43,20 +43,19 @@
   }
 
   apply();
-  /* Load first-run UI immediately so the app never flashes before onboarding. */
+
+  /* One clear stack only. Old cleanup/shell layers are intentionally not loaded. */
   styleOnce("onboarding-css-loader", "./onboarding.css");
   styleOnce("final-ui-css-loader", "./final-ui.css");
   styleOnce("experience-v2-css-loader", "./experience-v2.css");
-  styleOnce("cleanup-v3-css-loader", "./cleanup-v3.css");
-  styleOnce("shell-v4-css-loader", "./shell-v4.css");
-  /* This file is intentionally last: it owns mobile positioning and geometry. */
   styleOnce("quality-v5-css-loader", "./quality-v5.css");
+  styleOnce("stability-v6-css-loader", "./stability-v6.css");
 
   scriptOnce("onboarding-js-loader", "./onboarding.js")
     .then(() => scriptOnce("final-ui-js-loader", "./final-ui.js"))
     .then(() => scriptOnce("experience-v2-js-loader", "./experience-v2.js"))
-    .then(() => scriptOnce("shell-v4-js-loader", "./shell-v4.js"))
     .then(() => scriptOnce("quality-v5-js-loader", "./quality-v5.js"))
+    .then(() => scriptOnce("stability-v6-js-loader", "./stability-v6.js"))
     .catch(error => console.error("Health+ UI loader error", error));
 
   setInterval(apply, 60000);

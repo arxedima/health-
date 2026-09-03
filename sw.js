@@ -1,5 +1,5 @@
-const CACHE='healthplus-vector-loop-v1';
-const ASSETS=['./','./index.html','./vector-loop.css?v=loop1','./vector-loop.js?v=loop1','./vector-store.js','./vector-engine.js','./manifest.webmanifest?v=loop1','./assets/vector.svg'];
+const CACHE='healthplus-vector-loop-v2';
+const ASSETS=['./','./index.html','./vector-loop.css?v=loop1','./vector-quick-v2.css?v=loop2','./vector-loop.js?v=loop1','./vector-quick-v2.js?v=loop2','./vector-store.js','./vector-engine.js','./manifest.webmanifest?v=loop2','./assets/vector.svg'];
 self.addEventListener('install',e=>{self.skipWaiting();e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)));});
 self.addEventListener('activate',e=>e.waitUntil(Promise.all([caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))),self.clients.claim()])));
 self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;const isCore=e.request.mode==='navigate'||['script','style'].includes(e.request.destination);if(isCore){e.respondWith(fetch(e.request,{cache:'no-store'}).then(r=>{const c=r.clone();caches.open(CACHE).then(cache=>cache.put(e.request,c));return r;}).catch(()=>caches.match(e.request).then(r=>r||caches.match('./index.html'))));return;}e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request)));});

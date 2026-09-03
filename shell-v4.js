@@ -8,13 +8,13 @@
 
   function unifyBrand() {
     if (desktopBrand) {
-      desktopBrand.classList.add("health-brand");
+      if (!desktopBrand.classList.contains("health-brand")) desktopBrand.classList.add("health-brand");
       const strong = desktopBrand.querySelector("strong");
-      if (strong) strong.textContent = "Health+ / VECTOR";
+      if (strong && strong.textContent !== "Health+ / VECTOR") strong.textContent = "Health+ / VECTOR";
     }
     const kicker = document.getElementById("viewKicker");
-    if (kicker && app.classList.contains("final-subpage")) kicker.textContent = "Health+ / VECTOR";
-    document.title = "Health+ / VECTOR";
+    if (kicker && app.classList.contains("final-subpage") && kicker.textContent !== "Health+ / VECTOR") kicker.textContent = "Health+ / VECTOR";
+    if (document.title !== "Health+ / VECTOR") document.title = "Health+ / VECTOR";
   }
 
   function removeLegacyDock() {
@@ -26,8 +26,8 @@
   function lockScrollShell() {
     const content = document.querySelector("#app .content");
     const nav = document.querySelector("#app .mobile-nav");
-    if (content) content.dataset.shellScroll = "content-only";
-    if (nav) nav.dataset.shellFixed = "true";
+    if (content && content.dataset.shellScroll !== "content-only") content.dataset.shellScroll = "content-only";
+    if (nav && nav.dataset.shellFixed !== "true") nav.dataset.shellFixed = "true";
   }
 
   function sync() {

@@ -1,5 +1,5 @@
-const CACHE = "vector-health-v9-cleanup-fixed-nav";
-const V = "20260904-7";
+const CACHE = "healthplus-vector-v10-onboarding";
+const V = "20260904-8";
 const ASSETS = [
   "./",
   "./index.html",
@@ -10,13 +10,15 @@ const ASSETS = [
   `./final-ui.css?v=${V}`,
   `./experience-v2.css?v=${V}`,
   `./cleanup-v3.css?v=${V}`,
+  `./onboarding.css?v=${V}`,
   "./app.js?v=20260904-4",
   "./healthplus.js?v=20260904-4",
   "./minimal-redesign.js?v=20260904-4",
   "./unified-minimal.js?v=20260904-4",
   `./final-ui.js?v=${V}`,
   `./experience-v2.js?v=${V}`,
-  "./manifest.webmanifest?v=20260904-4",
+  `./onboarding.js?v=${V}`,
+  `./manifest.webmanifest?v=${V}`,
   "./assets/vector.svg",
   "./assets/balanced-meal.webp"
 ];

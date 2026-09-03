@@ -2,7 +2,7 @@
   "use strict";
   const app = document.getElementById("app");
   if (!app) return;
-  const VERSION = "20260904-9";
+  const VERSION = "20260904-10";
 
   function period() {
     const hour = new Date().getHours();
@@ -36,7 +36,6 @@
       const script = document.createElement("script");
       script.id = id;
       script.src = `${src}?v=${VERSION}`;
-      script.defer = true;
       script.onload = resolve;
       script.onerror = reject;
       document.body.appendChild(script);
@@ -44,16 +43,20 @@
   }
 
   apply();
+  /* Load first-run UI immediately so the app never flashes before onboarding. */
+  styleOnce("onboarding-css-loader", "./onboarding.css");
   styleOnce("final-ui-css-loader", "./final-ui.css");
   styleOnce("experience-v2-css-loader", "./experience-v2.css");
   styleOnce("cleanup-v3-css-loader", "./cleanup-v3.css");
-  styleOnce("onboarding-css-loader", "./onboarding.css");
   styleOnce("shell-v4-css-loader", "./shell-v4.css");
+  /* This file is intentionally last: it owns mobile positioning and geometry. */
+  styleOnce("quality-v5-css-loader", "./quality-v5.css");
 
-  scriptOnce("final-ui-js-loader", "./final-ui.js")
+  scriptOnce("onboarding-js-loader", "./onboarding.js")
+    .then(() => scriptOnce("final-ui-js-loader", "./final-ui.js"))
     .then(() => scriptOnce("experience-v2-js-loader", "./experience-v2.js"))
     .then(() => scriptOnce("shell-v4-js-loader", "./shell-v4.js"))
-    .then(() => scriptOnce("onboarding-js-loader", "./onboarding.js"))
+    .then(() => scriptOnce("quality-v5-js-loader", "./quality-v5.js"))
     .catch(error => console.error("Health+ UI loader error", error));
 
   setInterval(apply, 60000);

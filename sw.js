@@ -1,5 +1,16 @@
-const CACHE = "vector-health-v3";
-const ASSETS = ["./", "./index.html", "./styles.css", "./healthplus.css", "./app.js", "./healthplus.js", "./manifest.webmanifest", "./assets/vector.svg", "./assets/balanced-meal.webp"];
+const CACHE = "vector-health-v4";
+const V = "20260904-2";
+const ASSETS = [
+  "./",
+  "./index.html",
+  `./styles.css?v=${V}`,
+  `./healthplus.css?v=${V}`,
+  `./app.js?v=${V}`,
+  `./healthplus.js?v=${V}`,
+  `./manifest.webmanifest?v=${V}`,
+  "./assets/vector.svg",
+  "./assets/balanced-meal.webp"
+];
 self.addEventListener("install", event => {
   self.skipWaiting();
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(ASSETS)));
@@ -11,13 +22,20 @@ self.addEventListener("activate", event => event.waitUntil(Promise.all([
 self.addEventListener("fetch", event => {
   if (event.request.method !== "GET") return;
   const updateCache = response => {
+    if (!response || !response.ok) return response;
     const copy = response.clone();
     caches.open(CACHE).then(cache => cache.put(event.request, copy));
     return response;
   };
   if (event.request.mode === "navigate" || ["script", "style"].includes(event.request.destination)) {
-    event.respondWith(fetch(event.request).then(updateCache).catch(() => caches.match(event.request).then(cached => cached || caches.match("./index.html"))));
+    event.respondWith(
+      fetch(event.request, { cache: "no-store" })
+        .then(updateCache)
+        .catch(() => caches.match(event.request).then(cached => cached || caches.match("./index.html")))
+    );
     return;
   }
-  event.respondWith(caches.match(event.request).then(cached => cached || fetch(event.request).then(updateCache).catch(() => caches.match("./index.html"))));
+  event.respondWith(
+    caches.match(event.request).then(cached => cached || fetch(event.request).then(updateCache))
+  );
 });

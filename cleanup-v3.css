@@ -1,0 +1,8 @@
+/* Cleanup V3: remove obsolete in-content dock and keep only the fixed bottom navigation */
+.minimal-home-view .mh-quick-dock{display:none!important}
+
+@media(max-width:860px){
+  .app .mobile-nav{position:fixed!important;left:14px!important;right:14px!important;bottom:calc(10px + env(safe-area-inset-bottom))!important;transform:none!important;margin:0!important;z-index:12000!important}
+  .app .content{overflow-y:auto!important;overflow-x:hidden!important;-webkit-overflow-scrolling:touch!important;touch-action:pan-y!important;scroll-behavior:smooth!important;overscroll-behavior-y:contain!important;padding-bottom:calc(118px + env(safe-area-inset-bottom))!important}
+  .minimal-home-view{padding-bottom:8px!important}
+}

@@ -1,5 +1,5 @@
-const CACHE = "vector-health-v8-training-quick-scroll";
-const V = "20260904-6";
+const CACHE = "vector-health-v9-cleanup-fixed-nav";
+const V = "20260904-7";
 const ASSETS = [
   "./",
   "./index.html",
@@ -9,6 +9,7 @@ const ASSETS = [
   "./unified-minimal.css?v=20260904-4",
   `./final-ui.css?v=${V}`,
   `./experience-v2.css?v=${V}`,
+  `./cleanup-v3.css?v=${V}`,
   "./app.js?v=20260904-4",
   "./healthplus.js?v=20260904-4",
   "./minimal-redesign.js?v=20260904-4",

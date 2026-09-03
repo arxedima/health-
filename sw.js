@@ -1,18 +1,17 @@
-const CACHE = "healthplus-vector-v12-quality";
-const V = "20260904-10";
+const CACHE = "healthplus-vector-v13-stability";
+const V = "20260904-11";
 const ASSETS = [
   "./",
   "./index.html",
   "./styles.css?v=20260904-4",
   "./healthplus.css?v=20260904-4",
   "./minimal-redesign.css?v=20260904-4",
-  "./unified-minimal.css?v=20260904-4",
+  `./unified-minimal.css?v=${V}`,
   `./final-ui.css?v=${V}`,
   `./experience-v2.css?v=${V}`,
-  `./cleanup-v3.css?v=${V}`,
   `./onboarding.css?v=${V}`,
-  `./shell-v4.css?v=${V}`,
   `./quality-v5.css?v=${V}`,
+  `./stability-v6.css?v=${V}`,
   "./app.js?v=20260904-4",
   "./healthplus.js?v=20260904-4",
   "./minimal-redesign.js?v=20260904-4",
@@ -20,8 +19,8 @@ const ASSETS = [
   `./final-ui.js?v=${V}`,
   `./experience-v2.js?v=${V}`,
   `./onboarding.js?v=${V}`,
-  `./shell-v4.js?v=${V}`,
   `./quality-v5.js?v=${V}`,
+  `./stability-v6.js?v=${V}`,
   `./manifest.webmanifest?v=${V}`,
   "./assets/vector.svg",
   "./assets/balanced-meal.webp"

@@ -1,0 +1,134 @@
+/* Health+ / VECTOR stability v6 — iOS/PWA flicker fix + refined motion */
+:root{--v6-nav-height:70px;--v6-side:14px;--v6-bg:#0f1a3a;--v6-layer:#111f44;--v6-layer-strong:#0f1c3e;--v6-line:rgba(255,255,255,.085)}
+
+/* Old automatic entrance animations replayed on every DOM mutation. Disable them. */
+#app .content>*{animation:none!important}
+#app .final-enter{animation:none!important}
+
+@media(max-width:860px){
+  /* Stable compositor: no backdrop-filter on fixed elements in iOS nested scrolling. */
+  #app.final-subpage .topbar,
+  #app .mobile-nav,
+  .minimal-home-view .mh-header{
+    -webkit-backdrop-filter:none!important;
+    backdrop-filter:none!important;
+    -webkit-backface-visibility:hidden!important;
+    backface-visibility:hidden!important;
+    isolation:isolate!important;
+  }
+
+  /* HOME HEADER — truly fixed; never participates in the tape. */
+  #app:not(.final-subpage) .minimal-home-view .mh-header{
+    position:fixed!important;
+    top:0!important;
+    left:0!important;
+    right:0!important;
+    width:auto!important;
+    min-height:calc(64px + env(safe-area-inset-top))!important;
+    margin:0!important;
+    padding:calc(9px + env(safe-area-inset-top)) 20px 10px!important;
+    z-index:35000!important;
+    background:linear-gradient(180deg,#0f1a3a 0%,rgba(15,26,58,.985) 78%,rgba(15,26,58,.94) 100%)!important;
+    border-bottom:1px solid rgba(255,255,255,.035)!important;
+    box-shadow:0 7px 22px rgba(3,7,22,.10)!important;
+  }
+  #app:not(.final-subpage) .minimal-home-view .mh-intro{
+    padding-top:calc(82px + env(safe-area-inset-top))!important;
+  }
+
+  /* INTERNAL HEADER — stable opaque glass look without expensive live blur. */
+  #app.final-subpage .topbar{
+    background:linear-gradient(180deg,#0f1a3a 0%,#101d40 100%)!important;
+    box-shadow:0 8px 24px rgba(3,8,24,.13)!important;
+  }
+
+  /* BOTTOM NAV — smaller, lower, complete rounded pill. */
+  #app .mobile-nav{
+    position:fixed!important;
+    left:var(--v6-side)!important;
+    right:var(--v6-side)!important;
+    bottom:max(3px,calc(env(safe-area-inset-bottom) - 9px))!important;
+    top:auto!important;
+    width:auto!important;
+    height:var(--v6-nav-height)!important;
+    min-height:var(--v6-nav-height)!important;
+    padding:5px 7px!important;
+    margin:0!important;
+    display:flex!important;
+    align-items:center!important;
+    overflow:visible!important;
+    z-index:45000!important;
+    background:linear-gradient(180deg,#162650,#101d40)!important;
+    border:1px solid var(--v6-line)!important;
+    border-radius:23px!important;
+    box-shadow:0 14px 34px rgba(2,7,23,.34),inset 0 1px 0 rgba(255,255,255,.025)!important;
+  }
+  #app .mobile-nav .final-nav-shell{
+    width:100%!important;
+    height:60px!important;
+    align-items:center!important;
+  }
+  #app .mobile-nav .final-nav-item{
+    height:56px!important;
+    gap:3px!important;
+    border-radius:15px!important;
+  }
+  #app .mobile-nav .final-nav-item svg{width:21px!important;height:21px!important}
+  #app .mobile-nav .final-nav-item span{font-size:9px!important}
+  #app .mobile-nav .final-nav-item.active::before{top:-5px!important;height:2px!important;width:32px!important}
+  #app .mobile-nav .final-nav-plus{
+    width:56px!important;
+    height:56px!important;
+    transform:translateY(-7px)!important;
+    box-shadow:0 0 0 7px #18284f,0 10px 24px rgba(79,70,190,.30)!important;
+  }
+  #app .mobile-nav .final-nav-plus svg{width:25px!important;height:25px!important}
+
+  /* Give content exactly enough room for the lower nav, not a giant empty shelf. */
+  #app.final-subpage .content{
+    padding-bottom:calc(100px + env(safe-area-inset-bottom))!important;
+  }
+  #app:not(.final-subpage) .content{
+    padding-bottom:calc(100px + env(safe-area-inset-bottom))!important;
+  }
+
+  /* Stop expensive glass recomposition on large scrolling cards. Keep the appearance with alpha surfaces. */
+  #app .content .panel,
+  #app .content .program-card,
+  #app .content .meal-section,
+  #app .content .x2-training-gateway,
+  #app .content .hp-profile-card,
+  #app .content .mh-focus-card,
+  #app .content .mh-timeline-section{
+    -webkit-backdrop-filter:none!important;
+    backdrop-filter:none!important;
+  }
+
+  /* Touch motion: transform/opacity only, so scrolling remains 60/120 Hz friendly. */
+  #app button{
+    transition:transform .24s cubic-bezier(.22,.78,.22,1),opacity .2s ease,background-color .24s ease,border-color .24s ease!important;
+  }
+  #app button:active{transform:scale(.972)!important}
+
+  /* Living orb — smoother and more organic, no filter animation. */
+  .mh-orb-stage:not(.final-orb-tap):not(.final-orb-pressed):not(.final-orb-hold):not(.final-orb-success) .mh-orb{
+    animation:v6-orb-breathe 5.4s cubic-bezier(.45,.05,.55,.95) infinite!important;
+    will-change:transform!important;
+  }
+  .mh-orb .mh-eye{transform-origin:center!important;animation:v6-blink 6.4s ease-in-out infinite!important}
+  .mh-orb .mh-eye.right{animation-delay:.05s!important}
+  @keyframes v6-orb-breathe{
+    0%,100%{transform:translate3d(0,0,0) scale(1)}
+    30%{transform:translate3d(0,-5px,0) scale(1.018)}
+    58%{transform:translate3d(0,-8px,0) scale(1.026)}
+    80%{transform:translate3d(0,-3px,0) scale(1.01)}
+  }
+  @keyframes v6-blink{0%,45%,48%,100%{transform:scaleY(1)}46.5%{transform:scaleY(.08)}}
+
+  /* Actual page transition is applied by stability-v6.js only on view change. */
+  .v6-page-transition{transform-origin:50% 20%;will-change:transform,opacity}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .mh-orb,.mh-eye{animation:none!important}
+}

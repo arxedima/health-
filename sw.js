@@ -1,49 +1,5 @@
-const CACHE = "healthplus-vector-v13-stability";
-const V = "20260904-11";
-const ASSETS = [
-  "./",
-  "./index.html",
-  "./styles.css?v=20260904-4",
-  "./healthplus.css?v=20260904-4",
-  "./minimal-redesign.css?v=20260904-4",
-  `./unified-minimal.css?v=${V}`,
-  `./final-ui.css?v=${V}`,
-  `./experience-v2.css?v=${V}`,
-  `./onboarding.css?v=${V}`,
-  `./quality-v5.css?v=${V}`,
-  `./stability-v6.css?v=${V}`,
-  "./app.js?v=20260904-4",
-  "./healthplus.js?v=20260904-4",
-  "./minimal-redesign.js?v=20260904-4",
-  `./unified-minimal.js?v=${V}`,
-  `./final-ui.js?v=${V}`,
-  `./experience-v2.js?v=${V}`,
-  `./onboarding.js?v=${V}`,
-  `./quality-v5.js?v=${V}`,
-  `./stability-v6.js?v=${V}`,
-  `./manifest.webmanifest?v=${V}`,
-  "./assets/vector.svg",
-  "./assets/balanced-meal.webp"
-];
-self.addEventListener("install", event => {
-  self.skipWaiting();
-  event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(ASSETS)));
-});
-self.addEventListener("activate", event => event.waitUntil(Promise.all([
-  caches.keys().then(keys => Promise.all(keys.filter(key => key !== CACHE).map(key => caches.delete(key)))),
-  self.clients.claim()
-])));
-self.addEventListener("fetch", event => {
-  if (event.request.method !== "GET") return;
-  const updateCache = response => {
-    if (!response || !response.ok) return response;
-    const copy = response.clone();
-    caches.open(CACHE).then(cache => cache.put(event.request, copy));
-    return response;
-  };
-  if (event.request.mode === "navigate" || ["script", "style"].includes(event.request.destination)) {
-    event.respondWith(fetch(event.request, {cache:"no-store"}).then(updateCache).catch(() => caches.match(event.request).then(cached => cached || caches.match("./index.html"))));
-    return;
-  }
-  event.respondWith(caches.match(event.request).then(cached => cached || fetch(event.request).then(updateCache)));
-});
+const CACHE='healthplus-vector-loop-v1';
+const ASSETS=['./','./index.html','./vector-loop.css?v=loop1','./vector-loop.js?v=loop1','./vector-store.js','./vector-engine.js','./manifest.webmanifest?v=loop1','./assets/vector.svg'];
+self.addEventListener('install',e=>{self.skipWaiting();e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)));});
+self.addEventListener('activate',e=>e.waitUntil(Promise.all([caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))),self.clients.claim()])));
+self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;const isCore=e.request.mode==='navigate'||['script','style'].includes(e.request.destination);if(isCore){e.respondWith(fetch(e.request,{cache:'no-store'}).then(r=>{const c=r.clone();caches.open(CACHE).then(cache=>cache.put(e.request,c));return r;}).catch(()=>caches.match(e.request).then(r=>r||caches.match('./index.html'))));return;}e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request)));});

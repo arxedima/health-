@@ -1,14 +1,16 @@
-const CACHE = "vector-health-v5-minimal";
-const V = "20260904-3";
+const CACHE = "vector-health-v6-unified-minimal";
+const V = "20260904-4";
 const ASSETS = [
   "./",
   "./index.html",
   `./styles.css?v=${V}`,
   `./healthplus.css?v=${V}`,
   `./minimal-redesign.css?v=${V}`,
+  `./unified-minimal.css?v=${V}`,
   `./app.js?v=${V}`,
   `./healthplus.js?v=${V}`,
   `./minimal-redesign.js?v=${V}`,
+  `./unified-minimal.js?v=${V}`,
   `./manifest.webmanifest?v=${V}`,
   "./assets/vector.svg",
   "./assets/balanced-meal.webp"

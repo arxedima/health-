@@ -1,5 +1,5 @@
-const CACHE = "vector-health-v2";
-const ASSETS = ["./", "./index.html", "./styles.css", "./app.js", "./manifest.webmanifest", "./assets/vector.svg", "./assets/balanced-meal.webp"];
+const CACHE = "vector-health-v3";
+const ASSETS = ["./", "./index.html", "./styles.css", "./healthplus.css", "./app.js", "./healthplus.js", "./manifest.webmanifest", "./assets/vector.svg", "./assets/balanced-meal.webp"];
 self.addEventListener("install", event => {
   self.skipWaiting();
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(ASSETS)));

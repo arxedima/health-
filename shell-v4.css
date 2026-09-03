@@ -1,0 +1,53 @@
+/* Health+ / VECTOR shell v4: one fixed mobile frame, only content scrolls */
+.mh-quick-dock{display:none!important}
+
+@media(max-width:860px){
+  html,body{position:fixed!important;inset:0!important;width:100%!important;height:100%!important;max-height:100%!important;margin:0!important;overflow:hidden!important;overscroll-behavior:none!important;background:#101936!important}
+  body{touch-action:none!important}
+  #app.app{position:fixed!important;inset:0!important;width:100vw!important;height:100dvh!important;min-height:0!important;max-height:100dvh!important;overflow:hidden!important;isolation:isolate!important;transform:none!important}
+  #app .sidebar{display:none!important}
+  #app>.main{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;min-height:0!important;max-height:none!important;margin:0!important;padding:0!important;display:block!important;overflow:hidden!important;transform:none!important}
+
+  /* Internal pages: header and navigation never participate in document flow. */
+  #app.final-subpage .topbar{position:absolute!important;top:0!important;left:0!important;right:0!important;height:calc(116px + env(safe-area-inset-top))!important;min-height:0!important;margin:0!important;padding:calc(10px + env(safe-area-inset-top)) 20px 12px!important;z-index:9500!important;display:grid!important;grid-template-columns:minmax(0,1fr) 44px 44px!important;grid-template-rows:auto!important;align-items:center!important;gap:8px!important;background:linear-gradient(180deg,rgba(16,25,54,.98) 0%,rgba(16,25,54,.92) 72%,rgba(16,25,54,0) 100%)!important;border:0!important;box-shadow:none!important;backdrop-filter:blur(18px)!important;-webkit-backdrop-filter:blur(18px)!important;transform:none!important}
+  #app.final-subpage .topbar .mobile-mark{display:none!important}
+  #app.final-subpage .topbar .heading{min-width:0!important;margin:0!important;padding:0!important;align-self:center!important}
+  #app.final-subpage .topbar .heading>small{display:block!important;margin:0 0 4px!important;color:#a9a4ff!important;font-size:9px!important;font-weight:850!important;letter-spacing:.12em!important;text-transform:uppercase!important;white-space:nowrap!important}
+  #app.final-subpage .topbar .heading h1{margin:0!important;color:#fff!important;font-size:clamp(28px,7.5vw,38px)!important;line-height:.98!important;letter-spacing:-.055em!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+  #app.final-subpage .topbar .heading p{display:none!important}
+  #app.final-subpage .topbar .healthplus-chip,#app.final-subpage .topbar .icon-button{position:static!important;margin:0!important;width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important;border-radius:16px!important;display:grid!important;place-items:center!important;background:rgba(255,255,255,.045)!important;border:1px solid rgba(255,255,255,.08)!important;color:#aaa5ff!important;box-shadow:none!important;transform:none!important}
+  #app.final-subpage .topbar .healthplus-chip b{display:none!important}
+
+  #app.final-subpage .content{position:absolute!important;top:calc(106px + env(safe-area-inset-top))!important;left:0!important;right:0!important;bottom:calc(94px + env(safe-area-inset-bottom))!important;width:auto!important;height:auto!important;min-height:0!important;margin:0!important;padding:18px 20px 42px!important;overflow-y:auto!important;overflow-x:hidden!important;-webkit-overflow-scrolling:touch!important;overscroll-behavior-y:contain!important;scroll-behavior:smooth!important;touch-action:pan-y!important;scrollbar-width:none!important;transform:none!important;will-change:scroll-position!important}
+  #app.final-subpage .content::-webkit-scrollbar{display:none!important}
+  #app.final-subpage .content>*{max-width:760px;margin-left:auto;margin-right:auto}
+
+  /* Home owns its own header, but still scrolls inside the same fixed viewport. */
+  #app:not(.final-subpage) .topbar{display:none!important}
+  #app:not(.final-subpage) .content{position:absolute!important;inset:0 0 calc(94px + env(safe-area-inset-bottom)) 0!important;width:auto!important;height:auto!important;min-height:0!important;margin:0!important;padding:calc(14px + env(safe-area-inset-top)) 20px 42px!important;overflow-y:auto!important;overflow-x:hidden!important;-webkit-overflow-scrolling:touch!important;overscroll-behavior-y:contain!important;scroll-behavior:smooth!important;touch-action:pan-y!important;scrollbar-width:none!important;transform:none!important}
+  #app:not(.final-subpage) .content::-webkit-scrollbar{display:none!important}
+
+  /* One and only bottom navigation. */
+  #app .mobile-nav{position:absolute!important;left:16px!important;right:16px!important;bottom:calc(10px + env(safe-area-inset-bottom))!important;top:auto!important;width:auto!important;height:74px!important;min-height:74px!important;margin:0!important;padding:7px 8px!important;z-index:9800!important;overflow:visible!important;background:rgba(15,27,60,.88)!important;border:1px solid rgba(255,255,255,.08)!important;border-radius:25px!important;box-shadow:0 18px 48px rgba(2,8,24,.38)!important;backdrop-filter:blur(30px) saturate(1.08)!important;-webkit-backdrop-filter:blur(30px) saturate(1.08)!important;transform:none!important;will-change:auto!important;contain:layout paint!important}
+  #app .mobile-nav .final-nav-shell{height:100%!important;width:100%!important;transform:none!important;align-items:center!important}
+  #app .mobile-nav .final-nav-item{height:58px!important;transform:none!important}
+  #app .mobile-nav .final-nav-item.active{background:transparent!important}
+  #app .mobile-nav .final-nav-item.active::before{content:"";position:absolute;top:-7px;width:40px;height:3px;border-radius:999px;background:#57c7ff;box-shadow:0 0 14px rgba(87,199,255,.45)}
+  #app .mobile-nav .final-nav-plus{transform:translateY(-8px)!important;will-change:auto!important}
+
+  /* Kill obsolete floating docks and legacy mobile bars regardless of render order. */
+  .mh-quick-dock,.minimal-quick-dock,.minimal-home-actions,.home-quick-actions,.quick-dock,.mobile-actions,.floating-actions{display:none!important;visibility:hidden!important;pointer-events:none!important}
+
+  /* Softer, less janky content motion. */
+  #app .content .final-enter{animation:shell-v4-enter .42s cubic-bezier(.2,.78,.25,1) both!important}
+  #app .content button,#app .content .panel,#app .content .program-card,#app .content .x2-training-gateway{transition:transform .18s cubic-bezier(.2,.8,.2,1),border-color .22s ease,background .24s ease,box-shadow .24s ease!important}
+  #app .content button:active{transform:scale(.985)!important}
+  @keyframes shell-v4-enter{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+}
+
+/* Unified brand labels on all breakpoints. */
+.brand.health-brand .brand-mark,.brand.health-brand small{display:none!important}
+.brand.health-brand strong{font-size:17px!important;letter-spacing:-.035em!important}
+.mh-brand strong{font-size:0!important}
+.mh-brand strong::after{content:"Health+ / VECTOR";font-size:14px;letter-spacing:-.02em}
+.mh-brand small{display:none!important}

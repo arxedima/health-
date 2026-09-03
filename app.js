@@ -17,10 +17,14 @@
     lfkTab: "modern",
     lfkFilter: "all",
     nutritionTab: "diary",
+    journalTab: "today",
+    journalDate: todayKey(),
     calorieTarget: 2000,
     calculator: { sex: "male", age: 30, weight: 70, height: 175, activity: 1.375, goal: "maintain" },
     foodLogs: {},
-    completedSessions: []
+    completedSessions: [],
+    dailyLogs: {},
+    reminders: []
   };
 
   let state = loadState();
@@ -32,6 +36,7 @@
     { key: "lfk", label: "ЛФК", icon: "activity" },
     { key: "timer", label: "Таймер", icon: "clock" },
     { key: "nutrition", label: "Питание", icon: "food" },
+    { key: "journal", label: "Дневник", icon: "journal" },
     { key: "profile", label: "Профиль", icon: "user" }
   ];
 
@@ -40,6 +45,7 @@
     lfk: ["ВОССТАНОВЛЕНИЕ", "ЛФК", "Комплексы по зонам тела и архивная гимнастика"],
     timer: ["ИНСТРУМЕНТЫ", "Часы и таймер", "Отсчёт, секундомер и интервалы"],
     nutrition: ["ДНЕВНИК", "Питание", "Калории, продукты и баланс БЖУ"],
+    journal: ["МОЙ ПРОГРЕСС", "Умный дневник", "Показатели, недельная таблица и напоминания"],
     profile: ["НАСТРОЙКИ", "Профиль", "Оформление и данные приложения"]
   };
 
@@ -160,11 +166,19 @@
     work: 40, rest: 20, rounds: 6, currentRound: 1, phase: "work", keepAwake: true, laps: []
   };
   let sessionState = null;
+  const firedReminders = new Set();
 
   function loadState() {
     try {
       const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
-      return saved ? { ...defaultState, ...saved, calculator: { ...defaultState.calculator, ...(saved.calculator || {}) } } : structuredClone(defaultState);
+      if (!saved) return structuredClone(defaultState);
+      return {
+        ...defaultState,
+        ...saved,
+        calculator: { ...defaultState.calculator, ...(saved.calculator || {}) },
+        dailyLogs: saved.dailyLogs && typeof saved.dailyLogs === "object" ? saved.dailyLogs : {},
+        reminders: Array.isArray(saved.reminders) ? saved.reminders : []
+      };
     } catch {
       return structuredClone(defaultState);
     }
@@ -208,12 +222,12 @@
     document.getElementById("viewSubtitle").textContent = subtitle;
   }
 
-  function getLogs() {
-    return state.foodLogs[todayKey()] || [];
+  function getLogs(date = todayKey()) {
+    return state.foodLogs[date] || [];
   }
 
-  function getTotals() {
-    return getLogs().reduce((sum, item) => ({
+  function getTotals(date = todayKey()) {
+    return getLogs(date).reduce((sum, item) => ({
       kcal: sum.kcal + item.kcal,
       protein: sum.protein + item.protein,
       fat: sum.fat + item.fat,
@@ -234,12 +248,66 @@
     return Math.round(value).toLocaleString("ru-RU");
   }
 
+  function getDailyLog(date = todayKey()) {
+    return state.dailyLogs[date] || {
+      weight: "", water: "", sleep: "", steps: "", bikeMinutes: "", bikeResistance: "",
+      painBefore: "", painAfter: "", energy: "", note: ""
+    };
+  }
+
+  function sessionsForDate(date) {
+    return state.completedSessions.filter(item => item.date === date).length;
+  }
+
+  function recentDateKeys(count = 7) {
+    return Array.from({ length: count }, (_, index) => {
+      const date = new Date();
+      date.setHours(12, 0, 0, 0);
+      date.setDate(date.getDate() - (count - 1 - index));
+      return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+    });
+  }
+
+  function formatDay(date, long = false) {
+    const value = new Date(`${date}T12:00:00`);
+    return new Intl.DateTimeFormat("ru-RU", long ? { weekday: "short", day: "numeric", month: "short" } : { day: "2-digit", month: "2-digit" }).format(value);
+  }
+
+  function valueOrDash(value, suffix = "") {
+    if (value === "" || value === null || value === undefined) return "—";
+    const number = Number(value);
+    const formatted = Number.isInteger(number) ? formatNumber(number) : number.toLocaleString("ru-RU", { maximumFractionDigits: 1 });
+    return `${formatted}${suffix}`;
+  }
+
+  function painStatus(log) {
+    const before = Number(log.painBefore);
+    const after = Number(log.painAfter);
+    if (log.painBefore === "" || log.painAfter === "") return "neutral";
+    if (after >= 7 || after - before >= 2) return "alert";
+    if (after <= before) return "good";
+    return "watch";
+  }
+
+  function smartInsight(date) {
+    const log = getDailyLog(date);
+    const status = painStatus(log);
+    const sessions = sessionsForDate(date);
+    if (status === "alert") return { tone: "alert", title: "Обратите внимание на нагрузку", text: "После занятия показатель боли заметно вырос. Не увеличивайте нагрузку и при сохранении симптомов обсудите это со специалистом." };
+    if (Number(log.sleep) > 0 && Number(log.sleep) < 6 && Number(log.energy) > 0 && Number(log.energy) <= 2) return { tone: "watch", title: "Сегодня нужен спокойный темп", text: "Сна и энергии меньше обычного. Выберите щадящий комплекс и ориентируйтесь на самочувствие." };
+    if (sessions && status === "good") return { tone: "good", title: "Нагрузка перенесена спокойно", text: "Комплекс выполнен, а показатель боли не вырос. Запись попадёт в недельную статистику." };
+    if (sessions) return { tone: "good", title: "Занятие сохранено", text: "Добавьте самочувствие после нагрузки, чтобы дневник точнее показывал динамику." };
+    return { tone: "neutral", title: "Отметьте состояние за день", text: "Заполните несколько показателей — питание и выполненная ЛФК добавятся в таблицу автоматически." };
+  }
+
   function renderHome() {
     const totals = getTotals();
     const target = state.calorieTarget;
     const remaining = Math.max(0, target - totals.kcal);
     const kcalPercent = clamp(totals.kcal / target * 100, 0, 100);
     const macros = macroTargets();
+    const nextReminder = getNextReminder();
+    const todayLog = getDailyLog();
     const date = new Intl.DateTimeFormat("ru-RU", { weekday: "long", day: "numeric", month: "long" }).format(new Date());
     return `<section class="view">
       <div class="home-grid">
@@ -259,6 +327,18 @@
           <div class="next-visual"><div class="pulse-ring">${icon("activity")}</div></div>
           <h2>Мягкая мобилизация колена</h2><p>6 упражнений · около 12 минут</p>
           <button class="primary full" type="button" data-action="open-program" data-program="knee-soft">${icon("play")} Открыть комплекс</button>
+        </article>
+      </div>
+      <div class="home-tools-grid">
+        <article class="panel quick-tool-card">
+          <div class="panel-head"><span class="round-icon">${icon("journal")}</span><span class="status-pill">УМНАЯ ТАБЛИЦА</span></div>
+          <div><h3>Дневник состояния</h3><p>${todayLog.sleep || todayLog.steps || todayLog.painAfter !== "" ? `Сегодня: сон ${valueOrDash(todayLog.sleep, " ч")} · шаги ${valueOrDash(todayLog.steps)}` : "Запишите сон, шаги, воду, нагрузку и самочувствие."}</p></div>
+          <button class="secondary full" type="button" data-action="go-journal">Открыть дневник</button>
+        </article>
+        <article class="panel quick-tool-card">
+          <div class="panel-head"><span class="round-icon">${icon("bell")}</span><span class="status-pill">НАПОМИНАНИЯ</span></div>
+          <div><h3>${nextReminder ? esc(nextReminder.title) : "Добавьте расписание"}</h3><p>${nextReminder ? `Ближайшее: ${formatNextReminder(nextReminder)}` : "ЛФК, вода, питание или контрольный замер."}</p></div>
+          <button class="secondary full" type="button" data-action="go-reminders">Настроить напоминания</button>
         </article>
       </div>
       <article class="panel nutrition-hero">
@@ -398,15 +478,268 @@
     </div>`;
   }
 
+  function renderJournal() {
+    const tabs = [["today", "Сегодня"], ["week", "7 дней"], ["reminders", "Напоминания"]];
+    return `<section class="view">
+      <div class="section-heading"><div><span class="eyebrow">ВСЁ В ОДНОМ МЕСТЕ</span><h2>Умный дневник</h2><p>Питание и ЛФК считаются автоматически, остальные показатели добавляете вы.</p></div><span class="status-pill">${icon(state.journalTab === "reminders" ? "bell" : "journal")} ${state.journalTab === "reminders" ? "Расписание" : "Моя динамика"}</span></div>
+      <div class="tabs" role="tablist" aria-label="Раздел умного дневника">${tabs.map(([key, label]) => `<button type="button" class="${state.journalTab === key ? "active" : ""}" data-journal-tab="${key}">${label}</button>`).join("")}</div>
+      ${state.journalTab === "today" ? renderDailyJournal() : state.journalTab === "week" ? renderWeekJournal() : renderReminders()}
+    </section>`;
+  }
+
+  function renderDailyJournal() {
+    const date = state.journalDate || todayKey();
+    const log = getDailyLog(date);
+    const totals = getTotals(date);
+    const sessions = sessionsForDate(date);
+    const insight = smartInsight(date);
+    const scaleOptions = value => `<option value="">Не указано</option>${Array.from({ length: 11 }, (_, index) => `<option value="${index}" ${String(value) === String(index) ? "selected" : ""}>${index}</option>`).join("")}`;
+    return `<div class="journal-layout">
+      <form class="panel smart-form" id="smartLogForm">
+        <div class="panel-head"><div><span class="eyebrow">ЕЖЕДНЕВНАЯ ЗАПИСЬ</span><h3>${formatDay(date, true)}</h3></div>${icon("calendar")}</div>
+        <label class="field">Дата<input id="journalDate" type="date" value="${date}" max="${todayKey()}" /></label>
+        <div class="field-grid"><label class="field">Вес, кг<input id="journalWeight" type="number" min="25" max="350" step="0.1" value="${esc(log.weight)}" placeholder="Например, 65" /></label><label class="field">Сон, часов<input id="journalSleep" type="number" min="0" max="24" step="0.1" value="${esc(log.sleep)}" placeholder="Например, 8" /></label></div>
+        <div class="field-grid"><label class="field">Вода, мл<input id="journalWater" type="number" min="0" max="10000" step="50" value="${esc(log.water)}" placeholder="1500" /></label><label class="field">Шаги<input id="journalSteps" type="number" min="0" max="100000" step="100" value="${esc(log.steps)}" placeholder="6000" /></label></div>
+        <div class="field-grid"><label class="field">Велотренажёр, минут<input id="journalBikeMinutes" type="number" min="0" max="600" step="1" value="${esc(log.bikeMinutes)}" placeholder="15" /></label><label class="field">Сопротивление<input id="journalBikeResistance" type="number" min="0" max="30" step="1" value="${esc(log.bikeResistance)}" placeholder="4" /></label></div>
+        <div class="field-grid"><label class="field">Боль до нагрузки, 0–10<select id="journalPainBefore">${scaleOptions(log.painBefore)}</select></label><label class="field">Боль после, 0–10<select id="journalPainAfter">${scaleOptions(log.painAfter)}</select></label></div>
+        <label class="field">Энергия<select id="journalEnergy"><option value="">Не указано</option>${[[1, "1 — сил мало"], [2, "2 — ниже обычного"], [3, "3 — нормально"], [4, "4 — хорошо"], [5, "5 — отлично"]].map(([value, label]) => `<option value="${value}" ${String(log.energy) === String(value) ? "selected" : ""}>${label}</option>`).join("")}</select></label>
+        <label class="field">Заметка<textarea id="journalNote" maxlength="300" placeholder="Что было легко или сложно?">${esc(log.note)}</textarea></label>
+        <button class="primary full" type="submit">${icon("check")} Сохранить запись</button>
+      </form>
+      <aside class="journal-side">
+        <article class="panel insight-card ${insight.tone}"><span class="eyebrow">УМНАЯ ПОДСКАЗКА</span><h3>${insight.title}</h3><p>${insight.text}</p></article>
+        <article class="panel"><div class="panel-head"><div><span class="eyebrow">АВТОМАТИЧЕСКИ</span><h3>Данные за день</h3></div>${icon("activity")}</div><div class="auto-data-grid"><div><span>ЛФК</span><strong>${sessions}</strong><small>занятий</small></div><div><span>Калории</span><strong>${formatNumber(totals.kcal)}</strong><small>ккал</small></div><div><span>Белок</span><strong>${formatNumber(totals.protein)}</strong><small>граммов</small></div><div><span>Записей еды</span><strong>${getLogs(date).length}</strong><small>за день</small></div></div></article>
+        <article class="safety-note">${icon("info")}<div>Дневник показывает динамику, но не ставит диагноз. Резкую боль, отёк или заметное ухудшение самочувствия лучше обсудить со специалистом.</div></article>
+      </aside>
+    </div>`;
+  }
+
+  function renderWeekJournal() {
+    const dates = recentDateKeys(7);
+    const records = dates.map(date => ({ date, log: getDailyLog(date), totals: getTotals(date), sessions: sessionsForDate(date) }));
+    const logged = records.filter(({ log }) => Object.values(log).some(value => value !== "" && value !== null));
+    const sleepValues = logged.map(({ log }) => Number(log.sleep)).filter(value => value > 0);
+    const averageSleep = sleepValues.length ? sleepValues.reduce((sum, value) => sum + value, 0) / sleepValues.length : 0;
+    const totalSteps = logged.reduce((sum, { log }) => sum + (Number(log.steps) || 0), 0);
+    const totalWater = logged.reduce((sum, { log }) => sum + (Number(log.water) || 0), 0);
+    const sessionCount = records.reduce((sum, record) => sum + record.sessions, 0);
+    const rowMarkup = ({ date, log, totals, sessions }) => `<tr class="${painStatus(log)}"><td><button type="button" class="date-link" data-journal-date="${date}">${formatDay(date, true)}</button></td><td>${sessions || "—"}</td><td>${valueOrDash(log.bikeMinutes, " мин")}</td><td>${totals.kcal ? formatNumber(totals.kcal) : "—"}</td><td>${totals.protein ? `${formatNumber(totals.protein)} г` : "—"}</td><td>${valueOrDash(log.water, " мл")}</td><td>${valueOrDash(log.steps)}</td><td>${valueOrDash(log.sleep, " ч")}</td><td>${log.painBefore !== "" || log.painAfter !== "" ? `${log.painBefore === "" ? "—" : log.painBefore} → ${log.painAfter === "" ? "—" : log.painAfter}` : "—"}</td><td>${valueOrDash(log.weight, " кг")}</td></tr>`;
+    const cardMarkup = ({ date, log, totals, sessions }) => `<button class="week-day-card ${painStatus(log)}" type="button" data-journal-date="${date}"><header><strong>${formatDay(date, true)}</strong><span>${sessions ? "ЛФК ✓" : "ЛФК —"}</span></header><div><span>Ккал<strong>${totals.kcal ? formatNumber(totals.kcal) : "—"}</strong></span><span>Шаги<strong>${valueOrDash(log.steps)}</strong></span><span>Сон<strong>${valueOrDash(log.sleep, " ч")}</strong></span><span>Боль<strong>${log.painBefore !== "" || log.painAfter !== "" ? `${log.painBefore === "" ? "—" : log.painBefore} → ${log.painAfter === "" ? "—" : log.painAfter}` : "—"}</strong></span></div></button>`;
+    return `<div class="week-stack">
+      <div class="week-summary">${[["ЛФК", sessionCount, "занятий"], ["Сон", averageSleep ? averageSleep.toFixed(1) : "—", "среднее, ч"], ["Шаги", formatNumber(totalSteps), "за неделю"], ["Вода", formatNumber(totalWater), "мл записано"]].map(([label, value, detail]) => `<article class="metric-card"><span>${label.toUpperCase()}</span><strong>${value}</strong><small>${detail}</small></article>`).join("")}</div>
+      <article class="panel week-table-panel"><div class="panel-head"><div><span class="eyebrow">ПОСЛЕДНИЕ 7 ДНЕЙ</span><h3>Умная таблица</h3><p>Нажмите на дату, чтобы заполнить или изменить запись.</p></div><span class="status-pill">${logged.length}/7 заполнено</span></div><div class="smart-table-wrap"><table class="smart-table"><thead><tr><th>Дата</th><th>ЛФК</th><th>Вело</th><th>Ккал</th><th>Белок</th><th>Вода</th><th>Шаги</th><th>Сон</th><th>Боль</th><th>Вес</th></tr></thead><tbody>${records.map(rowMarkup).join("")}</tbody></table></div><div class="week-mobile-list">${records.map(cardMarkup).join("")}</div></article>
+      <div class="safety-note">${icon("info")}<div><strong>Цвет строки — только ориентир.</strong> Красная отметка означает, что введённая боль выросла минимум на 2 пункта или достигла 7 из 10.</div></div>
+    </div>`;
+  }
+
+  function renderReminders() {
+    const next = getNextReminder();
+    const permission = "Notification" in window ? Notification.permission : "unsupported";
+    const statusText = permission === "granted" ? "Уведомления разрешены" : permission === "denied" ? "Уведомления запрещены в настройках" : permission === "unsupported" ? "Используйте календарь iPhone" : "Разрешите уведомления";
+    const reminders = [...state.reminders].sort((a, b) => (nextDateForReminder(a)?.getTime() || Infinity) - (nextDateForReminder(b)?.getTime() || Infinity));
+    return `<div class="reminder-layout">
+      <div class="reminder-main">
+        <article class="panel next-reminder-card"><span class="eyebrow">БЛИЖАЙШЕЕ НАПОМИНАНИЕ</span><div class="next-reminder-time">${next ? next.time : "—"}</div><h3>${next ? esc(next.title) : "Расписание пока пустое"}</h3><p>${next ? formatNextReminder(next) : "Добавьте первое напоминание ниже."}</p></article>
+        <article class="panel"><div class="panel-head"><div><span class="eyebrow">МОЁ РАСПИСАНИЕ</span><h3>Активные напоминания</h3></div><span class="status-pill">${state.reminders.filter(item => item.active).length} включено</span></div><div class="reminder-list">${reminders.length ? reminders.map(reminderCardMarkup).join("") : `<div class="empty-state">Добавьте напоминание о ЛФК, воде, питании или замере.</div>`}</div></article>
+      </div>
+      <aside class="reminder-side">
+        <form class="panel reminder-form" id="reminderForm"><div class="panel-head"><div><span class="eyebrow">НОВОЕ</span><h3>Добавить напоминание</h3></div>${icon("bell")}</div><label class="field">Название<input id="reminderTitle" required maxlength="60" placeholder="Например, ЛФК для колена" /></label><div class="field-grid"><label class="field">Время<input id="reminderTime" required type="time" value="10:00" /></label><label class="field">Повтор<select id="reminderRepeat"><option value="daily">Каждый день</option><option value="weekdays">По будням</option><option value="once">Один раз</option></select></label></div><label class="field">Дата для разового напоминания<input id="reminderDate" type="date" min="${todayKey()}" value="${todayKey()}" /></label><button class="primary full" type="submit">${icon("plus")} Добавить</button><div class="quick-reminders"><button type="button" data-reminder-template="lfk">ЛФК · 10:00</button><button type="button" data-reminder-template="water">Вода · 12:00</button><button type="button" data-reminder-template="check">Запись · 20:00</button></div></form>
+        <article class="panel notification-card"><div class="panel-head"><span class="round-icon">${icon("bell")}</span><span class="status-pill">${statusText}</span></div><h3>Уведомления на iPhone</h3><p>Внутри веб-приложения сигнал работает, пока VECTOR открыт. Кнопка «В календарь» создаёт системное напоминание, которое работает и после закрытия.</p>${permission === "default" ? `<button class="secondary full" type="button" data-action="request-notifications">Разрешить уведомления</button>` : ""}</article>
+      </aside>
+    </div>`;
+  }
+
+  function reminderCardMarkup(reminder) {
+    const nextDate = nextDateForReminder(reminder);
+    return `<div class="reminder-card ${reminder.active ? "" : "disabled"}"><div class="reminder-clock"><strong>${reminder.time}</strong><small>${repeatLabel(reminder)}</small></div><div class="reminder-copy"><strong>${esc(reminder.title)}</strong><small>${nextDate ? formatNextReminder({ ...reminder, nextAt: nextDate }) : "Время прошло"}</small></div><button type="button" class="switch ${reminder.active ? "active" : ""}" data-reminder-toggle="${reminder.id}" role="switch" aria-checked="${reminder.active}" aria-label="${reminder.active ? "Выключить" : "Включить"} напоминание"></button><div class="reminder-actions"><button class="icon-plain" type="button" data-reminder-export="${reminder.id}" aria-label="Добавить в календарь">${icon("download")}</button><button class="icon-plain danger" type="button" data-reminder-delete="${reminder.id}" aria-label="Удалить напоминание">${icon("trash")}</button></div></div>`;
+  }
+
+  function repeatLabel(reminder) {
+    if (reminder.repeat === "weekdays") return "по будням";
+    if (reminder.repeat === "once") return formatDay(reminder.date, true);
+    return "каждый день";
+  }
+
+  function nextDateForReminder(reminder, from = new Date()) {
+    if (!reminder.active) return null;
+    const [hours, minutes] = String(reminder.time || "00:00").split(":").map(Number);
+    if (reminder.repeat === "once") {
+      const date = new Date(`${reminder.date}T${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:00`);
+      return date > from ? date : null;
+    }
+    const candidate = new Date(from);
+    candidate.setSeconds(0, 0);
+    candidate.setHours(hours, minutes, 0, 0);
+    if (candidate <= from) candidate.setDate(candidate.getDate() + 1);
+    if (reminder.repeat === "weekdays") {
+      while (candidate.getDay() === 0 || candidate.getDay() === 6) candidate.setDate(candidate.getDate() + 1);
+    }
+    return candidate;
+  }
+
+  function getNextReminder() {
+    return state.reminders.filter(item => item.active).map(item => ({ ...item, nextAt: nextDateForReminder(item) })).filter(item => item.nextAt).sort((a, b) => a.nextAt - b.nextAt)[0] || null;
+  }
+
+  function formatNextReminder(reminder) {
+    const date = reminder.nextAt || nextDateForReminder(reminder);
+    if (!date) return "время прошло";
+    const today = new Date();
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const sameDay = value => value.getFullYear() === date.getFullYear() && value.getMonth() === date.getMonth() && value.getDate() === date.getDate();
+    const day = sameDay(today) ? "сегодня" : sameDay(tomorrow) ? "завтра" : new Intl.DateTimeFormat("ru-RU", { weekday: "short", day: "numeric", month: "short" }).format(date);
+    return `${day} в ${reminder.time} · ${repeatLabel(reminder)}`;
+  }
+
+  function saveDailyJournal() {
+    const date = document.getElementById("journalDate").value || todayKey();
+    const fieldValue = id => document.getElementById(id)?.value.trim() || "";
+    state.journalDate = date;
+    state.dailyLogs[date] = {
+      weight: fieldValue("journalWeight"),
+      water: fieldValue("journalWater"),
+      sleep: fieldValue("journalSleep"),
+      steps: fieldValue("journalSteps"),
+      bikeMinutes: fieldValue("journalBikeMinutes"),
+      bikeResistance: fieldValue("journalBikeResistance"),
+      painBefore: fieldValue("journalPainBefore"),
+      painAfter: fieldValue("journalPainAfter"),
+      energy: fieldValue("journalEnergy"),
+      note: fieldValue("journalNote")
+    };
+    saveState();
+    render();
+    toast("Запись сохранена в умной таблице");
+  }
+
+  function addReminder() {
+    const title = document.getElementById("reminderTitle").value.trim();
+    const time = document.getElementById("reminderTime").value;
+    const repeat = document.getElementById("reminderRepeat").value;
+    const date = document.getElementById("reminderDate").value || todayKey();
+    if (!title || !time) return toast("Введите название и время");
+    const reminder = { id: `${Date.now()}-${Math.random().toString(16).slice(2)}`, title, time, repeat, date, active: true };
+    if (repeat === "once" && !nextDateForReminder(reminder)) return toast("Выберите будущее время для разового напоминания");
+    state.reminders.push(reminder);
+    saveState();
+    render();
+    toast("Напоминание добавлено");
+  }
+
+  function addReminderTemplate(template) {
+    const templates = {
+      lfk: { title: "Время для ЛФК", time: "10:00", repeat: "daily" },
+      water: { title: "Выпить воды", time: "12:00", repeat: "daily" },
+      check: { title: "Заполнить дневник", time: "20:00", repeat: "daily" }
+    };
+    const selected = templates[template];
+    if (!selected) return;
+    state.reminders.push({ id: `${Date.now()}-${Math.random().toString(16).slice(2)}`, ...selected, date: todayKey(), active: true });
+    saveState();
+    render();
+    toast(`${selected.title}: добавлено`);
+  }
+
+  function toggleReminder(id) {
+    const reminder = state.reminders.find(item => item.id === id);
+    if (!reminder) return;
+    reminder.active = !reminder.active;
+    saveState();
+    render();
+    toast(reminder.active ? "Напоминание включено" : "Напоминание выключено");
+  }
+
+  function deleteReminder(id) {
+    state.reminders = state.reminders.filter(item => item.id !== id);
+    saveState();
+    render();
+    toast("Напоминание удалено");
+  }
+
+  async function requestNotifications() {
+    if (!("Notification" in window)) return toast("На этом устройстве используйте добавление в календарь");
+    try {
+      const permission = await Notification.requestPermission();
+      render();
+      toast(permission === "granted" ? "Уведомления разрешены" : "Разрешение не получено");
+    } catch {
+      toast("Установите VECTOR на экран «Домой» и повторите");
+    }
+  }
+
+  function icsDate(date, utc = false) {
+    const get = part => utc ? date[`getUTC${part}`]() : date[`get${part}`]();
+    return `${get("FullYear")}${String(get("Month") + 1).padStart(2, "0")}${String(get("Date")).padStart(2, "0")}T${String(get("Hours")).padStart(2, "0")}${String(get("Minutes")).padStart(2, "0")}${String(get("Seconds")).padStart(2, "0")}${utc ? "Z" : ""}`;
+  }
+
+  function icsEscape(value) {
+    return String(value).replace(/\\/g, "\\\\").replace(/;/g, "\\;").replace(/,/g, "\\,").replace(/\n/g, "\\n");
+  }
+
+  function exportReminder(id) {
+    const reminder = state.reminders.find(item => item.id === id);
+    if (!reminder) return;
+    let start = nextDateForReminder({ ...reminder, active: true });
+    if (!start && reminder.repeat === "once") return toast("Время этого напоминания уже прошло");
+    if (!start) start = new Date();
+    const end = new Date(start.getTime() + 15 * 60 * 1000);
+    const rule = reminder.repeat === "daily" ? "RRULE:FREQ=DAILY" : reminder.repeat === "weekdays" ? "RRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR" : "";
+    const lines = ["BEGIN:VCALENDAR", "VERSION:2.0", "CALSCALE:GREGORIAN", "PRODID:-//VECTOR Health//RU", "BEGIN:VEVENT", `UID:${reminder.id}@vector-health`, `DTSTAMP:${icsDate(new Date(), true)}`, `DTSTART:${icsDate(start)}`, `DTEND:${icsDate(end)}`, `SUMMARY:${icsEscape(reminder.title)}`, "DESCRIPTION:Напоминание из VECTOR Здоровье", rule, "BEGIN:VALARM", "TRIGGER:PT0M", "ACTION:DISPLAY", `DESCRIPTION:${icsEscape(reminder.title)}`, "END:VALARM", "END:VEVENT", "END:VCALENDAR"].filter(Boolean);
+    const blob = new Blob([lines.join("\r\n")], { type: "text/calendar;charset=utf-8" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = `vector-${reminder.id}.ics`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+    toast("Откройте файл и добавьте событие в календарь");
+  }
+
+  async function showReminderNotification(reminder) {
+    if (!("Notification" in window) || Notification.permission !== "granted") return;
+    try {
+      if ("serviceWorker" in navigator) {
+        const registration = await navigator.serviceWorker.ready;
+        await registration.showNotification(reminder.title, { body: `Время: ${reminder.time}`, icon: "./assets/vector.svg", tag: `vector-${reminder.id}` });
+      } else {
+        new Notification(reminder.title, { body: `Время: ${reminder.time}` });
+      }
+    } catch { /* notification support differs across browsers */ }
+  }
+
+  function checkReminders() {
+    if (!state.reminders.length) return;
+    const now = new Date();
+    const date = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+    const time = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+    state.reminders.forEach(reminder => {
+      if (!reminder.active || reminder.time !== time) return;
+      const allowed = reminder.repeat === "daily" || (reminder.repeat === "weekdays" && now.getDay() >= 1 && now.getDay() <= 5) || (reminder.repeat === "once" && reminder.date === date);
+      const key = `${reminder.id}-${date}-${time}`;
+      if (!allowed || firedReminders.has(key)) return;
+      firedReminders.add(key);
+      toast(`Напоминание: ${reminder.title}`);
+      signalDone();
+      showReminderNotification(reminder);
+      if (reminder.repeat === "once") {
+        reminder.active = false;
+        saveState();
+      }
+    });
+  }
+
   function renderProfile() {
     const logCount = Object.values(state.foodLogs).reduce((sum, day) => sum + day.length, 0);
+    const diaryCount = Object.keys(state.dailyLogs).length;
     return `<section class="view">
       <div class="profile-grid">
-        <article class="panel profile-card"><div class="avatar">V</div><div><span class="eyebrow">МОЙ ПРОФИЛЬ</span><h2>VECTOR Здоровье</h2><p>${state.completedSessions.length} занятий · ${logCount} записей питания</p></div></article>
+        <article class="panel profile-card"><div class="avatar">V</div><div><span class="eyebrow">МОЙ ПРОФИЛЬ</span><h2>VECTOR Здоровье</h2><p>${state.completedSessions.length} занятий · ${logCount} записей питания · ${diaryCount} дней наблюдений</p></div></article>
         <article class="panel"><p class="setting-label">РЕЖИМ ЭКРАНА</p><div class="mode-grid">${[["system", "monitor", "Системный"], ["light", "sun", "Светлый"], ["dark", "moon", "Тёмный"]].map(([mode, iconName, label]) => `<button type="button" class="${state.mode === mode ? "active" : ""}" data-mode="${mode}">${icon(iconName)}<span>${label}</span></button>`).join("")}</div></article>
       </div>
       <article class="panel"><p class="setting-label">ЦВЕТОВАЯ ТЕМА</p><div class="theme-grid">${themeOptions.map(([key, label, color]) => `<button class="theme-dot ${state.theme === key ? "active" : ""}" type="button" data-theme-choice="${key}" style="--dot:${color}"><i></i><span>${label}</span></button>`).join("")}</div></article>
-      <article class="panel"><div class="panel-head"><div><span class="eyebrow">ДАННЫЕ</span><h3>Хранятся на этом устройстве</h3><p>Дневник еды, цель калорий и прогресс занятий доступны без регистрации.</p></div></div><p class="data-note">Если очистить данные браузера или удалить приложение с экрана «Домой», локальная история может исчезнуть.</p><button class="danger-button" type="button" data-action="clear-data">Очистить все данные</button></article>
+      <article class="panel"><div class="panel-head"><div><span class="eyebrow">ДАННЫЕ</span><h3>Хранятся на этом устройстве</h3><p>Питание, умный дневник, напоминания и прогресс занятий доступны без регистрации.</p></div></div><p class="data-note">Если очистить данные браузера или удалить приложение с экрана «Домой», локальная история может исчезнуть. Напоминания, добавленные в календарь iPhone, останутся в календаре.</p><button class="danger-button" type="button" data-action="clear-data">Очистить все данные</button></article>
     </section>`;
   }
 
@@ -414,7 +747,7 @@
     applyAppearance();
     renderNav();
     renderHeader();
-    const renderer = { home: renderHome, lfk: renderLfk, timer: renderTimer, nutrition: renderNutrition, profile: renderProfile }[state.view];
+    const renderer = { home: renderHome, lfk: renderLfk, timer: renderTimer, nutrition: renderNutrition, journal: renderJournal, profile: renderProfile }[state.view];
     root.innerHTML = renderer();
     updateLiveClock();
   }
@@ -733,6 +1066,12 @@
     if (button.dataset.lfkFilter) { state.lfkFilter = button.dataset.lfkFilter; saveState(); return render(); }
     if (button.dataset.timerMode) return setTimerMode(button.dataset.timerMode);
     if (button.dataset.nutritionTab) { state.nutritionTab = button.dataset.nutritionTab; saveState(); return render(); }
+    if (button.dataset.journalTab) { state.journalTab = button.dataset.journalTab; saveState(); return render(); }
+    if (button.dataset.journalDate) { state.journalDate = button.dataset.journalDate; state.journalTab = "today"; saveState(); return render(); }
+    if (button.dataset.reminderTemplate) return addReminderTemplate(button.dataset.reminderTemplate);
+    if (button.dataset.reminderToggle) return toggleReminder(button.dataset.reminderToggle);
+    if (button.dataset.reminderExport) return exportReminder(button.dataset.reminderExport);
+    if (button.dataset.reminderDelete) return deleteReminder(button.dataset.reminderDelete);
     if (button.dataset.mode) { state.mode = button.dataset.mode; saveState(); return render(); }
     if (button.dataset.themeChoice) { state.theme = button.dataset.themeChoice; saveState(); return render(); }
     if (button.dataset.preset) { timerState.duration = Number(button.dataset.preset) * 1000; timerState.remaining = timerState.duration; timerState.running = false; return render(); }
@@ -741,6 +1080,8 @@
     if (action === "open-program") return openProgram(button.dataset.program);
     if (action === "go-nutrition") { state.nutritionTab = "diary"; return setView("nutrition"); }
     if (action === "go-calculator") { state.nutritionTab = "calculator"; return setView("nutrition"); }
+    if (action === "go-journal") { state.journalTab = "today"; return setView("journal"); }
+    if (action === "go-reminders") { state.journalTab = "reminders"; return setView("journal"); }
     if (action === "open-custom-food") return openCustomFoodDialog();
     if (action === "add-food") return openFoodDialog(button.dataset.food);
     if (action === "delete-food") return deleteFoodEntry(button.dataset.entry);
@@ -751,8 +1092,9 @@
     if (action === "apply-interval") return applyIntervalInputs();
     if (action === "lap-timer") { timerState.laps.unshift(timerState.elapsed + Date.now() - timerState.startedAt); return render(); }
     if (action === "toggle-wake") { timerState.keepAwake = !timerState.keepAwake; if (!timerState.keepAwake) releaseWakeLock(); return render(); }
+    if (action === "request-notifications") return requestNotifications();
     if (action === "clear-data") {
-      if (confirm("Удалить дневник питания, настройки и историю занятий с этого устройства?")) {
+      if (confirm("Удалить питание, умный дневник, напоминания, настройки и историю занятий с этого устройства?")) {
         localStorage.removeItem(STORAGE_KEY);
         state = structuredClone(defaultState);
         render();
@@ -763,6 +1105,25 @@
 
   function handleRootInput(event) {
     if (event.target.id === "foodSearch") document.getElementById("foodResults").innerHTML = foodResultsMarkup(event.target.value);
+  }
+
+  function handleRootChange(event) {
+    if (event.target.id === "journalDate" && event.target.value) {
+      state.journalDate = event.target.value;
+      saveState();
+      render();
+    }
+  }
+
+  function handleRootSubmit(event) {
+    if (event.target.id === "smartLogForm") {
+      event.preventDefault();
+      saveDailyJournal();
+    }
+    if (event.target.id === "reminderForm") {
+      event.preventDefault();
+      addReminder();
+    }
   }
 
   function handleProgramDialog(event) {
@@ -823,6 +1184,8 @@
   mobileNav.addEventListener("click", handleRootClick);
   root.addEventListener("click", handleRootClick);
   root.addEventListener("input", handleRootInput);
+  root.addEventListener("change", handleRootChange);
+  root.addEventListener("submit", handleRootSubmit);
   programDialog.addEventListener("click", handleProgramDialog);
   foodDialog.addEventListener("click", handleFoodDialogClick);
   foodDialog.addEventListener("input", event => { if (event.target.id === "foodGrams") updatePortionPreview(); });
@@ -832,7 +1195,9 @@
   document.addEventListener("visibilitychange", () => { if (document.visibilityState === "visible" && (timerState.running || sessionState?.running)) requestKeepAwake(); });
   window.addEventListener("beforeunload", releaseWakeLock);
   setInterval(tickTimers, 100);
+  setInterval(checkReminders, 15000);
   if ("serviceWorker" in navigator) window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(() => {}));
 
   render();
+  checkReminders();
 })();

@@ -2,6 +2,7 @@
   "use strict";
   const app = document.getElementById("app");
   if (!app) return;
+  const VERSION = "20260904-6";
 
   function period() {
     const hour = new Date().getHours();
@@ -20,24 +21,34 @@
     if (meta) meta.content = value === "night" ? "#101936" : value === "evening" ? "#fbf3f6" : "#f7f8fc";
   }
 
-  function loadFinalExperience() {
-    if (!document.querySelector('link[data-final-ui]')) {
-      const link = document.createElement("link");
-      link.rel = "stylesheet";
-      link.href = "./final-ui.css?v=20260904-5";
-      link.dataset.finalUi = "true";
-      document.head.appendChild(link);
-    }
-    if (!document.querySelector('script[data-final-ui]')) {
+  function styleOnce(id, href) {
+    if (document.getElementById(id)) return;
+    const link = document.createElement("link");
+    link.id = id;
+    link.rel = "stylesheet";
+    link.href = `${href}?v=${VERSION}`;
+    document.head.appendChild(link);
+  }
+
+  function scriptOnce(id, src) {
+    if (document.getElementById(id)) return Promise.resolve();
+    return new Promise((resolve, reject) => {
       const script = document.createElement("script");
-      script.src = "./final-ui.js?v=20260904-5";
+      script.id = id;
+      script.src = `${src}?v=${VERSION}`;
       script.defer = true;
-      script.dataset.finalUi = "true";
+      script.onload = resolve;
+      script.onerror = reject;
       document.body.appendChild(script);
-    }
+    });
   }
 
   apply();
-  loadFinalExperience();
+  styleOnce("final-ui-css-loader", "./final-ui.css");
+  styleOnce("experience-v2-css-loader", "./experience-v2.css");
+  scriptOnce("final-ui-js-loader", "./final-ui.js")
+    .then(() => scriptOnce("experience-v2-js-loader", "./experience-v2.js"))
+    .catch(error => console.error("Health+ UI loader error", error));
+
   setInterval(apply, 60000);
 })();

@@ -1,13 +1,13 @@
 {
-  "name": "VECTOR Здоровье",
-  "short_name": "VECTOR",
-  "description": "ЛФК, гимнастика СССР, таймер, питание, умный дневник и напоминания",
+  "name": "Health+ / VECTOR",
+  "short_name": "Health+",
+  "description": "Health+ / VECTOR — движение, тренировки, питание, умный дневник и персональный AI-помощник",
   "lang": "ru",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#07111b",
-  "theme_color": "#07111b",
+  "background_color": "#101936",
+  "theme_color": "#101936",
   "icons": [
     { "src": "./assets/vector.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
   ]

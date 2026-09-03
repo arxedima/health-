@@ -1,0 +1,155 @@
+/* Unified minimal Health+ design system for every application page */
+body{background:#f7f8fc!important}
+.app.minimal-ui{
+  --u-text:#17203b;--u-muted:#7d86a0;--u-card:rgba(255,255,255,.72);--u-card-strong:rgba(255,255,255,.88);--u-line:rgba(29,43,77,.075);--u-line-strong:rgba(29,43,77,.13);--u-soft:rgba(108,105,244,.065);--u-accent:#6869ef;--u-accent2:#77cffa;--u-green:#66c9a9;--u-red:#f26979;--u-orange:#eca75c;--u-shadow:0 18px 58px rgba(68,78,112,.085);--u-shadow-soft:0 9px 28px rgba(68,78,112,.055);
+  --page:transparent!important;--surface:var(--u-card)!important;--surface-2:rgba(255,255,255,.56)!important;--surface-3:rgba(255,255,255,.78)!important;--text:var(--u-text)!important;--muted:var(--u-muted)!important;--border:var(--u-line)!important;--border-strong:var(--u-line-strong)!important;--track:rgba(32,45,78,.07)!important;--success:var(--u-green)!important;--warning:var(--u-orange)!important;--danger:var(--u-red)!important;--shadow:var(--u-shadow)!important;
+  position:relative;min-height:100dvh;color:var(--u-text)!important;background:linear-gradient(180deg,#fbfcff,#f6f7fb)!important;transition:background .8s ease,color .5s ease;
+}
+.app.minimal-ui[data-period="morning"]{background:radial-gradient(circle at 78% 2%,rgba(255,213,167,.36),transparent 31%),radial-gradient(circle at 18% 13%,rgba(216,205,255,.38),transparent 34%),linear-gradient(180deg,#fffaf6 0%,#f9f7ff 48%,#f5f8ff 100%)!important}
+.app.minimal-ui[data-period="day"]{background:radial-gradient(circle at 80% 0%,rgba(187,223,255,.45),transparent 32%),radial-gradient(circle at 18% 16%,rgba(225,212,255,.34),transparent 35%),linear-gradient(180deg,#fbfdff 0%,#f7f8ff 54%,#f5f7fb 100%)!important}
+.app.minimal-ui[data-period="evening"]{background:radial-gradient(circle at 79% 1%,rgba(255,190,151,.43),transparent 31%),radial-gradient(circle at 18% 13%,rgba(221,176,239,.31),transparent 36%),linear-gradient(180deg,#fff9f5 0%,#fbf4fb 48%,#f6f7ff 100%)!important}
+.app.minimal-ui[data-period="night"]{
+  --u-text:#f6f8ff;--u-muted:#aab3d0;--u-card:rgba(31,42,83,.57);--u-card-strong:rgba(34,47,91,.78);--u-line:rgba(255,255,255,.075);--u-line-strong:rgba(255,255,255,.13);--u-soft:rgba(255,255,255,.055);--u-accent:#9690ff;--u-accent2:#80d4ff;--u-shadow:0 18px 58px rgba(0,0,0,.20);--u-shadow-soft:0 9px 28px rgba(0,0,0,.15);
+  --surface:var(--u-card)!important;--surface-2:rgba(255,255,255,.045)!important;--surface-3:rgba(255,255,255,.065)!important;--text:var(--u-text)!important;--muted:var(--u-muted)!important;--border:var(--u-line)!important;--border-strong:var(--u-line-strong)!important;--track:rgba(255,255,255,.065)!important;
+  color-scheme:dark;background:radial-gradient(circle at 78% 0%,rgba(100,105,235,.25),transparent 33%),radial-gradient(circle at 12% 26%,rgba(78,139,223,.16),transparent 38%),linear-gradient(180deg,#101936 0%,#111a3a 48%,#0e1732 100%)!important;
+}
+.app.minimal-ui::after{content:"";position:fixed;z-index:0;pointer-events:none;right:-150px;top:18%;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(126,119,248,.10),transparent 69%);filter:blur(10px)}
+.app.minimal-ui .main,.app.minimal-ui .sidebar,.app.minimal-ui .mobile-nav{position:relative;z-index:1}
+
+/* Global shell */
+.app.minimal-ui .sidebar{background:color-mix(in srgb,var(--u-card-strong) 76%,transparent)!important;border-right:1px solid var(--u-line)!important;box-shadow:none!important;backdrop-filter:blur(26px);-webkit-backdrop-filter:blur(26px)}
+.app.minimal-ui .brand strong{color:var(--u-text)}
+.app.minimal-ui .brand small,.app.minimal-ui .sidebar-note small{color:var(--u-muted)}
+.app.minimal-ui .sidebar-note{border-top-color:var(--u-line)!important;color:var(--u-accent)!important}
+.app.minimal-ui .nav-list{gap:5px}
+.app.minimal-ui .nav-list button{min-height:48px;border-radius:16px!important;color:var(--u-muted)!important;border:1px solid transparent!important;background:transparent!important}
+.app.minimal-ui .nav-list button:hover{background:var(--u-soft)!important;color:var(--u-text)!important}
+.app.minimal-ui .nav-list button.active{background:var(--u-soft)!important;color:var(--u-accent)!important;border-color:var(--u-line)!important}
+.app.minimal-ui .nav-list button.active::before{display:none!important}
+.app.minimal-ui .topbar{min-height:102px;padding:20px clamp(20px,4vw,52px);border-bottom:0!important;background:transparent!important}
+.app.minimal-ui:not(.minimal-home) .topbar{max-width:1180px;margin:0 auto;width:100%}
+.app.minimal-ui .heading small{color:var(--u-muted)!important;font-size:9px!important;letter-spacing:.15em!important}
+.app.minimal-ui .heading h1{color:var(--u-text)!important;font-size:clamp(1.8rem,3vw,2.45rem)!important;letter-spacing:-.05em!important}
+.app.minimal-ui .heading p{color:var(--u-muted)!important;max-width:600px;line-height:1.45}
+.app.minimal-ui .healthplus-chip,.app.minimal-ui .icon-button{background:var(--u-card)!important;border:1px solid var(--u-line)!important;color:var(--u-accent)!important;box-shadow:var(--u-shadow-soft)!important;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+.app.minimal-ui .content{max-width:1180px;margin:0 auto;width:100%;padding:18px clamp(20px,4vw,52px) 110px!important}
+.app.minimal-ui .view{display:flex;flex-direction:column;gap:18px}
+
+/* Cards, headings, labels */
+.app.minimal-ui .panel,.app.minimal-ui .program-card,.app.minimal-ui .meal-section,.app.minimal-ui .safety-note,.app.minimal-ui .calc-result,.app.minimal-ui .smart-insight,.app.minimal-ui .week-table-wrap,.app.minimal-ui .reminder-card{background:var(--u-card)!important;border:1px solid var(--u-line)!important;border-radius:25px!important;box-shadow:var(--u-shadow)!important;backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);color:var(--u-text)!important}
+.app.minimal-ui .panel{padding:22px!important}
+.app.minimal-ui .panel h2,.app.minimal-ui .panel h3,.app.minimal-ui .section-heading h2,.app.minimal-ui .program-card h3{color:var(--u-text)!important;letter-spacing:-.035em}
+.app.minimal-ui .panel p,.app.minimal-ui .section-heading p,.app.minimal-ui .program-card p,.app.minimal-ui .data-note,.app.minimal-ui .muted{color:var(--u-muted)!important;line-height:1.55}
+.app.minimal-ui .eyebrow,.app.minimal-ui .setting-label{color:var(--u-muted)!important;font-size:9px!important;font-weight:850!important;letter-spacing:.14em!important}
+.app.minimal-ui .section-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;padding:2px 2px 8px}
+.app.minimal-ui .section-heading h2{margin:4px 0 3px;font-size:clamp(1.55rem,2.8vw,2.05rem)}
+.app.minimal-ui .status-pill,.app.minimal-ui .tag,.app.minimal-ui .retro-label{border:1px solid var(--u-line)!important;background:var(--u-soft)!important;color:var(--u-accent)!important;border-radius:999px!important;box-shadow:none!important}
+.app.minimal-ui .round-icon{display:grid;place-items:center;width:42px;height:42px;border-radius:15px;background:var(--u-soft)!important;color:var(--u-accent)!important;border:1px solid var(--u-line)!important}
+.app.minimal-ui .safety-note{padding:15px 17px!important;box-shadow:var(--u-shadow-soft)!important;color:var(--u-muted)!important}
+.app.minimal-ui .safety-note svg{color:var(--u-accent)!important}
+
+/* Controls */
+.app.minimal-ui .primary{background:#1c2a5b!important;color:#fff!important;border:0!important;border-radius:15px!important;box-shadow:0 10px 26px rgba(28,42,91,.12)!important;min-height:46px}
+.app.minimal-ui[data-period="night"] .primary{background:linear-gradient(135deg,#6870ef,#806cf1)!important}
+.app.minimal-ui .secondary{background:var(--u-card)!important;color:var(--u-text)!important;border:1px solid var(--u-line)!important;border-radius:15px!important;box-shadow:none!important;min-height:46px}
+.app.minimal-ui .danger-button{border-radius:15px!important;background:rgba(242,105,121,.09)!important;color:var(--u-red)!important;border:1px solid rgba(242,105,121,.14)!important}
+.app.minimal-ui .icon-plain{border-radius:13px!important;color:var(--u-muted)!important}
+.app.minimal-ui .tabs{padding:5px!important;background:var(--u-card)!important;border:1px solid var(--u-line)!important;border-radius:18px!important;box-shadow:var(--u-shadow-soft)!important;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+.app.minimal-ui .tabs button{border-radius:14px!important;color:var(--u-muted)!important;background:transparent!important}
+.app.minimal-ui .tabs button.active{background:var(--u-card-strong)!important;color:var(--u-accent)!important;box-shadow:0 6px 18px rgba(80,90,130,.07)!important}
+.app.minimal-ui .chips{gap:8px}
+.app.minimal-ui .chips button{border-radius:999px!important;background:var(--u-card)!important;border:1px solid var(--u-line)!important;color:var(--u-muted)!important;box-shadow:none!important}
+.app.minimal-ui .chips button.active{background:var(--u-soft)!important;color:var(--u-accent)!important;border-color:color-mix(in srgb,var(--u-accent) 18%,transparent)!important}
+.app.minimal-ui .field{color:var(--u-muted)!important}
+.app.minimal-ui .field input,.app.minimal-ui .field select,.app.minimal-ui textarea,.app.minimal-ui .search-field{background:var(--u-card-strong)!important;color:var(--u-text)!important;border:1px solid var(--u-line)!important;border-radius:15px!important;box-shadow:none!important}
+.app.minimal-ui .field input::placeholder,.app.minimal-ui textarea::placeholder{color:color-mix(in srgb,var(--u-muted) 65%,transparent)!important}
+
+/* LFK */
+.app.minimal-ui .program-grid{gap:14px!important}
+.app.minimal-ui .program-card{padding:20px!important;text-align:left!important;transition:transform .18s ease,box-shadow .18s ease!important;overflow:hidden;position:relative}
+.app.minimal-ui .program-card:hover{transform:translateY(-2px);box-shadow:0 18px 46px rgba(70,79,115,.11)!important}
+.app.minimal-ui .program-card::after{content:"";position:absolute;right:-36px;top:-36px;width:130px;height:130px;border-radius:50%;background:radial-gradient(circle,rgba(118,119,244,.10),transparent 67%);pointer-events:none}
+.app.minimal-ui .program-card footer{border-top-color:var(--u-line)!important;color:var(--u-muted)!important}
+.app.minimal-ui .retro-card{background:linear-gradient(145deg,color-mix(in srgb,var(--u-card) 94%,#ffe4d3),var(--u-card))!important}
+.app.minimal-ui .retro-card .program-no{color:#d87962!important}
+
+/* Timer */
+.app.minimal-ui .clock-panel{text-align:center;padding:28px!important;background:linear-gradient(145deg,color-mix(in srgb,var(--u-card) 90%,#dfe5ff),var(--u-card))!important}
+.app.minimal-ui .live-clock{color:var(--u-text)!important;font-size:clamp(2.6rem,8vw,5.2rem)!important;letter-spacing:-.06em!important;font-weight:650!important}
+.app.minimal-ui .clock-date{color:var(--u-muted)!important;margin-top:5px}
+.app.minimal-ui .timer-layout{gap:16px!important}
+.app.minimal-ui .timer-display{text-align:center;min-height:320px;display:grid;place-items:center;background:radial-gradient(circle at 50% 40%,rgba(125,119,249,.10),transparent 39%),var(--u-card)!important}
+.app.minimal-ui .timer-value{color:var(--u-text)!important;font-size:clamp(3.3rem,10vw,6.6rem)!important;letter-spacing:-.07em!important;font-weight:650!important}
+.app.minimal-ui .timer-phase{color:var(--u-muted)!important}
+.app.minimal-ui .timer-controls{justify-content:center!important;gap:10px!important}
+.app.minimal-ui .preset-row button{border-radius:13px!important;background:var(--u-soft)!important;color:var(--u-accent)!important;border-color:var(--u-line)!important}
+.app.minimal-ui .lap{border-bottom-color:var(--u-line)!important;color:var(--u-muted)!important}
+
+/* Nutrition */
+.app.minimal-ui .nutrition-layout{gap:16px!important}
+.app.minimal-ui .nutrition-summary{background:linear-gradient(145deg,color-mix(in srgb,var(--u-card) 92%,#dfeaff),var(--u-card))!important}
+.app.minimal-ui .kcal-ring{background:conic-gradient(var(--u-accent) var(--progress),rgba(120,130,160,.10) 0)!important;box-shadow:none!important}
+.app.minimal-ui .kcal-ring::before{background:var(--u-card-strong)!important}
+.app.minimal-ui .remaining strong{color:var(--u-text)!important}
+.app.minimal-ui .macro-progress>div,.app.minimal-ui .macro-row span{border-color:var(--u-line)!important;background:var(--u-soft)!important;border-radius:14px!important}
+.app.minimal-ui .progress-track{background:rgba(100,110,140,.09)!important;border-radius:999px!important}
+.app.minimal-ui .progress-track i{background:linear-gradient(90deg,var(--u-accent),var(--u-accent2))!important;border-radius:999px!important}
+.app.minimal-ui .meal-section{padding:17px!important;box-shadow:var(--u-shadow-soft)!important}
+.app.minimal-ui .meal-head{border-bottom-color:var(--u-line)!important}
+.app.minimal-ui .food-entry{border-bottom-color:var(--u-line)!important}
+.app.minimal-ui .food-entry strong{color:var(--u-text)!important}.app.minimal-ui .food-entry small,.app.minimal-ui .meal-empty{color:var(--u-muted)!important}
+.app.minimal-ui .food-result,.app.minimal-ui .search-result{border-color:var(--u-line)!important;background:var(--u-card)!important;border-radius:16px!important}
+.app.minimal-ui .calc-result{box-shadow:var(--u-shadow-soft)!important;background:linear-gradient(145deg,var(--u-soft),var(--u-card))!important}
+
+/* Journal and reminders */
+.app.minimal-ui .journal-layout,.app.minimal-ui .profile-grid{gap:16px!important}
+.app.minimal-ui .smart-insight{padding:18px!important;box-shadow:var(--u-shadow-soft)!important}
+.app.minimal-ui .smart-insight.good{background:linear-gradient(145deg,rgba(102,201,169,.10),var(--u-card))!important}
+.app.minimal-ui .smart-insight.watch{background:linear-gradient(145deg,rgba(236,167,92,.10),var(--u-card))!important}
+.app.minimal-ui .smart-insight.alert{background:linear-gradient(145deg,rgba(242,105,121,.10),var(--u-card))!important}
+.app.minimal-ui table{color:var(--u-text)!important}
+.app.minimal-ui th{color:var(--u-muted)!important;background:var(--u-soft)!important}
+.app.minimal-ui td,.app.minimal-ui th{border-color:var(--u-line)!important}
+.app.minimal-ui .week-table-wrap{overflow:hidden!important;box-shadow:var(--u-shadow-soft)!important}
+.app.minimal-ui .reminder-card{padding:17px!important;box-shadow:var(--u-shadow-soft)!important}
+.app.minimal-ui .reminder-card strong{color:var(--u-text)!important}.app.minimal-ui .reminder-card small{color:var(--u-muted)!important}
+.app.minimal-ui .reminder-time{color:var(--u-accent)!important}
+
+/* Profile */
+.app.minimal-ui .profile-card{background:linear-gradient(145deg,color-mix(in srgb,var(--u-card) 92%,#e8e2ff),var(--u-card))!important}
+.app.minimal-ui .avatar{background:radial-gradient(circle at 34% 28%,#fff 0 7%,#a9e1ff 19%,#7c79f7 53%,#d49cf1 79%,#ffd5dd 100%)!important;color:white!important;box-shadow:0 16px 36px rgba(107,105,239,.17)!important;border:0!important}
+.app.minimal-ui .mode-grid button,.app.minimal-ui .theme-dot{background:var(--u-card)!important;border:1px solid var(--u-line)!important;border-radius:16px!important;color:var(--u-muted)!important;box-shadow:none!important}
+.app.minimal-ui .mode-grid button.active,.app.minimal-ui .theme-dot.active{background:var(--u-soft)!important;color:var(--u-accent)!important;border-color:color-mix(in srgb,var(--u-accent) 18%,transparent)!important}
+
+/* Dialogs */
+.app.minimal-ui~.dialog,.dialog{border:1px solid var(--u-line,rgba(30,42,75,.10))!important;border-radius:26px!important;background:rgba(251,252,255,.94)!important;color:#17203b!important;box-shadow:0 30px 90px rgba(30,42,75,.18)!important;backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px)}
+.dialog::backdrop{background:rgba(20,26,47,.32)!important;backdrop-filter:blur(8px)}
+.dialog .dialog-head{border-bottom-color:rgba(30,42,75,.07)!important}.dialog .dialog-body{color:#17203b!important}.dialog .muted{color:#7d86a0!important}
+.app.minimal-ui[data-period="night"]~.dialog,.app.minimal-ui[data-period="night"] .dialog{background:rgba(20,30,64,.94)!important;color:#f6f8ff!important}.app.minimal-ui[data-period="night"]~.dialog .dialog-body{color:#f6f8ff!important}
+
+/* Mobile bottom navigation */
+.app.minimal-ui .mobile-nav{background:color-mix(in srgb,var(--u-card-strong) 86%,transparent)!important;border:1px solid var(--u-line)!important;border-radius:24px 24px 0 0!important;box-shadow:0 -12px 38px rgba(42,50,85,.07)!important;backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px)}
+.app.minimal-ui .mobile-nav button{color:var(--u-muted)!important;background:transparent!important}
+.app.minimal-ui .mobile-nav button.active{color:var(--u-accent)!important}
+
+@media(max-width:900px){
+  .app.minimal-ui:not(.minimal-home) .content{padding:14px 18px calc(108px + env(safe-area-inset-bottom))!important}
+  .app.minimal-ui:not(.minimal-home) .topbar{padding:16px 18px 9px!important;min-height:92px}
+  .app.minimal-ui .heading p{font-size:12px!important}
+  .app.minimal-ui .section-heading{align-items:flex-start;flex-direction:column;gap:9px}
+  .app.minimal-ui .panel{padding:18px!important;border-radius:22px!important}
+  .app.minimal-ui .program-card,.app.minimal-ui .meal-section{border-radius:21px!important}
+  .app.minimal-ui .timer-display{min-height:280px}
+  .app.minimal-ui .timer-value{font-size:clamp(3.25rem,17vw,5rem)!important}
+}
+@media(max-width:620px){
+  .app.minimal-ui .topbar{gap:10px!important}
+  .app.minimal-ui .heading h1{font-size:1.65rem!important}
+  .app.minimal-ui .heading p{display:none}
+  .app.minimal-ui .content{padding-left:14px!important;padding-right:14px!important}
+  .app.minimal-ui .tabs{overflow-x:auto;display:flex;scrollbar-width:none}.app.minimal-ui .tabs::-webkit-scrollbar{display:none}.app.minimal-ui .tabs button{white-space:nowrap;flex:1 0 auto}
+  .app.minimal-ui .field-grid{grid-template-columns:1fr!important}
+  .app.minimal-ui .nutrition-layout,.app.minimal-ui .timer-layout,.app.minimal-ui .journal-layout,.app.minimal-ui .profile-grid{grid-template-columns:1fr!important}
+  .app.minimal-ui .program-grid{grid-template-columns:1fr!important}
+  .app.minimal-ui .live-clock{font-size:3rem!important}
+}

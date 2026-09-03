@@ -1,5 +1,5 @@
-const CACHE = "healthplus-vector-v11-fixed-shell";
-const V = "20260904-9";
+const CACHE = "healthplus-vector-v12-quality";
+const V = "20260904-10";
 const ASSETS = [
   "./",
   "./index.html",
@@ -12,14 +12,16 @@ const ASSETS = [
   `./cleanup-v3.css?v=${V}`,
   `./onboarding.css?v=${V}`,
   `./shell-v4.css?v=${V}`,
+  `./quality-v5.css?v=${V}`,
   "./app.js?v=20260904-4",
   "./healthplus.js?v=20260904-4",
   "./minimal-redesign.js?v=20260904-4",
-  "./unified-minimal.js?v=20260904-4",
+  `./unified-minimal.js?v=${V}`,
   `./final-ui.js?v=${V}`,
   `./experience-v2.js?v=${V}`,
   `./onboarding.js?v=${V}`,
   `./shell-v4.js?v=${V}`,
+  `./quality-v5.js?v=${V}`,
   `./manifest.webmanifest?v=${V}`,
   "./assets/vector.svg",
   "./assets/balanced-meal.webp"
@@ -41,7 +43,7 @@ self.addEventListener("fetch", event => {
     return response;
   };
   if (event.request.mode === "navigate" || ["script", "style"].includes(event.request.destination)) {
-    event.respondWith(fetch(event.request, { cache: "no-store" }).then(updateCache).catch(() => caches.match(event.request).then(cached => cached || caches.match("./index.html"))));
+    event.respondWith(fetch(event.request, {cache:"no-store"}).then(updateCache).catch(() => caches.match(event.request).then(cached => cached || caches.match("./index.html"))));
     return;
   }
   event.respondWith(caches.match(event.request).then(cached => cached || fetch(event.request).then(updateCache)));

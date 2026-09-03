@@ -1,13 +1,13 @@
 {
-  "name": "Health+ / VECTOR",
+  "name": "Health+ / VECTOR LOOP",
   "short_name": "Health+",
-  "description": "Health+ / VECTOR — движение, тренировки, питание, умный дневник и персональный AI-помощник",
+  "description": "VECTOR LOOP — один следующий правильный шаг вместо перегруза данными.",
   "lang": "ru",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#101936",
-  "theme_color": "#101936",
+  "background_color": "#0e1836",
+  "theme_color": "#0e1836",
   "icons": [
     { "src": "./assets/vector.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
   ]

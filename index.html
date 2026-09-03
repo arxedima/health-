@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+    <meta name="theme-color" content="#07111b" />
+    <meta name="description" content="VECTOR Здоровье — ЛФК, гимнастика СССР, интервальный таймер и дневник питания." />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="VECTOR" />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" href="./assets/vector.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./styles.css" />
+    <title>VECTOR Здоровье</title>
+  </head>
+  <body>
+    <svg class="svg-sprite" aria-hidden="true">
+      <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 11 9-8 9 8v9a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></symbol>
+      <symbol id="i-activity" viewBox="0 0 24 24"><path d="M3 12h4l2.2-7 4.2 14 2.3-7H21"/></symbol>
+      <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+      <symbol id="i-food" viewBox="0 0 24 24"><path d="M6 3v7M9 3v7M6 7h3M7.5 10v11M16 3c2 2 2 7 0 9v9M16 3v9h3"/></symbol>
+      <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c.7-5 3.4-7 8-7s7.3 2 8 7"/></symbol>
+      <symbol id="i-play" viewBox="0 0 24 24"><path d="m8 5 11 7-11 7z"/></symbol>
+      <symbol id="i-pause" viewBox="0 0 24 24"><path d="M8 5v14M16 5v14"/></symbol>
+      <symbol id="i-reset" viewBox="0 0 24 24"><path d="M4 7v5h5M5.5 11a7.5 7.5 0 1 1 2 7"/></symbol>
+      <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+      <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+      <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m16 16 5 5"/></symbol>
+      <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+      <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7h.01"/></symbol>
+      <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+      <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 15.5A8.5 8.5 0 0 1 8.5 4 8.5 8.5 0 1 0 20 15.5z"/></symbol>
+      <symbol id="i-monitor" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></symbol>
+      <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M7 7l1 14h8l1-14M10 11v6M14 11v6"/></symbol>
+      <symbol id="i-edit" viewBox="0 0 24 24"><path d="m4 20 4.5-1 10-10a2 2 0 0 0-3-3l-10 10zM14 7l3 3"/></symbol>
+      <symbol id="i-kcal" viewBox="0 0 24 24"><path d="M13 2c1 4-2 5-2 8 0 2 1 3 2 4 1-2 3-3 4-5 2 2 3 4 3 7a8 8 0 1 1-15-4c1-2 3-4 6-6 0 3 1 4 2 5"/></symbol>
+      <symbol id="i-archive" viewBox="0 0 24 24"><path d="M4 7h16v14H4zM3 3h18v4H3zM9 11h6"/></symbol>
+      <symbol id="i-heart" viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"/></symbol>
+    </svg>
+
+    <div id="app" class="app" data-theme="navy" data-mode="dark">
+      <aside class="sidebar" aria-label="Основная навигация">
+        <div class="brand"><span class="brand-mark"><i></i><b></b></span><strong>VECTOR.</strong><small>ЗДОРОВЬЕ</small></div>
+        <nav class="nav-list" id="desktopNav"></nav>
+        <div class="sidebar-note"><svg><use href="#i-heart"></use></svg><span><strong>Баланс каждый день</strong><small>движение и питание</small></span></div>
+      </aside>
+      <main class="main">
+        <header class="topbar">
+          <div class="mobile-mark"><span class="brand-mark"><i></i><b></b></span></div>
+          <div class="heading"><small id="viewKicker">СЕГОДНЯ</small><h1 id="viewTitle">Привет!</h1><p id="viewSubtitle"></p></div>
+          <button class="icon-button" id="themeQuick" aria-label="Сменить светлую и тёмную тему"><svg><use href="#i-moon"></use></svg></button>
+        </header>
+        <div id="viewRoot" class="content" tabindex="-1"></div>
+      </main>
+      <nav class="mobile-nav" id="mobileNav" aria-label="Основная навигация"></nav>
+      <dialog class="dialog" id="programDialog"></dialog>
+      <dialog class="dialog" id="foodDialog"></dialog>
+      <div class="toast-stack" id="toastStack" aria-live="polite"></div>
+    </div>
+    <script src="./app.js" defer></script>
+  </body>
+</html>

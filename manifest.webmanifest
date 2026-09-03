@@ -1,0 +1,14 @@
+{
+  "name": "VECTOR Здоровье",
+  "short_name": "VECTOR",
+  "description": "ЛФК, гимнастика СССР, таймер и дневник питания",
+  "lang": "ru",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#07111b",
+  "theme_color": "#07111b",
+  "icons": [
+    { "src": "./assets/vector.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

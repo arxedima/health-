@@ -1,10 +1,12 @@
-/* Health+ / VECTOR LOOP — mobile shell v2
-   Bottom navigation is physically anchored to the viewport bottom.
-   Safe-area lives INSIDE the nav instead of creating a blank strip below it. */
+/* Health+ / VECTOR LOOP — mobile shell v3
+   Bottom navigation follows the ACTUAL visible viewport on iOS.
+   Safari / ChatGPT browser chrome can overlap the layout viewport, so JS
+   supplies --vv-bottom. In standalone/PWA mode it naturally resolves to 0. */
 
 :root{
   --vector-nav-core:72px;
   --vector-nav-gap:10px;
+  --vv-bottom:0px;
 }
 
 .app{
@@ -13,16 +15,16 @@
 }
 
 .screen{
-  /* Enough room to scroll the final card fully above the fixed navigation. */
-  padding-bottom:calc(var(--vector-nav-core) + var(--safe-b) + 30px)!important;
-  scroll-padding-bottom:calc(var(--vector-nav-core) + var(--safe-b) + 30px);
+  /* Final content always clears both the nav and any visible browser chrome. */
+  padding-bottom:calc(var(--vector-nav-core) + var(--safe-b) + var(--vv-bottom) + 30px)!important;
+  scroll-padding-bottom:calc(var(--vector-nav-core) + var(--safe-b) + var(--vv-bottom) + 30px);
 }
 
 .bottom-nav{
   position:fixed!important;
   left:10px!important;
   right:10px!important;
-  bottom:0!important;
+  bottom:var(--vv-bottom)!important;
   top:auto!important;
   width:auto!important;
   height:calc(var(--vector-nav-core) + var(--safe-b))!important;
@@ -38,6 +40,7 @@
   backface-visibility:hidden;
   -webkit-backface-visibility:hidden;
   contain:layout paint style;
+  transition:bottom .16s ease,opacity .16s ease,transform .16s ease;
 }
 
 .bottom-nav>button{
@@ -56,12 +59,18 @@
   height:56px!important;
 }
 
-/* Keep the floating VECTOR visually centered while the shell reaches the bottom. */
 .bottom-nav .vector-quick-launcher + button{
   min-width:0;
 }
 
-/* Prevent iOS rubber-banding from visually detaching fixed chrome. */
+/* While the iOS keyboard is open, don't float the whole nav above it. */
+html.vector-keyboard-open .bottom-nav{
+  opacity:0!important;
+  pointer-events:none!important;
+  transform:translate3d(0,14px,0)!important;
+}
+
+/* Prevent rubber-banding from visually detaching fixed chrome. */
 html,body,.app{
   overscroll-behavior:none!important;
 }
@@ -71,14 +80,12 @@ html,body,.app{
   -webkit-overflow-scrolling:touch;
 }
 
-/* Light theme follows the exact same geometry; only the palette changes. */
 html[data-vector-theme="light"] .bottom-nav{
   background:rgba(249,251,255,.98)!important;
   border-color:rgba(39,54,91,.11)!important;
   box-shadow:0 -12px 32px rgba(61,74,109,.10)!important;
 }
 
-/* Landscape / short viewport: keep navigation usable without covering most content. */
 @media (max-height:650px){
   :root{--vector-nav-core:66px}
   .bottom-nav>button{height:52px!important;min-height:52px!important}
@@ -92,5 +99,8 @@ html[data-vector-theme="light"] .bottom-nav{
     right:auto!important;
     width:min(680px,calc(100vw - 24px))!important;
     transform:translate3d(-50%,0,0)!important;
+  }
+  html.vector-keyboard-open .bottom-nav{
+    transform:translate3d(-50%,14px,0)!important;
   }
 }

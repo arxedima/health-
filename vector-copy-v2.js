@@ -100,8 +100,8 @@
 
   function patchMainCopy(){
     const now=screen.querySelector('.now-page');
-    if(now&&!now.dataset.copyV2){
-      now.dataset.copyV2='1';
+    if(now&&!now.dataset.copyV3){
+      now.dataset.copyV3='1';
       const duplicateClock=now.querySelector('.now-time strong');
       if(duplicateClock)duplicateClock.remove();
       const kicker=now.querySelector('.now-copy small');
@@ -115,12 +115,37 @@
       else if(hour>=22||hour<5){title='Всё нормально.';sub='На сегодня достаточно. Остальное — завтра.'}
       if(h)h.textContent=title;
       if(p)p.textContent=sub;
-      const actionLabel=now.querySelector('.one-action>small');
-      if(actionLabel)actionLabel.textContent='СЕЙЧАС ВАЖНО';
-      const hold=now.querySelector('.hold-note');
-      if(hold)hold.textContent='Удерживай карточку: сделать или пропустить';
-      const silence=now.querySelector('.silence-note');
-      if(silence)silence.textContent='Если сейчас ничего полезного не нужно — VECTOR просто молчит.';
+
+      const card=now.querySelector('.one-action');
+      const isCalm=card?.classList.contains('calm');
+      if(card){
+        const actionLabel=card.querySelector(':scope>small');
+        const actionTitle=card.querySelector('h2');
+        const actionText=card.querySelector('p');
+        if(isCalm){
+          card.classList.add('quiet-state');
+          if(actionLabel)actionLabel.textContent='СЕЙЧАС';
+          if(actionTitle)actionTitle.textContent='Сейчас ничего делать не нужно.';
+          if(actionText)actionText.textContent='Следующий шаг появится, когда он действительно понадобится.';
+          card.querySelector('.action-primary')?.remove();
+          card.querySelector('.why')?.remove();
+          card.querySelector('.hold-note')?.remove();
+        }else{
+          if(actionLabel)actionLabel.textContent='СЕЙЧАС ВАЖНО';
+          const hold=card.querySelector('.hold-note');
+          if(hold)hold.textContent='Удерживай карточку: сделать или пропустить';
+        }
+      }
+
+      const route=now.querySelector('.route-peek');
+      if(route){
+        const sm=route.querySelector('small');
+        const b=route.querySelector('b');
+        if(sm)sm.textContent='МАРШРУТ';
+        if(b)b.textContent='Посмотреть день';
+        if(isCalm)route.classList.add('route-peek-quiet');
+      }
+      now.querySelector('.silence-note')?.remove();
     }
 
     const food=screen.querySelector('.food-page');

@@ -1,5 +1,5 @@
-/* Health+ / VECTOR LOOP — mobile shell v6
-   One fixed bottom navigation. The screen owns all scrolling.
+/* Health+ / VECTOR LOOP — mobile shell v7
+   The outer document never scrolls. Only .screen owns vertical scrolling.
    --vv-bottom is supplied by vector-viewport-v1.js for iOS browser chrome. */
 
 :root{
@@ -8,15 +8,39 @@
   --vv-bottom:0px;
 }
 
+html,body{
+  position:fixed!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  max-height:100%!important;
+  margin:0!important;
+  overflow:hidden!important;
+  overscroll-behavior:none!important;
+}
+
 .app{
+  position:fixed!important;
+  inset:0!important;
+  width:100%!important;
+  height:100dvh!important;
+  max-height:100dvh!important;
+  overflow:hidden!important;
   grid-template-rows:calc(var(--header) + var(--safe-t)) minmax(0,1fr) 0!important;
 }
 
 .screen{
+  position:relative!important;
+  min-height:0!important;
+  height:100%!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
   padding-bottom:calc(var(--vector-nav-core) + var(--safe-b) + var(--vv-bottom) + 18px)!important;
+  scroll-padding-top:8px!important;
   scroll-padding-bottom:calc(var(--vector-nav-core) + var(--safe-b) + var(--vv-bottom) + 18px);
   overscroll-behavior-y:contain!important;
   -webkit-overflow-scrolling:touch;
+  touch-action:pan-y;
 }
 
 .bottom-nav{
@@ -39,7 +63,8 @@
   transform:translate3d(0,0,0)!important;
   backface-visibility:hidden;
   -webkit-backface-visibility:hidden;
-  contain:layout paint style;
+  contain:layout style!important;
+  overflow:visible!important;
   transition:opacity .16s ease,transform .16s ease;
 }
 
@@ -47,6 +72,7 @@
   height:50px!important;
   min-height:50px!important;
   gap:2px!important;
+  overflow:visible!important;
 }
 
 .bottom-nav button>span{
@@ -64,14 +90,23 @@
 }
 
 .bottom-nav .vector-quick-launcher{
-  height:56px!important;
-  min-height:56px!important;
-  margin-top:-10px!important;
+  position:relative!important;
+  z-index:4!important;
+  height:58px!important;
+  min-height:58px!important;
+  margin-top:-11px!important;
+  overflow:visible!important;
 }
 
 .bottom-nav .vq-mini-core{
+  position:relative!important;
+  z-index:5!important;
   width:50px!important;
   height:50px!important;
+  min-width:50px!important;
+  min-height:50px!important;
+  flex:none!important;
+  overflow:visible!important;
   box-shadow:0 0 0 7px rgba(31,45,87,.86),0 9px 22px rgba(60,56,167,.28),0 0 24px rgba(126,117,255,.22)!important;
 }
 
@@ -83,6 +118,7 @@
 @media (max-width:600px){
   .view-now .now-page{
     padding-bottom:4px!important;
+    overflow:visible!important;
   }
   .view-now .now-time{
     padding-top:2px!important;
@@ -106,13 +142,17 @@
     line-height:1.42!important;
   }
   .view-now .sphere-wrap.hero{
-    width:218px!important;
-    height:226px!important;
-    margin:10px auto 6px!important;
+    width:220px!important;
+    height:232px!important;
+    min-height:232px!important;
+    margin:10px auto 10px!important;
+    overflow:visible!important;
   }
   .view-now .sphere-wrap.hero .state-sphere{
     width:168px!important;
     height:168px!important;
+    min-width:168px!important;
+    min-height:168px!important;
   }
   .view-now .one-action{
     margin-top:2px!important;
@@ -128,10 +168,6 @@ html.vector-keyboard-open .bottom-nav{
   transform:translate3d(0,14px,0)!important;
 }
 
-html,body,.app{
-  overscroll-behavior:none!important;
-}
-
 html[data-vector-theme="light"] .bottom-nav{
   background:rgba(249,251,255,.97)!important;
   border-color:rgba(39,54,91,.11)!important;
@@ -141,8 +177,8 @@ html[data-vector-theme="light"] .bottom-nav{
 @media (max-height:650px){
   :root{--vector-nav-core:56px}
   .bottom-nav>button{height:46px!important;min-height:46px!important}
-  .bottom-nav .vector-quick-launcher{height:52px!important;min-height:52px!important;margin-top:-8px!important}
-  .bottom-nav .vq-mini-core{width:47px!important;height:47px!important}
+  .bottom-nav .vector-quick-launcher{height:54px!important;min-height:54px!important;margin-top:-9px!important}
+  .bottom-nav .vq-mini-core{width:47px!important;height:47px!important;min-width:47px!important;min-height:47px!important}
 }
 
 @media (min-width:760px){

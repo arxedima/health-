@@ -42,6 +42,7 @@
     if(g)pendingGoal=LEGACY[g.dataset.obGoal]||g.dataset.obGoal;
     const t=e.target.closest?.('[data-ob-tone]');
     if(t)pendingTone=t.dataset.obTone;
+    if(e.target.closest?.('[data-ob-next]'))setTimeout(migrate,80);
   },true);
 
   function goalButtons(selected){
@@ -91,8 +92,9 @@
 
     if(card.querySelector('.ob-formula')){
       const s=load();
-      const goal=GOAL_LABEL[LEGACY[s?.profile?.goal]||s?.profile?.goal]||'Всё вместе';
-      card.innerHTML=`<small>VECTOR LOOP</small><h1>Настройка готова.</h1><p>Фокус: <b>${goal}</b>. VECTOR будет вести тебя через один понятный следующий шаг — без перегруза и чувства вины.</p><div class="ob-formula"><b>STATE</b><span>→</span><b>ACTION</b><span>→</span><b>LEARN</b><span>→</span><b>ADAPT</b></div>`;
+      const rawGoal=pendingGoal||LEGACY[s?.profile?.goal]||s?.profile?.goal||'balanced';
+      const goal=GOAL_LABEL[rawGoal]||'Всё вместе';
+      card.innerHTML=`<small>VECTOR LOOP</small><h1>Настройка готова.</h1><p>Фокус: <b>${goal}</b>. Дальше — один понятный следующий шаг за раз, без перегруза и чувства вины.</p><div class="ob-formula"><b>STATE</b><span>→</span><b>ACTION</b><span>→</span><b>LEARN</b><span>→</span><b>ADAPT</b></div>`;
     }
   }
 

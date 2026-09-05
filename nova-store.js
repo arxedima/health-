@@ -15,6 +15,12 @@ const base=()=>({
 
 function obj(v,f={}){return v&&typeof v==='object'&&!Array.isArray(v)?v:f}
 function arr(v){return Array.isArray(v)?v:[]}
+function cleanName(v){
+  const name=String(v||'').trim();
+  if(!name)return 'Дмитрий';
+  if(/^дима$/i.test(name)||/^dima$/i.test(name))return 'Дмитрий';
+  return name;
+}
 
 function migrateVector(){
   try{
@@ -22,7 +28,7 @@ function migrateVector(){
     if(!old)return null;
     const n=base();
     const p=obj(old.profile);
-    n.profile.name=p.name||old.profileName||n.profile.name;
+    n.profile.name=cleanName(p.name||old.profileName||n.profile.name);
     n.profile.height=Number(p.height||old.calculator?.height||n.profile.height);
     n.profile.weight=Number(p.weight||old.calculator?.weight||n.profile.weight);
     n.profile.goal=p.goal||old.healthGoal||n.profile.goal;
@@ -34,10 +40,11 @@ function migrateVector(){
 }
 
 export function normalize(raw){
-  const b=base(),r=obj(raw);
+  const b=base(),r=obj(raw),profile={...b.profile,...obj(r.profile)};
+  profile.name=cleanName(profile.name);
   return {
     ...b,...r,
-    profile:{...b.profile,...obj(r.profile)},
+    profile,
     settings:{...b.settings,...obj(r.settings)},
     daily:obj(r.daily),
     meals:obj(r.meals),

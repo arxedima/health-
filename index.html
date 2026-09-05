@@ -9,11 +9,12 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Nova+">
-  <link rel="manifest" href="./manifest.webmanifest?v=nova8">
-  <link rel="icon" href="./assets/nova-orb.svg?v=nova8" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="./assets/nova-orb.svg?v=nova8">
-  <link rel="stylesheet" href="./nova.css?v=nova8">
-  <link rel="stylesheet" href="./nova-reference-v8.css?v=nova8">
+  <link rel="manifest" href="./manifest.webmanifest?v=nova9">
+  <link rel="icon" href="./assets/nova-orb.svg?v=nova9" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="./assets/nova-orb.svg?v=nova9">
+  <link rel="stylesheet" href="./nova.css?v=nova9">
+  <link rel="stylesheet" href="./nova-reference-v8.css?v=nova9">
+  <link rel="stylesheet" href="./nova-sections-v9.css?v=nova9">
   <title>Nova+</title>
 </head>
 <body>
@@ -24,10 +25,10 @@
   </div>
   <div id="sheet" class="sheet"></div>
   <input id="cameraInput" type="file" accept="image/*" capture="environment" hidden>
-  <script type="module" src="./nova-app.js?v=nova8"></script>
-  <script src="./nova-reference-v8.js?v=nova8" defer></script>
+  <script type="module" src="./nova-app-v9.js?v=nova9"></script>
+  <script src="./nova-reference-v8.js?v=nova9" defer></script>
   <script>
-    if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=nova8').catch(()=>{}));}
+    if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=nova9').catch(()=>{}));}
   </script>
 </body>
 </html>

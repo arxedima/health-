@@ -1,4 +1,4 @@
-/* Health+ / VECTOR LOOP — mobile shell v5
+/* Health+ / VECTOR LOOP — mobile shell v6
    One fixed bottom navigation. The screen owns all scrolling.
    --vv-bottom is supplied by vector-viewport-v1.js for iOS browser chrome. */
 
@@ -13,8 +13,8 @@
 }
 
 .screen{
-  padding-bottom:calc(var(--vector-nav-core) + var(--safe-b) + var(--vv-bottom) + 46px)!important;
-  scroll-padding-bottom:calc(var(--vector-nav-core) + var(--safe-b) + var(--vv-bottom) + 46px);
+  padding-bottom:calc(var(--vector-nav-core) + var(--safe-b) + var(--vv-bottom) + 18px)!important;
+  scroll-padding-bottom:calc(var(--vector-nav-core) + var(--safe-b) + var(--vv-bottom) + 18px);
   overscroll-behavior-y:contain!important;
   -webkit-overflow-scrolling:touch;
 }
@@ -79,9 +79,11 @@
   min-width:0;
 }
 
-/* Main screen: remove dead vertical space so the first action reads as part of
-   the current screen instead of appearing underneath the navigation. */
+/* Main screen: one clean visual rhythm — heading, sphere, one action, route. */
 @media (max-width:600px){
+  .view-now .now-page{
+    padding-bottom:4px!important;
+  }
   .view-now .now-time{
     padding-top:2px!important;
   }
@@ -93,10 +95,10 @@
     font-size:9px!important;
   }
   .view-now .now-copy{
-    margin-top:12px!important;
+    margin-top:10px!important;
   }
   .view-now .now-copy h1{
-    font-size:clamp(34px,9.2vw,44px)!important;
+    font-size:clamp(33px,9vw,43px)!important;
     line-height:1!important;
   }
   .view-now .now-copy p{
@@ -104,16 +106,19 @@
     line-height:1.42!important;
   }
   .view-now .sphere-wrap.hero{
-    width:224px!important;
-    height:236px!important;
-    margin:12px auto 8px!important;
+    width:218px!important;
+    height:226px!important;
+    margin:10px auto 6px!important;
   }
   .view-now .sphere-wrap.hero .state-sphere{
-    width:172px!important;
-    height:172px!important;
+    width:168px!important;
+    height:168px!important;
   }
   .view-now .one-action{
-    margin-top:4px!important;
+    margin-top:2px!important;
+  }
+  .view-now .route-peek{
+    margin-bottom:0!important;
   }
 }
 

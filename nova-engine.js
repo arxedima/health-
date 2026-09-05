@@ -73,15 +73,15 @@ export function weeklyBars(state,date=new Date()){
 export function greeting(date=new Date()){
   const h=date.getHours();
   if(h<11)return['Доброе утро','Пора сделать первый шаг.'];
-  if(h<17)return['Добрый день','Держим хороший ритм.'];
+  if(h<17)return['Добрый день','Продолжим в твоём ритме.'];
   if(h<22)return['Спокойный вечер','Хороший день. Время восстановиться.'];
-  return['Спокойной ночи','Сегодня уже достаточно.'];
+  return['Спокойной ночи','На сегодня достаточно.'];
 }
 
 export function dailyTip(state,date=new Date()){
   const m=metrics(state,date),h=date.getHours();
-  if(m.water.done<2)return{icon:'💧',title:'Стакан воды',text:'Небольшой шаг, который легко выполнить прямо сейчас.'};
-  if(m.movement.done===0&&h>14)return{icon:'🏃',title:'10 минут движения',text:'Короткая прогулка или мягкая тренировка поддержит ритм.'};
-  if(m.food.done<2&&h>13)return{icon:'🍎',title:'Добавь приём пищи',text:'Сделай следующий приём пищи простым и сбалансированным.'};
-  return{icon:'🌙',title:'Снизь темп',text:'Оставь немного времени на спокойное завершение дня.'};
+  if(m.water.done<2)return{icon:'water',title:'Стакан воды',text:'После пробуждения помогает мягко запустить день.'};
+  if(m.movement.done===0&&h>14)return{icon:'sport',title:'10 минут движения',text:'Короткая прогулка поможет сохранить хороший ритм.'};
+  if(m.food.done<2&&h>13)return{icon:'food',title:'Сбалансированный приём пищи',text:'Простой приём пищи поддержит энергию до вечера.'};
+  return{icon:'sleep',title:'Подготовка ко сну',text:'10 минут спокойного режима помогают заснуть легче.'};
 }

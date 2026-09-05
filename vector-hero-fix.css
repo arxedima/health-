@@ -1,0 +1,61 @@
+/* Health+ / VECTOR — hero sphere integrity fix
+   Keep the main STATE SPHERE visually complete and separated from cards. */
+
+.view-now .now-page{
+  overflow:visible!important;
+}
+
+.view-now .sphere-wrap.hero{
+  position:relative!important;
+  width:220px!important;
+  height:220px!important;
+  min-height:220px!important;
+  margin:14px auto 20px!important;
+  overflow:visible!important;
+  display:grid!important;
+  place-items:center!important;
+  isolation:isolate;
+  contain:none!important;
+}
+
+.view-now .sphere-wrap.hero .state-sphere{
+  width:164px!important;
+  height:164px!important;
+  min-width:164px!important;
+  min-height:164px!important;
+  margin:0!important;
+  flex:none!important;
+  position:relative!important;
+  z-index:2!important;
+}
+
+.view-now .sphere-wrap.hero + .recalc-banner,
+.view-now .sphere-wrap.hero + .one-action,
+.view-now .recalc-banner + .one-action{
+  margin-top:8px!important;
+}
+
+.view-now .one-action{
+  position:relative!important;
+  z-index:1!important;
+}
+
+/* Give the first screen a small optical buffer below the fixed header. */
+.view-now .now-page{
+  padding-top:4px!important;
+}
+
+@media (max-width:370px){
+  .view-now .sphere-wrap.hero{
+    width:204px!important;
+    height:204px!important;
+    min-height:204px!important;
+    margin:10px auto 16px!important;
+  }
+  .view-now .sphere-wrap.hero .state-sphere{
+    width:154px!important;
+    height:154px!important;
+    min-width:154px!important;
+    min-height:154px!important;
+  }
+}

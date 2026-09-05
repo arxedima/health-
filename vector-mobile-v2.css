@@ -1,0 +1,95 @@
+/* Health+ / VECTOR LOOP — mobile shell v2
+   Bottom navigation is physically anchored to the viewport bottom.
+   Safe-area lives INSIDE the nav instead of creating a blank strip below it. */
+
+:root{
+  --vector-nav-core:72px;
+  --vector-nav-gap:10px;
+}
+
+.app{
+  /* Header + scroll content. Navigation is fixed outside the grid flow. */
+  grid-template-rows:calc(var(--header) + var(--safe-t)) minmax(0,1fr) 0!important;
+}
+
+.screen{
+  /* Enough room to scroll the final card fully above the fixed navigation. */
+  padding-bottom:calc(var(--vector-nav-core) + var(--safe-b) + 30px)!important;
+  scroll-padding-bottom:calc(var(--vector-nav-core) + var(--safe-b) + 30px);
+}
+
+.bottom-nav{
+  position:fixed!important;
+  left:10px!important;
+  right:10px!important;
+  bottom:0!important;
+  top:auto!important;
+  width:auto!important;
+  height:calc(var(--vector-nav-core) + var(--safe-b))!important;
+  min-height:var(--vector-nav-core)!important;
+  margin:0!important;
+  padding:6px 8px max(6px,var(--safe-b))!important;
+  border-radius:26px 26px 0 0!important;
+  border-bottom:0!important;
+  align-items:start!important;
+  z-index:50000!important;
+  transform:translate3d(0,0,0)!important;
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+  contain:layout paint style;
+}
+
+.bottom-nav>button{
+  height:58px!important;
+  min-height:58px!important;
+}
+
+.bottom-nav .vector-quick-launcher{
+  height:64px!important;
+  min-height:64px!important;
+  margin-top:-14px!important;
+}
+
+.bottom-nav .vq-mini-core{
+  width:56px!important;
+  height:56px!important;
+}
+
+/* Keep the floating VECTOR visually centered while the shell reaches the bottom. */
+.bottom-nav .vector-quick-launcher + button{
+  min-width:0;
+}
+
+/* Prevent iOS rubber-banding from visually detaching fixed chrome. */
+html,body,.app{
+  overscroll-behavior:none!important;
+}
+
+.screen{
+  overscroll-behavior-y:contain!important;
+  -webkit-overflow-scrolling:touch;
+}
+
+/* Light theme follows the exact same geometry; only the palette changes. */
+html[data-vector-theme="light"] .bottom-nav{
+  background:rgba(249,251,255,.98)!important;
+  border-color:rgba(39,54,91,.11)!important;
+  box-shadow:0 -12px 32px rgba(61,74,109,.10)!important;
+}
+
+/* Landscape / short viewport: keep navigation usable without covering most content. */
+@media (max-height:650px){
+  :root{--vector-nav-core:66px}
+  .bottom-nav>button{height:52px!important;min-height:52px!important}
+  .bottom-nav .vector-quick-launcher{height:58px!important;min-height:58px!important;margin-top:-10px!important}
+  .bottom-nav .vq-mini-core{width:52px!important;height:52px!important}
+}
+
+@media (min-width:760px){
+  .bottom-nav{
+    left:50%!important;
+    right:auto!important;
+    width:min(680px,calc(100vw - 24px))!important;
+    transform:translate3d(-50%,0,0)!important;
+  }
+}

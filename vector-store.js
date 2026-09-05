@@ -27,6 +27,69 @@ const baseState = () => ({
 
 function object(value, fallback={}) { return value && typeof value === 'object' && !Array.isArray(value) ? value : fallback; }
 function array(value) { return Array.isArray(value) ? value : []; }
+function stamp(value={}) { return Math.max(Number(value.doneAt)||0,Number(value.skippedAt)||0,Number(value.offeredAt)||0,Number(value.at)||0); }
+function unionBy(itemsA=[],itemsB=[],keyFn=x=>x?.id) {
+  const map=new Map();
+  [...array(itemsA),...array(itemsB)].forEach((item,index)=>{
+    const key=keyFn(item) ?? `anon-${index}-${JSON.stringify(item)}`;
+    const old=map.get(key);
+    if(!old || stamp(item)>=stamp(old)) map.set(key,item);
+  });
+  return [...map.values()];
+}
+function mergeCounters(a={},b={}) {
+  const out={...object(a)};
+  for(const [key,value] of Object.entries(object(b))){
+    if(value && typeof value==='object' && !Array.isArray(value)){
+      const cur=object(out[key]);
+      out[key]={...cur,...value};
+      for(const n of ['offered','completed','skipped']){
+        if(n in cur || n in value) out[key][n]=Math.max(Number(cur[n])||0,Number(value[n])||0);
+      }
+    } else out[key]=value;
+  }
+  return out;
+}
+function mergeActions(a={},b={}) {
+  const out={...object(a)};
+  for(const [id,next] of Object.entries(object(b))){
+    const prev=out[id];
+    if(!prev || stamp(next)>=stamp(prev)) out[id]={...object(prev),...object(next)};
+    else out[id]={...object(next),...object(prev)};
+  }
+  return out;
+}
+function mergeDailyLogs(current={},incoming={}) {
+  const out={...object(current)};
+  for(const [date,incRaw] of Object.entries(object(incoming))){
+    const cur=object(out[date]), inc=object(incRaw);
+    out[date]={...cur,...inc};
+    out[date].actions=mergeActions(cur.actions,inc.actions);
+    if('water' in cur || 'water' in inc) out[date].water=Math.max(Number(cur.water)||0,Number(inc.water)||0);
+    if('steps' in cur || 'steps' in inc) out[date].steps=Math.max(Number(cur.steps)||0,Number(inc.steps)||0);
+    if('sleep' in cur || 'sleep' in inc) out[date].sleep=Math.max(Number(cur.sleep)||0,Number(inc.sleep)||0);
+    /* Energy is not monotonic; when reconciling a stale writer keep the newest stored value. */
+    if('energy' in cur) out[date].energy=cur.energy;
+  }
+  return out;
+}
+function mergeFoodLogs(current={},incoming={}) {
+  const out={...object(current)};
+  for(const date of new Set([...Object.keys(object(current)),...Object.keys(object(incoming))])){
+    out[date]=unionBy(object(current)[date],object(incoming)[date],x=>x?.id||`${x?.at||0}-${x?.name||''}`);
+  }
+  return out;
+}
+function mergeBehavior(current={},incoming={}) {
+  const cur=object(current), inc=object(incoming);
+  return {
+    ...cur,...inc,
+    actions:mergeCounters(cur.actions,inc.actions),
+    dose:mergeCounters(cur.dose,inc.dose),
+    hours:mergeCounters(cur.hours,inc.hours),
+    experiments:mergeCounters(cur.experiments,inc.experiments)
+  };
+}
 
 export function normalizeState(raw) {
   const d = baseState();
@@ -53,11 +116,9 @@ export function loadState() {
 }
 
 /*
-  Every loaded state carries a revision. If another module saves a newer copy
-  before an older screen persists navigation state, the stale write is not
-  allowed to erase health data. We keep the latest state and apply only UI
-  navigation from the stale writer. The following render/load then receives
-  the fresh state automatically.
+  VECTOR has more than one UI module. Every loaded state carries a revision.
+  If an older module tries to save after a newer module, reconcile additive
+  health data instead of letting the stale copy erase recent changes.
 */
 export function saveState(state) {
   const incoming = normalizeState(state);
@@ -73,15 +134,21 @@ export function saveState(state) {
   if (current && incomingRev < currentRev) {
     const merged = normalizeState({
       ...current,
-      ui: { ...current.ui, ...incoming.ui },
-      _rev: currentRev + 1
+      dailyLogs:mergeDailyLogs(current.dailyLogs,incoming.dailyLogs),
+      foodLogs:mergeFoodLogs(current.foodLogs,incoming.foodLogs),
+      completedSessions:unionBy(current.completedSessions,incoming.completedSessions,x=>x?.id||`${x?.at||x?.completedAt||0}-${x?.title||''}`),
+      reminders:unionBy(current.reminders,incoming.reminders,x=>x?.id||`${x?.time||''}-${x?.title||''}`),
+      routeEvents:unionBy(current.routeEvents,incoming.routeEvents,x=>x?.id||`${x?.at||0}-${x?.type||''}-${x?.action||''}`),
+      behavior:mergeBehavior(current.behavior,incoming.behavior),
+      ui:{...current.ui,...incoming.ui},
+      _rev:currentRev+1
     });
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
+    localStorage.setItem(STORAGE_KEY,JSON.stringify(merged));
     return merged;
   }
 
-  incoming._rev = Math.max(incomingRev,currentRev) + 1;
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(incoming));
+  incoming._rev=Math.max(incomingRev,currentRev)+1;
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(incoming));
   return incoming;
 }
 

@@ -3,42 +3,26 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#0e1836">
-  <meta name="color-scheme" content="dark light">
-  <meta name="description" content="Health+ / VECTOR LOOP — один следующий правильный шаг вместо перегруза данными.">
+  <meta name="theme-color" content="#f4f8ff">
+  <meta name="color-scheme" content="light dark">
+  <meta name="description" content="Nova+ — персональная система здоровья, движения, питания и восстановления.">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Health+">
-  <script>
-    try { document.documentElement.dataset.vectorTheme = localStorage.getItem('vector-theme-v1') || 'dark'; } catch (_) { document.documentElement.dataset.vectorTheme = 'dark'; }
-  </script>
-  <link rel="manifest" href="./manifest.webmanifest?v=qa12">
-  <link rel="icon" href="./assets/vector-orb.svg?v=icon2" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="./assets/vector-orb.svg?v=icon2">
-  <link rel="stylesheet" href="./vector-loop.css?v=loop1">
-  <link rel="stylesheet" href="./vector-actions-v3.css?v=loop3">
-  <link rel="stylesheet" href="./vector-theme-v1.css?v=theme1">
-  <link rel="stylesheet" href="./vector-mobile-v2.css?v=mobile7">
-  <link rel="stylesheet" href="./vector-copy-v2.css?v=copy5">
-  <link rel="stylesheet" href="./vector-hero-fix.css?v=hero1">
-  <link rel="stylesheet" href="./vector-month-rhythm.css?v=month1">
-  <title>Health+ / VECTOR LOOP</title>
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Nova+">
+  <link rel="manifest" href="./manifest.webmanifest?v=nova1">
+  <link rel="icon" href="./assets/nova-orb.svg?v=nova1" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="./assets/nova-orb.svg?v=nova1">
+  <link rel="stylesheet" href="./nova.css?v=nova1">
+  <title>Nova+</title>
 </head>
 <body>
-  <div id="app" class="app" data-period="night">
-    <header id="appHeader" class="app-header"></header>
-    <main id="screen" class="screen" aria-live="polite"></main>
-    <nav id="bottomNav" class="bottom-nav" aria-label="Основная навигация"></nav>
+  <div id="app" class="nova-app">
+    <header id="header" class="nova-header"></header>
+    <main id="screen" class="nova-screen" aria-live="polite"></main>
+    <nav id="nav" class="bottom-nav" aria-label="Основная навигация"></nav>
   </div>
-  <div id="overlay" class="overlay"></div>
-  <div id="toastHost" class="toast-host" aria-live="polite"></div>
+  <div id="sheet" class="sheet"></div>
   <input id="cameraInput" type="file" accept="image/*" capture="environment" hidden>
-  <script src="./vector-viewport-v1.js?v=viewport2" defer></script>
-  <script type="module" src="./vector-loop.js?v=loop1"></script>
-  <script type="module" src="./vector-actions-v3.js?v=loop4"></script>
-  <script type="module" src="./vector-copy-v2.js?v=copy5"></script>
-  <script src="./vector-month-rhythm.js?v=month1" defer></script>
-  <script src="./vector-scroll-guard.js?v=guard2" defer></script>
-  <script src="./vector-theme-v1.js?v=theme1" defer></script>
+  <script type="module" src="./nova-app.js?v=nova1"></script>
 </body>
 </html>

@@ -12,13 +12,13 @@
   <script>
     try { document.documentElement.dataset.vectorTheme = localStorage.getItem('vector-theme-v1') || 'dark'; } catch (_) { document.documentElement.dataset.vectorTheme = 'dark'; }
   </script>
-  <link rel="manifest" href="./manifest.webmanifest?v=qa1">
+  <link rel="manifest" href="./manifest.webmanifest?v=qa4">
   <link rel="icon" href="./assets/vector-orb.svg?v=icon2" type="image/svg+xml">
   <link rel="apple-touch-icon" href="./assets/vector-orb.svg?v=icon2">
   <link rel="stylesheet" href="./vector-loop.css?v=loop1">
   <link rel="stylesheet" href="./vector-actions-v3.css?v=loop3">
   <link rel="stylesheet" href="./vector-theme-v1.css?v=theme1">
-  <link rel="stylesheet" href="./vector-mobile-v2.css?v=mobile2">
+  <link rel="stylesheet" href="./vector-mobile-v2.css?v=mobile3">
   <title>Health+ / VECTOR LOOP</title>
 </head>
 <body>
@@ -30,6 +30,7 @@
   <div id="overlay" class="overlay"></div>
   <div id="toastHost" class="toast-host" aria-live="polite"></div>
   <input id="cameraInput" type="file" accept="image/*" capture="environment" hidden>
+  <script src="./vector-viewport-v1.js?v=viewport1" defer></script>
   <script type="module" src="./vector-loop.js?v=loop1"></script>
   <script type="module" src="./vector-actions-v3.js?v=loop4"></script>
   <script src="./vector-theme-v1.js?v=theme1" defer></script>

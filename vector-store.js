@@ -7,6 +7,7 @@ export function todayKey(date = new Date()) {
 
 const baseState = () => ({
   version: 2,
+  _rev: 0,
   profile: { name:'', height:175, weight:70, goal:'balanced', tone:'calm' },
   calculator: { sex:'male', age:30, height:175, weight:70, activity:1.375, goal:'maintain' },
   calorieTarget: 2000,
@@ -36,7 +37,7 @@ export function normalizeState(raw) {
   const height = Number(profile.height || calculator.height || d.profile.height);
   const weight = Number(profile.weight || calculator.weight || d.profile.weight);
   return {
-    ...d, ...old, version: 2,
+    ...d, ...old, version: 2, _rev:Number(old._rev)||0,
     profile: { ...d.profile, ...profile, name, height:Number.isFinite(height)?height:d.profile.height, weight:Number.isFinite(weight)?weight:d.profile.weight, goal:profile.goal||old.healthGoal||d.profile.goal, tone:profile.tone||d.profile.tone },
     calculator: { ...calculator, height, weight },
     dailyLogs: object(old.dailyLogs), foodLogs: object(old.foodLogs), completedSessions: array(old.completedSessions), reminders: array(old.reminders), routeEvents: array(old.routeEvents),
@@ -46,8 +47,44 @@ export function normalizeState(raw) {
   };
 }
 
-export function loadState() { try { return normalizeState(JSON.parse(localStorage.getItem(STORAGE_KEY)||'null')); } catch { return baseState(); } }
-export function saveState(state) { localStorage.setItem(STORAGE_KEY, JSON.stringify(normalizeState(state))); }
+export function loadState() {
+  try { return normalizeState(JSON.parse(localStorage.getItem(STORAGE_KEY)||'null')); }
+  catch { return baseState(); }
+}
+
+/*
+  Every loaded state carries a revision. If another module saves a newer copy
+  before an older screen persists navigation state, the stale write is not
+  allowed to erase health data. We keep the latest state and apply only UI
+  navigation from the stale writer. The following render/load then receives
+  the fresh state automatically.
+*/
+export function saveState(state) {
+  const incoming = normalizeState(state);
+  let current = null;
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) current = normalizeState(JSON.parse(raw));
+  } catch {}
+
+  const incomingRev = Number(incoming._rev)||0;
+  const currentRev = Number(current?._rev)||0;
+
+  if (current && incomingRev < currentRev) {
+    const merged = normalizeState({
+      ...current,
+      ui: { ...current.ui, ...incoming.ui },
+      _rev: currentRev + 1
+    });
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
+    return merged;
+  }
+
+  incoming._rev = Math.max(incomingRev,currentRev) + 1;
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(incoming));
+  return incoming;
+}
+
 export function updateState(mutator) { const state=loadState(); const next=mutator(state)||state; saveState(next); return next; }
 export function markOnboarded() { localStorage.setItem(ONBOARDING_KEY,'done'); }
 export function resetOnboarding() { localStorage.removeItem(ONBOARDING_KEY); updateState(s=>{s.onboardingCompleted=false;return s;}); }

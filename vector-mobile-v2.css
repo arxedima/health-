@@ -10,12 +10,10 @@
 }
 
 .app{
-  /* Header + scroll content. Navigation is fixed outside the grid flow. */
   grid-template-rows:calc(var(--header) + var(--safe-t)) minmax(0,1fr) 0!important;
 }
 
 .screen{
-  /* Final content always clears both the nav and any visible browser chrome. */
   padding-bottom:calc(var(--vector-nav-core) + var(--safe-b) + var(--vv-bottom) + 30px)!important;
   scroll-padding-bottom:calc(var(--vector-nav-core) + var(--safe-b) + var(--vv-bottom) + 30px);
 }
@@ -34,13 +32,13 @@
   border-radius:26px 26px 0 0!important;
   border-bottom:0!important;
   align-items:start!important;
-  /* Above page content, below VECTOR overlays (base overlay is z-index 100). */
   z-index:50!important;
   transform:translate3d(0,0,0)!important;
   backface-visibility:hidden;
   -webkit-backface-visibility:hidden;
   contain:layout paint style;
-  transition:bottom .16s ease,opacity .16s ease,transform .16s ease;
+  /* No bottom transition: iOS browser chrome can move faster than CSS animation. */
+  transition:opacity .16s ease,transform .16s ease;
 }
 
 .bottom-nav>button{
@@ -63,14 +61,12 @@
   min-width:0;
 }
 
-/* While the iOS keyboard is open, don't float the whole nav above it. */
 html.vector-keyboard-open .bottom-nav{
   opacity:0!important;
   pointer-events:none!important;
   transform:translate3d(0,14px,0)!important;
 }
 
-/* Prevent rubber-banding from visually detaching fixed chrome. */
 html,body,.app{
   overscroll-behavior:none!important;
 }

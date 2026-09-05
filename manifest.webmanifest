@@ -1,15 +1,15 @@
 {
-  "name": "Health+ / VECTOR LOOP",
-  "short_name": "Health+",
-  "description": "VECTOR LOOP — один следующий правильный шаг вместо перегруза данными.",
+  "name": "Nova+",
+  "short_name": "Nova+",
+  "description": "Персональная система здоровья, движения, питания и восстановления.",
   "lang": "ru",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#0e1836",
-  "theme_color": "#0e1836",
+  "background_color": "#f4f8ff",
+  "theme_color": "#f4f8ff",
   "icons": [
-    { "src": "./assets/vector-orb.svg?v=icon2", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
-    { "src": "./assets/vector-orb.svg?v=icon2", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+    { "src": "./assets/nova-orb.svg?v=nova1", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "./assets/nova-orb.svg?v=nova1", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
   ]
 }

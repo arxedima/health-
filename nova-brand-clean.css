@@ -1,0 +1,4 @@
+/* Nova+ brand cleanup: single-line header brand */
+.brand small{display:none!important}
+.brand>div{display:flex;align-items:center}
+.brand strong{margin:0!important}

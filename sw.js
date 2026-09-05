@@ -1,5 +1,5 @@
-const CACHE='nova-plus-v1';
-const ASSETS=['./','./index.html','./nova.css?v=nova1','./nova-app.js?v=nova1','./nova-store.js','./nova-engine.js','./manifest.webmanifest?v=nova1','./assets/nova-orb.svg?v=nova1'];
+const CACHE='nova-plus-v2';
+const ASSETS=['./','./index.html','./nova.css?v=nova1','./nova-app.js?v=nova1','./nova-profile-label.js?v=nova2','./nova-store.js','./nova-engine.js','./manifest.webmanifest?v=nova1','./assets/nova-orb.svg?v=nova1'];
 self.addEventListener('install',e=>{self.skipWaiting();e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)));});
 self.addEventListener('activate',e=>e.waitUntil(Promise.all([caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))),self.clients.claim()])));
 self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;const isCore=e.request.mode==='navigate'||['script','style'].includes(e.request.destination);if(isCore){e.respondWith(fetch(e.request,{cache:'no-store'}).then(r=>{const c=r.clone();caches.open(CACHE).then(cache=>cache.put(e.request,c));return r;}).catch(()=>caches.match(e.request).then(r=>r||caches.match('./index.html'))));return;}e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request)));});

@@ -32,7 +32,8 @@
   border-radius:26px 26px 0 0!important;
   border-bottom:0!important;
   align-items:start!important;
-  z-index:50000!important;
+  /* Above page content, below VECTOR overlays (base overlay is z-index 100). */
+  z-index:50!important;
   transform:translate3d(0,0,0)!important;
   backface-visibility:hidden;
   -webkit-backface-visibility:hidden;

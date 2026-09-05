@@ -9,13 +9,16 @@
     raf=0;
     const app=document.getElementById('app');
     const appH=app?.getBoundingClientRect().height||0;
-    const docH=document.documentElement.clientHeight||0;
-    const winH=window.innerHeight||0;
-    const layoutH=Math.max(appH,docH,winH);
-
-    const visualH=vv?.height||winH||layoutH;
+    const winH=window.innerHeight||document.documentElement.clientHeight||appH;
+    const visualH=vv?.height||winH;
     const visualTop=vv?.offsetTop||0;
-    const occludedBottom=Math.max(0,layoutH-(visualTop+visualH));
+
+    /*
+      iOS 26 can paint position:fixed against window.innerHeight while the
+      browser's floating controls reduce visualViewport.height. This delta is
+      exactly the region where the bottom nav would otherwise be hidden.
+    */
+    const occludedBottom=Math.max(0,winH-(visualTop+visualH));
 
     const active=document.activeElement;
     const editing=!!active&&(/^(INPUT|TEXTAREA|SELECT)$/.test(active.tagName)||active.isContentEditable);
@@ -39,6 +42,6 @@
   vv?.addEventListener('resize',schedule,{passive:true});
   vv?.addEventListener('scroll',schedule,{passive:true});
 
-  /* iOS browser chrome can finish animating after resize has fired. */
-  [80,220,520].forEach(ms=>setTimeout(schedule,ms));
+  /* Browser chrome can finish its animation after the first viewport event. */
+  [60,180,420,800].forEach(ms=>setTimeout(schedule,ms));
 })();

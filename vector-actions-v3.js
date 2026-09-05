@@ -65,6 +65,17 @@ function patchNav(){
   if(buttons.length<5) return;
   const current=screen.className.match(/view-([\w-]+)/)?.[1]||'now';
   const [b0,b1,b2,b3,b4]=buttons;
+  const alreadyPatched=
+    nav.dataset.vectorPatched===current &&
+    b0.dataset.view==='now' &&
+    b1.dataset.view==='move' &&
+    b2.classList.contains('vector-quick-launcher') &&
+    !b2.hasAttribute('data-view') &&
+    b3.dataset.view==='food' &&
+    b4.dataset.view==='me';
+  if(alreadyPatched) return;
+
+  nav.dataset.vectorPatched=current;
   b0.dataset.view='now'; b0.classList.toggle('active',current==='now'); b0.innerHTML='<span>⌁</span><small>Сейчас</small>';
   b1.dataset.view='move'; b1.classList.toggle('active',current==='move'); b1.innerHTML='<span>⌁</span><small>Движение</small>';
   delete b2.dataset.view; b2.removeAttribute('data-view'); b2.className='vector-quick-launcher'; b2.type='button'; b2.setAttribute('aria-label','Быстрые действия VECTOR'); b2.innerHTML='<span class="vq-mini-core" aria-hidden="true"></span>';
@@ -132,7 +143,7 @@ function chooseFeeling(){
 }
 function reminder(){
   const layer=openUtility('<small class="vau-kicker">НАПОМИНАНИЕ</small><h2>Что не забыть?</h2><input class="vau-input" id="vauReminderText" placeholder="Например: ЛФК"><input class="vau-input" id="vauReminderTime" type="time"><button class="vau-primary" id="vauReminderSave">Сохранить</button>');
-  layer.querySelector('#vauReminderSave').onclick=()=>{const text=layer.querySelector('#vauReminderText').value.trim()||'Полезное действие',time=layer.querySelector('#vauReminderTime').value||'18:00';const s=loadState();s.reminders=Array.isArray(s.reminders)?s.reminders:[];s.reminders.push({id:Date.now(),title:text,time,enabled:true});saveState(s);closeUtility();toast(`Напоминание · ${time}`)};
+  layer.querySelector('#vauReminderSave').onclick=()=>{const text=layer.querySelector('#vauReminderText').value.trim()||'Полезное действие',time=layer.querySelector('#vauReminderTime').value||'18:00';const s=loadState();s.reminders=Array.isArray(s.reminders)?s.reminders:[];s.reminders.push({id:Date.now(),title:text,time,enabled:true,active:true,repeat:'daily'});saveState(s);closeUtility();toast(`Напоминание · ${time}`)};
 }
 function breathe(){
   const layer=openUtility('<small class="vau-kicker">ТИХАЯ ПОМОЩЬ</small><h2>Одна минута дыхания</h2><p id="vauBreathText">Спокойный вдох</p><div class="vau-breathe"></div><button class="vau-primary" id="vauBreathDone">Готово</button>','breathe-mode');let inhale=true;utilityTimer=setInterval(()=>{inhale=!inhale;layer.classList.toggle('exhale',!inhale);const t=layer.querySelector('#vauBreathText');if(t)t.textContent=inhale?'Спокойный вдох':'Длинный выдох'},5000);layer.querySelector('#vauBreathDone').onclick=()=>{closeUtility();toast('Стало чуть тише ◌')};
@@ -145,7 +156,12 @@ function askAi(){
 
 function runAction(id){
   navigator.vibrate?.(8);
-  if(id==='camera'){closeQuick();go('food');setTimeout(()=>cameraInput?.click(),240);return}
+  if(id==='camera'){
+    /* iOS requires the file picker to be opened synchronously from the user gesture. */
+    closeQuick();
+    if(cameraInput){cameraInput.value='';cameraInput.click();}
+    return;
+  }
   if(id==='water'){let s=loadState();s=addWater(s,.2);saveState(s);closeQuick();toast('💧 +200 мл воды');refresh();return}
   if(id==='timer'){chooseTimer();return}
   if(id==='reminder'){reminder();return}
@@ -156,7 +172,11 @@ function runAction(id){
   if(id==='breathe'){breathe();return}
   if(id==='focus'){launchTimer(600,'Фокус · 10 минут');return}
   if(id==='route'){go('route');return}
-  if(id==='analytics'){go('me');return}
+  if(id==='analytics'){
+    go('me');
+    setTimeout(()=>screen.querySelector('[data-analytics]')?.click(),50);
+    return;
+  }
 }
 
 function quoteFor(long=false){const p=period();const list=long?deepQuotes:(shortQuotes[p]||shortQuotes.day);return list[Math.floor(Math.random()*list.length)]}

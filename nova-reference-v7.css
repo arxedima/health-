@@ -1,0 +1,168 @@
+/* Nova+ v7 — strict home-screen match to approved reference */
+:root{--nav-h:58px}
+
+/* true reference palettes */
+.nova-app{background:#fff!important}
+.nova-app.dark{background:#031124!important;--bg:#031124;--bg-soft:#06182d;--card:rgba(7,25,47,.94);--card-solid:#081c34;--text:#f8fbff;--muted:#8295b2;--line:rgba(255,255,255,.065)}
+
+/* HEADER */
+.nova-header{
+  min-height:49px!important;
+  padding:calc(var(--safe-t) + 7px) 18px 5px!important;
+  background:transparent!important;
+}
+.brand{gap:8px!important}
+.brand-orb{width:29px!important;height:29px!important;flex-basis:29px!important}
+.brand strong{font-size:16.5px!important;font-weight:700!important;letter-spacing:-.035em!important}
+.header-btn{
+  width:36px!important;height:36px!important;padding:8px!important;
+  border-radius:50%!important;background:rgba(255,255,255,.96)!important;
+  border:1px solid rgba(15,52,100,.055)!important;
+  box-shadow:0 5px 15px rgba(32,68,110,.045)!important;
+  position:relative!important;color:#f0ad33!important
+}
+.header-btn svg{display:none!important}
+.header-btn:before{content:"☀︎";font-size:22px;line-height:1;color:#f0ad33}
+.dark .header-btn{background:rgba(8,27,49,.9)!important;border-color:rgba(255,255,255,.055)!important}
+.dark .header-btn:before{content:"☾";font-size:23px;color:#dcecff}
+
+/* HOME SCREEN: compact enough to reproduce the single-screen reference */
+.nova-screen{
+  padding:0 18px calc(var(--nav-h) + var(--safe-b) + 5px)!important;
+  overflow-y:auto!important;
+}
+.home-page{max-width:365px!important;padding:0 0 3px!important;min-height:auto!important}
+.home-page .page-kicker{margin-top:0!important;font-size:11px!important;line-height:1.12!important;font-weight:430!important;color:#7f91ad!important}
+.dark .home-page .page-kicker{color:#8498b7!important}
+.home-page h1{
+  margin:6px 0 0!important;max-width:275px!important;
+  font-size:29px!important;line-height:.94!important;font-weight:540!important;
+  letter-spacing:-.046em!important;color:#08265a!important
+}
+.dark .home-page h1{color:#f7fbff!important}
+.home-page .page-sub{margin:5px 0 0!important;font-size:12.5px!important;line-height:1.22!important;color:#8192ae!important}
+
+/* HERO — shorter, denser, with visible liquid-glass sphere */
+.home-page .hero-orb-wrap{
+  height:190px!important;margin:-2px auto 0!important;overflow:visible!important;
+  display:grid!important;place-items:center!important
+}
+.home-page .sphere-stage{width:205px!important;height:184px!important;overflow:visible!important}
+.home-page .hero-orb{
+  width:168px!important;height:168px!important;overflow:hidden!important;
+  border:1px solid rgba(255,255,255,.50)!important;
+  background:
+    radial-gradient(circle at 28% 22%,rgba(255,255,255,.98) 0 3%,rgba(255,255,255,.73) 8%,transparent 19%),
+    radial-gradient(ellipse at 52% 80%,rgba(255,255,255,.88) 0 5%,rgba(245,251,255,.55) 18%,transparent 42%),
+    radial-gradient(ellipse at 68% 63%,rgba(95,145,196,.20),transparent 46%),
+    linear-gradient(145deg,rgba(238,249,255,.94) 0%,rgba(182,218,244,.58) 38%,rgba(108,161,209,.46) 67%,rgba(225,242,253,.72) 100%)!important;
+  box-shadow:
+    inset 0 0 30px rgba(255,255,255,.82),
+    inset -14px -22px 34px rgba(74,123,173,.10),
+    0 17px 38px rgba(48,96,151,.11),
+    0 0 36px rgba(155,207,244,.20)!important;
+  backdrop-filter:blur(25px)!important;
+  filter:saturate(.92) contrast(.98)!important;
+  animation:novaRefFloat 9s ease-in-out infinite!important
+}
+.home-page .hero-orb:before{
+  width:42%!important;height:25%!important;left:9%!important;top:5%!important;
+  background:radial-gradient(ellipse,rgba(255,255,255,.9),rgba(255,255,255,.13) 58%,transparent 73%)!important;
+  filter:blur(2px)!important;opacity:.98!important
+}
+.home-page .hero-orb:after{
+  left:1%!important;right:1%!important;bottom:-2%!important;height:42%!important;
+  background:linear-gradient(180deg,transparent 0%,rgba(255,255,255,.18) 20%,rgba(255,255,255,.76) 75%,rgba(255,255,255,.45) 100%)!important;
+  filter:blur(10px)!important
+}
+.home-page .nova-wave{width:72%!important;left:14%!important;top:59%!important;height:27px!important;border-top:1.5px solid rgba(255,255,255,.38)!important;opacity:.68!important}
+
+/* mist spills outside sphere exactly like reference */
+.home-page .mist{z-index:7!important;background:rgba(250,253,255,.96)!important;filter:blur(13px)!important}
+.home-page .mist-a{width:190px!important;height:36px!important;left:4px!important;bottom:5px!important;opacity:1!important}
+.home-page .mist-b{width:150px!important;height:31px!important;right:-7px!important;bottom:20px!important;opacity:.68!important}
+.home-page .mist-c{width:155px!important;height:26px!important;left:27px!important;bottom:-6px!important;opacity:.96!important}
+.home-page .sphere-stage:before,.home-page .sphere-stage:after{content:"";position:absolute;z-index:6;border-radius:50%;background:rgba(247,252,255,.76);filter:blur(17px);pointer-events:none}
+.home-page .sphere-stage:before{width:118px;height:25px;left:-6px;bottom:22px;transform:rotate(-6deg)}
+.home-page .sphere-stage:after{width:126px;height:25px;right:-13px;bottom:7px;transform:rotate(4deg);opacity:.72}
+
+.dark .home-page .hero-orb{
+  border-color:rgba(194,226,255,.12)!important;
+  background:
+    radial-gradient(circle at 28% 22%,rgba(235,248,255,.9) 0 3%,rgba(162,204,238,.35) 9%,transparent 20%),
+    radial-gradient(ellipse at 52% 80%,rgba(88,142,188,.18) 0 7%,transparent 43%),
+    radial-gradient(ellipse at 68% 62%,rgba(75,135,184,.18),transparent 47%),
+    linear-gradient(145deg,rgba(26,62,98,.72) 0%,rgba(17,50,84,.73) 44%,rgba(5,22,42,.94) 100%)!important;
+  box-shadow:inset 0 0 30px rgba(137,198,244,.13),inset -14px -22px 34px rgba(0,7,18,.40),0 18px 40px rgba(0,0,0,.42),0 0 34px rgba(78,142,194,.08)!important
+}
+.dark .home-page .mist,.dark .home-page .sphere-stage:before,.dark .home-page .sphere-stage:after{background:rgba(45,88,126,.31)!important;filter:blur(17px)!important}
+
+/* ARC: fixed reference geometry, progress always starts at 12 o'clock and travels right */
+.home-page .progress-ring{width:203px!important;height:203px!important;overflow:visible!important;transform:none!important}
+.home-page .ring-track{stroke:rgba(61,127,194,.10)!important;stroke-width:5!important}
+.home-page .ring-value{stroke:#347fd2!important;stroke-width:5.5!important;filter:drop-shadow(0 2px 4px rgba(42,117,203,.13))!important}
+.dark .home-page .ring-track{stroke:rgba(168,207,244,.14)!important}
+.dark .home-page .ring-value{stroke:#e0efff!important}
+
+/* METRICS */
+.home-page .metric-grid{gap:6px!important;margin-top:0!important}
+.home-page .metric{
+  height:72px!important;padding:7px 3px 6px!important;border-radius:15px!important;
+  background:#fff!important;border:1px solid rgba(17,55,108,.05)!important;
+  box-shadow:0 6px 16px rgba(38,77,125,.05)!important
+}
+.home-page .metric-icon{width:22px!important;height:22px!important;color:#0a2a5e!important}
+.home-page .metric b{margin-top:2px!important;font-size:9.4px!important;line-height:1!important;font-weight:560!important}
+.home-page .metric small{margin-top:2px!important;font-size:10.3px!important;line-height:1!important;font-weight:550!important}
+.home-page .mini-line{width:82%!important;height:3px!important;margin-top:auto!important;background:#edf3fa!important}
+.home-page .mini-line i{background:#2f83d8!important}
+.dark .home-page .metric{background:rgba(8,27,49,.94)!important;border-color:rgba(255,255,255,.055)!important;box-shadow:0 7px 18px rgba(0,0,0,.18)!important}
+.dark .home-page .metric-icon{color:#f0f7ff!important}.dark .home-page .mini-line{background:rgba(203,225,248,.10)!important}
+
+/* CTA */
+.home-cta{
+  min-height:40px!important;margin-top:7px!important;border-radius:15px!important;
+  background:#0e3769!important;color:#fff!important;font-size:12px!important;font-weight:520!important;
+  box-shadow:0 6px 15px rgba(14,55,105,.11)!important
+}
+.dark .home-cta{background:#f7fbff!important;color:#092a52!important}
+
+/* TIP — fully visible above nav */
+.home-tip{
+  min-height:70px!important;margin:7px 0 0!important;padding:9px 11px!important;border-radius:17px!important;
+  grid-template-columns:38px 1fr 15px!important;gap:9px!important;background:#fff!important;
+  border:1px solid rgba(18,55,108,.05)!important;box-shadow:0 5px 15px rgba(39,77,123,.04)!important
+}
+.home-tip .tip-icon{width:38px!important;height:38px!important;padding:9px!important;background:linear-gradient(145deg,#eaf4ff,#fff)!important}
+.home-tip small{font-size:8.6px!important;line-height:1!important;color:#8192ad!important}
+.home-tip b{margin-top:2px!important;font-size:12.8px!important;line-height:1.05!important;font-weight:590!important}
+.home-tip p{margin:3px 0 0!important;font-size:9.5px!important;line-height:1.16!important;-webkit-line-clamp:2!important}
+.home-tip .chev{width:14px!important;height:14px!important}
+.dark .home-tip{background:rgba(8,27,49,.94)!important;border-color:rgba(255,255,255,.055)!important}
+
+/* NAV — reference-like, low, integrated, compact central + */
+.bottom-nav{
+  height:calc(58px + var(--safe-b))!important;padding:3px 9px var(--safe-b)!important;
+  background:rgba(255,255,255,.99)!important;border-top:1px solid rgba(18,52,100,.045)!important;
+  box-shadow:0 -3px 12px rgba(32,68,110,.03)!important;backdrop-filter:blur(18px)!important
+}
+.dark .bottom-nav{background:rgba(3,17,36,.99)!important;border-top-color:rgba(255,255,255,.05)!important}
+.bottom-nav button{height:49px!important;gap:1px!important}
+.nav-icon{width:20px!important;height:20px!important}
+.bottom-nav button small{font-size:7.9px!important;line-height:1!important;font-weight:530!important}
+.plus-launch{margin-top:-10px!important;height:58px!important}
+.plus-core{width:48px!important;height:48px!important;font-size:27px!important;font-weight:200!important;background:#174d8e!important;box-shadow:0 0 0 4px #fff,0 7px 15px rgba(18,75,144,.18)!important}
+.dark .plus-core{background:#397ec1!important;box-shadow:0 0 0 4px #031124,0 7px 17px rgba(0,0,0,.28)!important}
+
+@keyframes novaRefFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-1px) scale(1.004)}}
+
+/* Safari / embedded browser: squeeze, never let tip hide behind nav */
+@media(max-height:690px){
+  .nova-header{min-height:45px!important;padding-top:calc(var(--safe-t) + 5px)!important}
+  .brand-orb{width:27px!important;height:27px!important;flex-basis:27px!important}.brand strong{font-size:15.5px!important}.header-btn{width:33px!important;height:33px!important}
+  .home-page h1{font-size:27px!important;margin-top:5px!important}.home-page .page-sub{font-size:11.5px!important;margin-top:3px!important}
+  .home-page .hero-orb-wrap{height:168px!important;margin-top:-4px!important}.home-page .sphere-stage{width:185px!important;height:165px!important}.home-page .hero-orb{width:150px!important;height:150px!important}.home-page .progress-ring{width:183px!important;height:183px!important}
+  .home-page .metric{height:66px!important}.home-page .metric-icon{width:20px!important;height:20px!important}.home-cta{min-height:37px!important}.home-tip{min-height:63px!important;padding:7px 10px!important}.home-tip .tip-icon{width:34px!important;height:34px!important}
+}
+
+@media(prefers-reduced-motion:reduce){.home-page .hero-orb{animation:none!important}}

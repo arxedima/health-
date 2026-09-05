@@ -6,10 +6,10 @@
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#f4f8ff",
-  "theme_color": "#f4f8ff",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
   "icons": [
-    { "src": "./assets/nova-orb.svg?v=nova1", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
-    { "src": "./assets/nova-orb.svg?v=nova1", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+    { "src": "./assets/nova-orb.svg?v=nova2", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "./assets/nova-orb.svg?v=nova2", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
   ]
 }

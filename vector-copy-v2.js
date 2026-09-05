@@ -102,6 +102,10 @@
     const now=screen.querySelector('.now-page');
     if(now&&!now.dataset.copyV2){
       now.dataset.copyV2='1';
+      const duplicateClock=now.querySelector('.now-time strong');
+      if(duplicateClock)duplicateClock.remove();
+      const kicker=now.querySelector('.now-copy small');
+      if(kicker)kicker.textContent='СЕЙЧАС';
       const h=now.querySelector('.now-copy h1');
       const p=now.querySelector('.now-copy p');
       const hour=new Date().getHours();

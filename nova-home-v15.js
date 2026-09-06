@@ -26,7 +26,7 @@
     const p=Math.max(0,Math.min(1,progress));
     const pct=(p*100).toFixed(2);
     const visual=p<=0?0:Math.min(.93,p);
-    const sphereTop=56,sphereBottom=224,sphereSize=168;
+    const sphereBottom=224,sphereSize=168;
     const liquidH=sphereSize*visual;
     const liquidY=sphereBottom-liquidH;
     const fog=dark?'#8dbfe3':'#eff8fd';
@@ -101,6 +101,9 @@
     </div>`;
   }
 
+  function setHTML(el,value){if(el&&el.innerHTML!==value)el.innerHTML=value;}
+  function setText(el,value){if(el&&el.textContent!==value)el.textContent=value;}
+
   function tuneCopy(home,dark){
     const h1=home.querySelector('h1');
     const sub=home.querySelector('.page-sub');
@@ -109,14 +112,14 @@
 
     if(dark){
       let name='Дмитрий';
-      const original=(h1?.textContent||'').replace(/\s+/g,' ').trim();
+      const original=(h1?.dataset.v15Original||h1?.textContent||'').replace(/<br\s*\/?>/gi,' ').replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim();
       const comma=original.indexOf(',');
       if(comma>=0){const candidate=original.slice(comma+1).trim();if(candidate)name=candidate;}
-      if(h1)h1.innerHTML=`Спокойный вечер,<br>${name}`;
-      if(sub)sub.textContent='Хороший день. Время восстановиться.';
+      setHTML(h1,`Спокойный вечер,<br>${name}`);
+      setText(sub,'Хороший день. Время восстановиться.');
     }else{
-      if(h1?.dataset.v15Original)h1.innerHTML=h1.dataset.v15Original;
-      if(sub?.dataset.v15Original)sub.textContent=sub.dataset.v15Original;
+      if(h1?.dataset.v15Original)setHTML(h1,h1.dataset.v15Original);
+      if(sub?.dataset.v15Original)setText(sub,sub.dataset.v15Original);
     }
 
     const tip=home.querySelector('.home-tip');
@@ -127,12 +130,12 @@
     const p=tip.querySelector('p');
     [icon,small,b,p].forEach((el)=>{if(el&&!el.dataset.v15Original)el.dataset.v15Original=el.innerHTML});
     if(dark){
-      if(icon)icon.innerHTML=moonSvg;
-      if(small)small.textContent='Совет дня';
-      if(b)b.textContent='Подготовка ко сну';
-      if(p)p.textContent='10 минут дыхательной практики улучшают сон.';
+      setHTML(icon,moonSvg);
+      setText(small,'Совет дня');
+      setText(b,'Подготовка ко сну');
+      setText(p,'10 минут дыхательной практики улучшают сон.');
     }else{
-      [icon,small,b,p].forEach((el)=>{if(el?.dataset.v15Original)el.innerHTML=el.dataset.v15Original});
+      [icon,small,b,p].forEach((el)=>{if(el?.dataset.v15Original)setHTML(el,el.dataset.v15Original)});
     }
   }
 
@@ -140,7 +143,7 @@
     const btn=header?.querySelector('.header-btn');
     if(!btn)return;
     if(!btn.dataset.v15Original)btn.dataset.v15Original=btn.innerHTML;
-    if(dark)btn.innerHTML=moonSvg;
+    if(dark)setHTML(btn,moonSvg);
   }
 
   function calibrate(){

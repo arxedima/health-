@@ -3,33 +3,26 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#ffffff">
+  <meta name="theme-color" content="#f6faff">
   <meta name="color-scheme" content="light dark">
-  <meta name="description" content="Nova+ — персональная система здоровья, движения, питания и восстановления.">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Nova+">
-  <link rel="manifest" href="./manifest.webmanifest?v=nova18">
-  <link rel="icon" href="./assets/nova-orb.svg?v=nova18" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="./assets/nova-orb.svg?v=nova18">
-  <link rel="stylesheet" href="./nova.css?v=nova18">
-  <link rel="stylesheet" href="./nova-sections-v9.css?v=nova18">
-  <link rel="stylesheet" href="./nova-home-clean-v16.css?v=nova18">
-  <link rel="stylesheet" href="./nova-cloud-motion-v18.css?v=nova18">
+  <meta name="description" content="Nova+ — здоровье, баланс и развитие в одном приложении.">
+  <link rel="manifest" href="./manifest.webmanifest?v=nova20">
+  <link rel="icon" href="./assets/nova-orb.svg?v=nova20" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="./assets/nova-orb.svg?v=nova20">
+  <link rel="stylesheet" href="./nova-v20.css?v=nova20">
   <title>Nova+</title>
 </head>
 <body>
-  <div id="app" class="nova-app">
-    <header id="header" class="nova-header"></header>
-    <main id="screen" class="nova-screen" aria-live="polite"></main>
-    <nav id="nav" class="bottom-nav" aria-label="Основная навигация"></nav>
-  </div>
-  <div id="sheet" class="sheet"></div>
-  <input id="cameraInput" type="file" accept="image/*" capture="environment" hidden>
-  <script type="module" src="./nova-app-v9.js?v=nova18"></script>
-  <script src="./nova-home-clean-v16.js?v=nova18" defer></script>
+  <div id="novaApp" class="nova-shell"></div>
+  <input id="photoInput" type="file" accept="image/*" capture="environment" hidden>
+  <script type="module" src="./nova-v20.js?v=nova20"></script>
   <script>
-    if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=nova18').catch(()=>{}));}
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js?v=nova20').catch(() => {}));
+    }
   </script>
 </body>
 </html>

@@ -1,0 +1,69 @@
+/* Nova+ v17 — cloud motion only.
+   Keeps the v16 static composition intact; no sphere/liquid/arc behavior changes. */
+
+.home-page .sphere-stage::before,
+.home-page .sphere-stage::after,
+.home-page .mist-a,
+.home-page .mist-b,
+.home-page .mist-c{
+  will-change:translate;
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+}
+
+/* Far fog: slowest, widest drift. */
+.home-page .sphere-stage::before{
+  animation:novaCloudBack17 22s ease-in-out infinite !important;
+}
+
+/* Front fog: opposite direction and slightly slower. */
+.home-page .sphere-stage::after{
+  animation:novaCloudFront17 27s ease-in-out infinite alternate !important;
+}
+
+/* Three small steam layers move independently by only a few pixels. */
+.home-page .mist-a{
+  animation:novaMistA17 18s ease-in-out infinite alternate !important;
+}
+.home-page .mist-b{
+  animation:novaMistB17 24s ease-in-out infinite alternate !important;
+}
+.home-page .mist-c{
+  animation:novaMistC17 30s ease-in-out infinite alternate !important;
+}
+
+@keyframes novaCloudBack17{
+  0%,100%{translate:-7px 0}
+  50%{translate:8px 0}
+}
+
+@keyframes novaCloudFront17{
+  0%{translate:7px 0}
+  100%{translate:-8px 0}
+}
+
+@keyframes novaMistA17{
+  0%{translate:-4px 0}
+  100%{translate:7px 0}
+}
+
+@keyframes novaMistB17{
+  0%{translate:6px 0}
+  100%{translate:-6px 0}
+}
+
+@keyframes novaMistC17{
+  0%{translate:-5px 0}
+  100%{translate:5px 0}
+}
+
+@media (prefers-reduced-motion: reduce){
+  .home-page .sphere-stage::before,
+  .home-page .sphere-stage::after,
+  .home-page .mist-a,
+  .home-page .mist-b,
+  .home-page .mist-c{
+    animation:none !important;
+    translate:0 0 !important;
+  }
+}

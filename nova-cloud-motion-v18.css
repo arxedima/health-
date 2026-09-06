@@ -1,0 +1,135 @@
+/* Nova+ v18 — larger cloud / steam atmosphere only.
+   Builds on clean v16 geometry and keeps sphere, arc, metrics and logic untouched. */
+
+.home-page .sphere-stage::before,
+.home-page .sphere-stage::after,
+.home-page .mist-a,
+.home-page .mist-b,
+.home-page .mist-c{
+  will-change:translate;
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+  pointer-events:none !important;
+}
+
+/* Wide rear cloud bank — noticeably larger than the sphere. */
+.home-page .sphere-stage::before{
+  width:410px !important;
+  height:124px !important;
+  bottom:8px !important;
+  opacity:.94 !important;
+  filter:blur(12px) !important;
+  background:
+    radial-gradient(ellipse at 4% 67%,rgba(219,239,251,.74) 0 20%,transparent 44%),
+    radial-gradient(ellipse at 17% 52%,rgba(229,244,253,.86) 0 24%,transparent 49%),
+    radial-gradient(ellipse at 34% 61%,rgba(240,249,255,.92) 0 27%,transparent 52%),
+    radial-gradient(ellipse at 51% 48%,rgba(230,244,253,.86) 0 30%,transparent 54%),
+    radial-gradient(ellipse at 68% 61%,rgba(239,249,255,.90) 0 27%,transparent 52%),
+    radial-gradient(ellipse at 84% 50%,rgba(227,243,253,.84) 0 24%,transparent 49%),
+    radial-gradient(ellipse at 97% 66%,rgba(216,237,250,.72) 0 20%,transparent 43%) !important;
+  animation:novaCloudBack18 24s ease-in-out infinite !important;
+}
+
+.dark .home-page .sphere-stage::before{
+  opacity:.91 !important;
+  background:
+    radial-gradient(ellipse at 4% 67%,rgba(64,126,176,.42) 0 20%,transparent 44%),
+    radial-gradient(ellipse at 17% 52%,rgba(82,151,202,.52) 0 24%,transparent 49%),
+    radial-gradient(ellipse at 34% 61%,rgba(104,174,219,.58) 0 27%,transparent 52%),
+    radial-gradient(ellipse at 51% 48%,rgba(89,159,209,.54) 0 30%,transparent 54%),
+    radial-gradient(ellipse at 68% 61%,rgba(104,174,219,.57) 0 27%,transparent 52%),
+    radial-gradient(ellipse at 84% 50%,rgba(78,147,198,.50) 0 24%,transparent 49%),
+    radial-gradient(ellipse at 97% 66%,rgba(58,119,170,.40) 0 20%,transparent 43%) !important;
+}
+
+/* Front rolling steam — larger, denser and closer to the sphere. */
+.home-page .sphere-stage::after{
+  width:360px !important;
+  height:82px !important;
+  bottom:-2px !important;
+  opacity:.86 !important;
+  filter:blur(9px) !important;
+  background:
+    radial-gradient(ellipse at 10% 58%,rgba(255,255,255,.82) 0 23%,transparent 48%),
+    radial-gradient(ellipse at 30% 43%,rgba(255,255,255,.94) 0 26%,transparent 51%),
+    radial-gradient(ellipse at 50% 62%,rgba(248,253,255,.96) 0 30%,transparent 54%),
+    radial-gradient(ellipse at 71% 45%,rgba(255,255,255,.92) 0 26%,transparent 51%),
+    radial-gradient(ellipse at 91% 59%,rgba(250,254,255,.82) 0 23%,transparent 48%) !important;
+  animation:novaCloudFront18 29s ease-in-out infinite alternate !important;
+}
+
+.dark .home-page .sphere-stage::after{
+  opacity:.84 !important;
+  background:
+    radial-gradient(ellipse at 10% 58%,rgba(91,161,211,.35) 0 23%,transparent 48%),
+    radial-gradient(ellipse at 30% 43%,rgba(111,184,230,.42) 0 26%,transparent 51%),
+    radial-gradient(ellipse at 50% 62%,rgba(122,193,235,.46) 0 30%,transparent 54%),
+    radial-gradient(ellipse at 71% 45%,rgba(105,178,224,.41) 0 26%,transparent 51%),
+    radial-gradient(ellipse at 91% 59%,rgba(84,151,202,.34) 0 23%,transparent 48%) !important;
+}
+
+/* Bigger individual steam pillows. */
+.home-page .mist-a{
+  width:145px !important;
+  height:42px !important;
+  left:-18px !important;
+  bottom:26px !important;
+  opacity:.88 !important;
+  filter:blur(12px) !important;
+  animation:novaMistA18 20s ease-in-out infinite alternate !important;
+}
+.home-page .mist-b{
+  width:158px !important;
+  height:46px !important;
+  right:-22px !important;
+  left:auto !important;
+  bottom:21px !important;
+  opacity:.86 !important;
+  filter:blur(13px) !important;
+  animation:novaMistB18 26s ease-in-out infinite alternate !important;
+}
+.home-page .mist-c{
+  width:235px !important;
+  height:36px !important;
+  left:18px !important;
+  bottom:-10px !important;
+  opacity:.70 !important;
+  filter:blur(16px) !important;
+  animation:novaMistC18 32s ease-in-out infinite alternate !important;
+}
+
+.dark .home-page .mist{
+  background:rgba(99,165,213,.38) !important;
+}
+
+@keyframes novaCloudBack18{
+  0%,100%{translate:-12px 0}
+  50%{translate:13px 0}
+}
+@keyframes novaCloudFront18{
+  0%{translate:11px 0}
+  100%{translate:-12px 0}
+}
+@keyframes novaMistA18{
+  0%{translate:-8px 0}
+  100%{translate:10px 0}
+}
+@keyframes novaMistB18{
+  0%{translate:9px 0}
+  100%{translate:-10px 0}
+}
+@keyframes novaMistC18{
+  0%{translate:-7px 0}
+  100%{translate:8px 0}
+}
+
+@media (prefers-reduced-motion: reduce){
+  .home-page .sphere-stage::before,
+  .home-page .sphere-stage::after,
+  .home-page .mist-a,
+  .home-page .mist-b,
+  .home-page .mist-c{
+    animation:none !important;
+    translate:0 0 !important;
+  }
+}

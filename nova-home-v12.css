@@ -1,0 +1,425 @@
+/* Nova+ v12 — Reference Lock
+   Goal: match the approved light reference: airy glass sphere, subtle liquid,
+   restrained progress arc, soft animated clouds. No heavy blue disk, no hard line. */
+
+/* ---------- HERO / SPHERE ---------- */
+.home-page .hero-orb-wrap {
+  position: relative !important;
+  height: 292px !important;
+  margin: 0 auto 0 !important;
+  overflow: visible !important;
+}
+
+.home-page .sphere-stage {
+  position: relative !important;
+  width: 282px !important;
+  height: 264px !important;
+  overflow: visible !important;
+  isolation: isolate !important;
+}
+
+.home-page .hero-orb {
+  --nova-fill: 0%;
+  position: relative !important;
+  z-index: 4 !important;
+  width: 210px !important;
+  height: 210px !important;
+  overflow: hidden !important;
+  isolation: isolate !important;
+  border-radius: 50% !important;
+  border: 1px solid rgba(255,255,255,.82) !important;
+  background:
+    radial-gradient(circle at 29% 22%, rgba(255,255,255,.98) 0 4%, rgba(255,255,255,.72) 10%, rgba(255,255,255,.18) 18%, transparent 28%),
+    radial-gradient(ellipse at 68% 42%, rgba(91,153,207,.16) 0%, rgba(91,153,207,.07) 30%, transparent 54%),
+    radial-gradient(ellipse at 52% 74%, rgba(67,118,168,.11) 0%, rgba(67,118,168,.05) 34%, transparent 60%),
+    linear-gradient(150deg, rgba(245,251,255,.98) 0%, rgba(221,238,250,.92) 34%, rgba(185,216,239,.86) 68%, rgba(238,247,252,.96) 100%) !important;
+  box-shadow:
+    inset 0 0 32px rgba(255,255,255,.88),
+    inset -18px -23px 38px rgba(63,106,153,.11),
+    inset 14px 14px 28px rgba(255,255,255,.30),
+    0 16px 34px rgba(70,118,169,.10),
+    0 0 34px rgba(142,196,232,.14) !important;
+  filter: saturate(.86) contrast(.99) !important;
+  animation: none !important;
+  transform: none !important;
+}
+
+/* Glass highlight — broad and diffused, like the reference. */
+.home-page .hero-orb::before {
+  content: "" !important;
+  position: absolute !important;
+  z-index: 7 !important;
+  left: 7% !important;
+  top: 5% !important;
+  width: 48% !important;
+  height: 31% !important;
+  border-radius: 50% !important;
+  border: 0 !important;
+  background: radial-gradient(ellipse at 38% 42%, rgba(255,255,255,.96) 0%, rgba(255,255,255,.50) 29%, rgba(255,255,255,.10) 55%, transparent 76%) !important;
+  filter: blur(2px) !important;
+  opacity: .96 !important;
+  transform: rotate(-17deg) !important;
+  pointer-events: none !important;
+}
+
+/* Soft inner depth / mist. No visible line. */
+.home-page .hero-orb::after {
+  content: "" !important;
+  position: absolute !important;
+  z-index: 6 !important;
+  left: 10% !important;
+  right: 10% !important;
+  bottom: 8% !important;
+  height: 31% !important;
+  border: 0 !important;
+  border-radius: 50% !important;
+  background:
+    radial-gradient(ellipse at 42% 42%, rgba(82,132,180,.13) 0%, rgba(82,132,180,.06) 35%, transparent 66%),
+    radial-gradient(ellipse at 66% 60%, rgba(39,95,153,.08) 0%, transparent 62%) !important;
+  filter: blur(10px) !important;
+  opacity: .66 !important;
+  pointer-events: none !important;
+}
+
+/* Remove every legacy hard interior wave/line. */
+.home-page .nova-wave {
+  display: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  opacity: 0 !important;
+}
+
+/* ---------- LIQUID PROGRESS ---------- */
+.home-page .nova-liquid {
+  position: absolute !important;
+  z-index: 2 !important;
+  left: -6% !important;
+  right: -6% !important;
+  bottom: -2px !important;
+  height: var(--nova-fill) !important;
+  min-height: 0 !important;
+  overflow: visible !important;
+  border-radius: 0 0 48% 48% !important;
+  pointer-events: none !important;
+  background:
+    radial-gradient(ellipse at 35% 18%, rgba(116,184,230,.22) 0%, transparent 37%),
+    linear-gradient(180deg, rgba(115,179,225,.34) 0%, rgba(82,151,205,.37) 40%, rgba(57,119,178,.42) 100%) !important;
+  box-shadow:
+    inset 0 11px 26px rgba(255,255,255,.12),
+    inset 0 -20px 32px rgba(29,77,129,.10),
+    0 -5px 18px rgba(107,174,222,.07) !important;
+  opacity: .88 !important;
+  transition: height .72s cubic-bezier(.2,.75,.2,1) !important;
+  will-change: height;
+}
+
+/* The surface is formed by two translucent overlapping crests, not a stroke. */
+.home-page .nova-liquid::before,
+.home-page .nova-liquid::after {
+  content: "" !important;
+  position: absolute !important;
+  pointer-events: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  will-change: transform;
+}
+
+.home-page .nova-liquid::before {
+  left: -17% !important;
+  top: -16px !important;
+  width: 136% !important;
+  height: 34px !important;
+  border-radius: 50% !important;
+  background:
+    radial-gradient(ellipse at 33% 61%, rgba(219,243,255,.54) 0 26%, rgba(151,205,237,.24) 48%, transparent 72%),
+    radial-gradient(ellipse at 76% 47%, rgba(169,218,245,.30) 0 24%, transparent 69%) !important;
+  filter: blur(2.2px) !important;
+  opacity: .72 !important;
+  animation: novaLiquidCrestAV12 7.2s ease-in-out infinite !important;
+}
+
+.home-page .nova-liquid::after {
+  left: -29% !important;
+  top: -12px !important;
+  width: 158% !important;
+  height: 29px !important;
+  border-radius: 50% !important;
+  background: radial-gradient(ellipse at 56% 52%, rgba(245,252,255,.34) 0 19%, rgba(185,224,246,.16) 41%, transparent 69%) !important;
+  filter: blur(3.4px) !important;
+  opacity: .52 !important;
+  animation: novaLiquidCrestBV12 9.4s ease-in-out infinite reverse !important;
+}
+
+.home-page .hero-orb[data-progress="0"] .nova-liquid,
+.home-page .hero-orb[data-progress="0"] .nova-liquid::before,
+.home-page .hero-orb[data-progress="0"] .nova-liquid::after {
+  opacity: 0 !important;
+}
+
+/* Barely visible depth particles. */
+.home-page .hero-orb .nova-particles {
+  position: absolute !important;
+  z-index: 4 !important;
+  inset: 17% 13% 16% !important;
+  border-radius: 50% !important;
+  pointer-events: none !important;
+  opacity: .16 !important;
+  background:
+    radial-gradient(circle at 24% 68%, rgba(246,253,255,.90) 0 1px, transparent 1.8px),
+    radial-gradient(circle at 40% 78%, rgba(228,245,255,.78) 0 1.2px, transparent 2px),
+    radial-gradient(circle at 62% 67%, rgba(247,253,255,.74) 0 .9px, transparent 1.7px),
+    radial-gradient(circle at 74% 80%, rgba(217,239,253,.70) 0 1.1px, transparent 1.9px) !important;
+  animation: novaParticlesV12 11s ease-in-out infinite !important;
+}
+
+/* ---------- OUTER PROGRESS ARC ---------- */
+.home-page .progress-ring {
+  width: 254px !important;
+  height: 254px !important;
+  overflow: visible !important;
+  z-index: 8 !important;
+}
+
+.home-page .ring-track,
+.home-page .ring-value {
+  fill: none !important;
+  stroke-linecap: round !important;
+}
+
+.home-page .ring-track {
+  stroke: rgba(70,128,188,.11) !important;
+  stroke-width: 5.5 !important;
+  filter: none !important;
+}
+
+.home-page .ring-value {
+  stroke: #397fd5 !important;
+  stroke-width: 6.3 !important;
+  filter: drop-shadow(0 2px 3px rgba(49,111,191,.11)) !important;
+  transition: stroke-dasharray .72s cubic-bezier(.2,.75,.2,1) !important;
+}
+
+/* ---------- CLOUDS ----------
+   Three restrained layers. They stay around the lower third of the sphere
+   and never form the large white band seen in v11. */
+.home-page .sphere-stage::before {
+  content: "" !important;
+  position: absolute !important;
+  z-index: 5 !important;
+  left: 50% !important;
+  bottom: 14px !important;
+  width: 286px !important;
+  height: 78px !important;
+  border-radius: 999px !important;
+  background:
+    radial-gradient(ellipse at 12% 60%, rgba(241,248,253,.54) 0 18%, transparent 44%),
+    radial-gradient(ellipse at 32% 46%, rgba(247,251,254,.62) 0 22%, transparent 47%),
+    radial-gradient(ellipse at 52% 62%, rgba(235,245,252,.58) 0 24%, transparent 50%),
+    radial-gradient(ellipse at 71% 48%, rgba(249,252,254,.62) 0 22%, transparent 47%),
+    radial-gradient(ellipse at 90% 59%, rgba(239,247,253,.52) 0 18%, transparent 44%) !important;
+  filter: blur(8px) !important;
+  opacity: .72 !important;
+  transform: translateX(-50%) !important;
+  pointer-events: none !important;
+  animation: novaCloudBackV12 14s ease-in-out infinite !important;
+  will-change: transform, opacity;
+}
+
+.home-page .sphere-stage::after {
+  content: "" !important;
+  position: absolute !important;
+  z-index: 6 !important;
+  left: 50% !important;
+  bottom: 2px !important;
+  width: 274px !important;
+  height: 66px !important;
+  border-radius: 999px !important;
+  background:
+    radial-gradient(ellipse at 17% 54%, rgba(250,253,255,.72) 0 21%, transparent 47%),
+    radial-gradient(ellipse at 39% 63%, rgba(240,248,253,.76) 0 25%, transparent 52%),
+    radial-gradient(ellipse at 61% 52%, rgba(252,254,255,.76) 0 23%, transparent 49%),
+    radial-gradient(ellipse at 83% 61%, rgba(241,248,253,.68) 0 21%, transparent 47%) !important;
+  filter: blur(7px) !important;
+  opacity: .78 !important;
+  transform: translateX(-50%) !important;
+  pointer-events: none !important;
+  animation: novaCloudMidV12 18s ease-in-out infinite alternate !important;
+  will-change: transform, opacity;
+}
+
+/* Front mist puffs — small and soft. */
+.home-page .mist {
+  position: absolute !important;
+  z-index: 7 !important;
+  pointer-events: none !important;
+  border-radius: 999px !important;
+  background: rgba(247,252,255,.66) !important;
+  box-shadow: none !important;
+}
+
+.home-page .mist-a {
+  width: 104px !important;
+  height: 33px !important;
+  left: 7px !important;
+  bottom: 20px !important;
+  filter: blur(9px) !important;
+  opacity: .62 !important;
+  animation: novaMistAV12 22s ease-in-out infinite !important;
+}
+
+.home-page .mist-b {
+  width: 118px !important;
+  height: 35px !important;
+  right: 1px !important;
+  left: auto !important;
+  bottom: 13px !important;
+  filter: blur(10px) !important;
+  opacity: .58 !important;
+  animation: novaMistBV12 24s ease-in-out infinite !important;
+}
+
+.home-page .mist-c {
+  width: 164px !important;
+  height: 27px !important;
+  left: 59px !important;
+  bottom: -1px !important;
+  filter: blur(12px) !important;
+  opacity: .46 !important;
+  animation: novaMistCV12 20s ease-in-out infinite !important;
+}
+
+/* ---------- HOME METRICS / CTA / TIP ---------- */
+.home-page .metric-grid {
+  gap: 8px !important;
+  margin-top: 0 !important;
+  position: relative !important;
+  z-index: 10 !important;
+}
+
+.home-page .metric {
+  min-width: 0 !important;
+  height: 91px !important;
+  padding: 9px 5px 8px !important;
+  border-radius: 18px !important;
+  background: rgba(255,255,255,.94) !important;
+  border: 1px solid rgba(24,61,111,.055) !important;
+  box-shadow: 0 6px 16px rgba(39,73,116,.045) !important;
+}
+
+.home-page .metric-icon {
+  color: #11386f !important;
+  opacity: 1 !important;
+}
+
+.home-page .mini-line {
+  height: 4px !important;
+  background: #edf3f9 !important;
+}
+
+.home-page .mini-line i {
+  background: #397fd5 !important;
+}
+
+.home-cta {
+  min-height: 53px !important;
+  margin-top: 10px !important;
+  border-radius: 18px !important;
+  background: #143f78 !important;
+  box-shadow: 0 7px 16px rgba(20,63,120,.10) !important;
+}
+
+.home-tip {
+  margin-top: 11px !important;
+  min-height: 86px !important;
+  border-radius: 20px !important;
+  background: rgba(255,255,255,.94) !important;
+  box-shadow: 0 6px 16px rgba(39,73,116,.04) !important;
+}
+
+/* ---------- DARK THEME ---------- */
+.dark .home-page .hero-orb {
+  background:
+    radial-gradient(circle at 29% 22%, rgba(235,248,255,.82) 0 4%, rgba(155,202,238,.28) 10%, transparent 24%),
+    radial-gradient(ellipse at 67% 42%, rgba(85,145,197,.20) 0%, transparent 52%),
+    linear-gradient(150deg, rgba(57,100,136,.82) 0%, rgba(36,77,113,.86) 42%, rgba(18,52,83,.92) 78%, rgba(31,63,92,.88) 100%) !important;
+  border-color: rgba(215,238,255,.14) !important;
+  box-shadow:
+    inset 0 0 32px rgba(147,201,241,.11),
+    inset -18px -23px 38px rgba(0,9,24,.26),
+    0 16px 34px rgba(0,0,0,.28),
+    0 0 28px rgba(76,140,191,.10) !important;
+}
+
+.dark .home-page .nova-liquid {
+  background:
+    radial-gradient(ellipse at 35% 18%, rgba(92,170,220,.18) 0%, transparent 37%),
+    linear-gradient(180deg, rgba(70,143,195,.30), rgba(43,104,161,.36) 42%, rgba(24,75,130,.44) 100%) !important;
+}
+
+.dark .home-page .ring-track { stroke: rgba(178,212,240,.13) !important; }
+.dark .home-page .ring-value { stroke: #e2f1ff !important; }
+.dark .home-page .sphere-stage::before,
+.dark .home-page .sphere-stage::after,
+.dark .home-page .mist {
+  opacity: .34 !important;
+  filter: blur(10px) !important;
+  background-color: rgba(77,117,151,.25) !important;
+}
+
+/* ---------- MOTION ---------- */
+@keyframes novaLiquidCrestAV12 {
+  0%,100% { transform: translate3d(-2%,0,0) rotate(-1deg) scaleX(1.02); }
+  50% { transform: translate3d(5%,-1px,0) rotate(.8deg) scaleX(.99); }
+}
+
+@keyframes novaLiquidCrestBV12 {
+  0%,100% { transform: translate3d(-4%,1px,0) rotate(.8deg) scaleX(1); }
+  50% { transform: translate3d(6%,-1px,0) rotate(-.7deg) scaleX(1.03); }
+}
+
+@keyframes novaParticlesV12 {
+  0%,100% { transform: translate3d(0,1px,0); opacity: .13; }
+  50% { transform: translate3d(1px,-2px,0); opacity: .19; }
+}
+
+@keyframes novaCloudBackV12 {
+  0%,100% { transform: translateX(-50%) translate3d(-5px,0,0); opacity: .68; }
+  50% { transform: translateX(-50%) translate3d(7px,0,0); opacity: .76; }
+}
+
+@keyframes novaCloudMidV12 {
+  0% { transform: translateX(-50%) translate3d(6px,0,0); opacity: .73; }
+  100% { transform: translateX(-50%) translate3d(-7px,0,0); opacity: .81; }
+}
+
+@keyframes novaMistAV12 {
+  0%,100% { transform: translate3d(-4px,0,0); opacity: .58; }
+  50% { transform: translate3d(7px,0,0); opacity: .66; }
+}
+
+@keyframes novaMistBV12 {
+  0%,100% { transform: translate3d(5px,0,0); opacity: .54; }
+  50% { transform: translate3d(-8px,0,0); opacity: .62; }
+}
+
+@keyframes novaMistCV12 {
+  0%,100% { transform: translate3d(-3px,0,0) scaleX(1); opacity: .42; }
+  50% { transform: translate3d(6px,0,0) scaleX(1.04); opacity: .50; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-page .nova-liquid::before,
+  .home-page .nova-liquid::after,
+  .home-page .nova-particles,
+  .home-page .sphere-stage::before,
+  .home-page .sphere-stage::after,
+  .home-page .mist-a,
+  .home-page .mist-b,
+  .home-page .mist-c {
+    animation: none !important;
+  }
+  .home-page .nova-liquid,
+  .home-page .ring-value {
+    transition: none !important;
+  }
+}

@@ -8,6 +8,7 @@
   const force = new URLSearchParams(location.search).get('onboarding') === '1';
   const shouldOpen = force || !localStorage.getItem(DONE_KEY);
   const DEFAULT_PROFILE = { name: '', height: '', weight: '', goal: '' };
+  const GOAL_LABEL = { health:'Здоровье', shape:'Форма', lose:'Снизить вес', gain:'Набрать массу', energy:'Больше энергии', recovery:'Восстановление' };
   const phrases = [
     ['NOVA', 'Новая реальность начинается с маленького действия.'],
     ['Новая жизнь.', ''], ['Новые привычки.', ''], ['Новое тело.', ''], ['Новая энергия.', ''], ['Новый ритм.', ''], ['Новый ты.', ''],
@@ -68,7 +69,9 @@
   function finish() {
     stopText(); localStorage.setItem(DONE_KEY, 'done');
     document.documentElement.classList.remove('nova-onboarding-open','nova-onboarding-pending');
-    root?.remove(); root = null; syncProfile();
+    root?.remove(); root = null;
+    if (force && history.replaceState) { const u=new URL(location.href); u.searchParams.delete('onboarding'); history.replaceState({},'',u.pathname+(u.search||'')+u.hash); }
+    syncProfile();
   }
   function startText() {
     if (running || !root) return; running = true; idx = 0;
@@ -96,7 +99,7 @@
   function syncProfile() {
     const p = readProfile(); const name = p.name || 'Дмитрий';
     const greeting = document.getElementById('greetingTitle'); if (greeting) { const hour=new Date().getHours(); const sal=hour<6?'Доброй ночи':hour<12?'Доброе утро':hour<18?'Добрый день':'Добрый вечер'; const html=`${sal},<br>${esc(name)}`; if (greeting.innerHTML!==html) greeting.innerHTML=html; }
-    document.querySelectorAll('.nf-profile').forEach(card => { const strong=card.querySelector('strong'); if (strong && strong.textContent!==name) strong.textContent=name; const avatar=card.querySelector('div'), initial=(name[0]||'N').toUpperCase(); if (avatar && avatar.textContent!==initial) avatar.textContent=initial; });
+    document.querySelectorAll('.nf-profile').forEach(card => { const strong=card.querySelector('strong'); if (strong && strong.textContent!==name) strong.textContent=name; const avatar=card.querySelector('div'), initial=(name[0]||'N').toUpperCase(); if (avatar && avatar.textContent!==initial) avatar.textContent=initial; const sub=card.querySelector('small'), meta=[p.height?`${p.height} см`:'',p.weight?`${p.weight} кг`:'',p.goal?(GOAL_LABEL[p.goal]||''):''].filter(Boolean).join(' · ')||'Nova+ профиль'; if(sub&&sub.textContent!==meta)sub.textContent=meta; });
     injectProfileEditor();
   }
   function injectProfileEditor() {

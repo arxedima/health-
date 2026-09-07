@@ -25,7 +25,7 @@
   loadScript('./nova-features.js?v=2', 'data-nova-features');
   loadCss('./quick-actions.css?v=1', 'data-quick-actions');
   loadScript('./quick-actions.js?v=1', 'data-quick-actions');
-  loadCss('./nova-intelligence.css?v=1', 'data-nova-intelligence');
+  loadCss('./nova-intelligence.css?v=2', 'data-nova-intelligence');
   loadScript('./nova-intelligence.js?v=1', 'data-nova-intelligence');
 
   const toast = document.getElementById('toast');

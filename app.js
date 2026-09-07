@@ -1,6 +1,22 @@
 (() => {
   'use strict';
 
+  const PREMIUM_VERSION = '1';
+  if (!document.querySelector('link[data-premium-tabs]')) {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = `./premium-tabs.css?v=${PREMIUM_VERSION}`;
+    link.dataset.premiumTabs = 'true';
+    document.head.appendChild(link);
+  }
+  if (!document.querySelector('script[data-premium-tabs]')) {
+    const script = document.createElement('script');
+    script.src = `./premium-tabs.js?v=${PREMIUM_VERSION}`;
+    script.defer = true;
+    script.dataset.premiumTabs = 'true';
+    document.body.appendChild(script);
+  }
+
   const toast = document.getElementById('toast');
   const sheet = document.getElementById('actionSheet');
   const backdrop = document.getElementById('sheetBackdrop');

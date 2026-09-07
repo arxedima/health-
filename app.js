@@ -1,6 +1,24 @@
 (() => {
   'use strict';
 
+  function loadDepthPremium() {
+    if (!document.querySelector('link[data-depth-premium]')) {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = './depth-premium.css?v=1';
+      link.setAttribute('data-depth-premium', 'true');
+      document.head.appendChild(link);
+    }
+    if (!document.querySelector('script[data-depth-premium]')) {
+      const script = document.createElement('script');
+      script.src = './depth-premium.js?v=1';
+      script.async = false;
+      script.setAttribute('data-depth-premium', 'true');
+      document.body.appendChild(script);
+    }
+  }
+  loadDepthPremium();
+
   const toast = document.getElementById('toast');
   const sheet = document.getElementById('actionSheet');
   const backdrop = document.getElementById('sheetBackdrop');

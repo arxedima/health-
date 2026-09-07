@@ -1,0 +1,178 @@
+/* Nova+ v23 — home geometry + responsive containment + clean progress arc. */
+html,body{max-width:100%;overflow-x:hidden!important}
+#novaApp,.nova-shell{width:100%;max-width:100%;overflow-x:hidden!important}
+
+.nova23-home-page{
+  position:relative;
+  width:100%;
+  max-width:430px;
+  margin:0 auto;
+  padding:12px 16px 18px!important;
+  overflow:hidden!important;
+}
+.nova23-home-page .topbar{margin-bottom:10px!important}
+.nova23-home-page .brand-orb{width:34px!important;height:34px!important}
+.nova23-home-page .brand-name{font-size:18px!important}
+.nova23-home-page .brand-date{font-size:10px!important;margin-top:3px!important}
+.nova23-home-page .icon-btn{width:39px!important;height:39px!important}
+
+.nova23-home-page .hero-title{
+  width:100%;
+  max-width:100%!important;
+  margin:0!important;
+  font-size:29px!important;
+  line-height:.97!important;
+  letter-spacing:-.042em!important;
+  font-weight:760!important;
+  overflow-wrap:normal;
+}
+.nova23-home-page .hero-sub{
+  width:100%;
+  margin:6px 0 0!important;
+  font-size:13.5px!important;
+  line-height:1.25!important;
+}
+
+.nova23-home-page .home-hero.nova23-hero{
+  position:relative;
+  width:100%!important;
+  max-width:100%!important;
+  height:208px!important;
+  margin:2px 0 0!important;
+  display:grid!important;
+  place-items:center!important;
+  overflow:hidden!important;
+  isolation:isolate;
+  border-radius:22px!important;
+  background:radial-gradient(ellipse at 50% 67%,rgba(137,198,238,.17) 0%,rgba(196,228,248,.08) 40%,transparent 72%);
+}
+.nova23-home-page .home-hero.nova23-hero::before{
+  content:""!important;
+  position:absolute!important;
+  z-index:0!important;
+  left:50%!important;
+  bottom:5px!important;
+  width:145%!important;
+  height:124px!important;
+  transform:translateX(-50%)!important;
+  border-radius:50%!important;
+  filter:blur(13px)!important;
+  opacity:.95!important;
+  pointer-events:none!important;
+  background:
+    radial-gradient(ellipse at 7% 65%,rgba(199,227,247,.62) 0 18%,transparent 44%),
+    radial-gradient(ellipse at 22% 47%,rgba(231,245,253,.90) 0 24%,transparent 50%),
+    radial-gradient(ellipse at 40% 66%,rgba(205,231,248,.78) 0 26%,transparent 52%),
+    radial-gradient(ellipse at 58% 46%,rgba(239,249,255,.95) 0 26%,transparent 52%),
+    radial-gradient(ellipse at 76% 66%,rgba(205,231,248,.79) 0 25%,transparent 51%),
+    radial-gradient(ellipse at 93% 52%,rgba(224,241,252,.82) 0 22%,transparent 47%);
+}
+.nova23-home-page .home-hero.nova23-hero::after{
+  content:""!important;
+  position:absolute!important;
+  z-index:1!important;
+  left:50%!important;
+  bottom:-6px!important;
+  width:128%!important;
+  height:70px!important;
+  transform:translateX(-50%)!important;
+  border-radius:50%!important;
+  filter:blur(10px)!important;
+  opacity:.82!important;
+  pointer-events:none!important;
+  background:
+    radial-gradient(ellipse at 18% 58%,rgba(250,253,255,.83) 0 21%,transparent 47%),
+    radial-gradient(ellipse at 42% 68%,rgba(240,249,255,.94) 0 27%,transparent 52%),
+    radial-gradient(ellipse at 67% 51%,rgba(251,254,255,.91) 0 28%,transparent 53%),
+    radial-gradient(ellipse at 88% 62%,rgba(237,248,254,.86) 0 23%,transparent 49%);
+}
+.dark .nova23-home-page .home-hero.nova23-hero{
+  background:radial-gradient(ellipse at 50% 66%,rgba(62,132,181,.18),rgba(23,66,103,.05) 45%,transparent 72%);
+}
+.dark .nova23-home-page .home-hero.nova23-hero::before{
+  background:
+    radial-gradient(ellipse at 7% 65%,rgba(39,94,140,.50) 0 18%,transparent 44%),
+    radial-gradient(ellipse at 22% 47%,rgba(72,136,182,.57) 0 24%,transparent 50%),
+    radial-gradient(ellipse at 40% 66%,rgba(45,108,157,.56) 0 26%,transparent 52%),
+    radial-gradient(ellipse at 58% 46%,rgba(84,150,195,.61) 0 26%,transparent 52%),
+    radial-gradient(ellipse at 76% 66%,rgba(45,108,156,.56) 0 25%,transparent 51%),
+    radial-gradient(ellipse at 93% 52%,rgba(65,128,173,.52) 0 22%,transparent 47%);
+}
+.dark .nova23-home-page .home-hero.nova23-hero::after{
+  background:
+    radial-gradient(ellipse at 18% 58%,rgba(90,155,201,.29) 0 21%,transparent 47%),
+    radial-gradient(ellipse at 42% 68%,rgba(68,134,183,.37) 0 27%,transparent 52%),
+    radial-gradient(ellipse at 67% 51%,rgba(103,169,212,.35) 0 28%,transparent 53%),
+    radial-gradient(ellipse at 88% 62%,rgba(74,140,187,.32) 0 23%,transparent 49%);
+}
+
+.nova23-sphere-svg{
+  position:relative;
+  z-index:2;
+  display:block;
+  width:196px!important;
+  height:196px!important;
+  max-width:78vw;
+  overflow:visible;
+  filter:drop-shadow(0 11px 18px rgba(50,110,170,.10));
+}
+.dark .nova23-sphere-svg{filter:drop-shadow(0 13px 23px rgba(0,10,27,.28))}
+
+.nova23-home-page .metric-grid{
+  width:100%!important;
+  max-width:100%!important;
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  gap:6px!important;
+  margin:0!important;
+  position:relative;
+  z-index:5;
+}
+.nova23-home-page .metric-card{
+  min-width:0!important;
+  width:100%!important;
+  height:80px!important;
+  padding:7px 2px 6px!important;
+  border-radius:15px!important;
+  overflow:hidden!important;
+  background:rgba(255,255,255,.79)!important;
+  border-color:rgba(44,92,145,.08)!important;
+  box-shadow:0 6px 16px rgba(45,91,142,.05)!important;
+}
+.dark .nova23-home-page .metric-card{background:rgba(8,33,58,.74)!important;border-color:rgba(124,178,217,.09)!important;box-shadow:none!important}
+.nova23-home-page .metric-card svg{width:21px!important;height:21px!important;flex:0 0 auto}
+.nova23-home-page .metric-card strong{font-size:10px!important;line-height:1!important;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.nova23-home-page .metric-card b{font-size:11.5px!important;line-height:1!important;white-space:nowrap}
+.nova23-home-page .mini-track{width:78%!important;height:3px!important}
+
+.nova23-home-page .home-cta{margin-top:8px!important;height:44px!important;border-radius:22px!important;font-size:12.5px!important}
+.nova23-home-page .tip{margin-top:8px!important;min-height:70px!important;padding:8px 10px!important;grid-template-columns:42px 1fr 14px!important;gap:8px!important;border-radius:16px!important;background:rgba(255,255,255,.73)!important;box-shadow:0 6px 16px rgba(45,91,142,.05)!important;overflow:hidden}
+.dark .nova23-home-page .tip{background:rgba(8,33,58,.72)!important;box-shadow:none!important}
+.nova23-home-page .tip-icon{width:42px!important;height:42px!important}.nova23-home-page .tip-icon svg{width:23px!important;height:23px!important}
+.nova23-home-page .tip small{font-size:8.8px!important}.nova23-home-page .tip b{font-size:12.5px!important;margin-top:1px!important}.nova23-home-page .tip p{font-size:9px!important;margin-top:2px!important}.nova23-home-page .chev{font-size:19px!important}
+
+.nova23-home-active .bottom-nav{
+  left:0!important;
+  right:0!important;
+  width:100%!important;
+  max-width:none!important;
+  min-height:64px!important;
+  height:calc(64px + env(safe-area-inset-bottom))!important;
+  padding:4px max(8px,env(safe-area-inset-left)) env(safe-area-inset-bottom) max(8px,env(safe-area-inset-right))!important;
+  overflow:visible!important;
+}
+.nova23-home-active .nav-btn{min-width:0!important;font-size:8.8px!important}
+.nova23-home-active .nav-btn svg{width:22px!important;height:22px!important}
+.nova23-home-active .plus-circle{width:54px!important;height:54px!important;font-size:29px!important;border-width:4px!important}
+
+@media(max-width:370px){
+  .nova23-home-page{padding-left:13px!important;padding-right:13px!important}
+  .nova23-home-page .hero-title{font-size:27px!important}
+  .nova23-home-page .hero-sub{font-size:13px!important}
+  .nova23-home-page .home-hero.nova23-hero{height:200px!important}
+  .nova23-sphere-svg{width:188px!important;height:188px!important}
+  .nova23-home-page .metric-grid{gap:5px!important}
+  .nova23-home-page .metric-card{height:77px!important}
+}
+
+@media(prefers-reduced-motion:reduce){.nova23-home-page *,.nova23-home-active .bottom-nav *{animation:none!important;transition:none!important}}

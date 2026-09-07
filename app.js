@@ -16,6 +16,13 @@
       script.setAttribute('data-depth-premium', 'true');
       document.body.appendChild(script);
     }
+    if (!document.querySelector('script[data-depth-premium-safari]')) {
+      const script = document.createElement('script');
+      script.src = './depth-premium-safari.js?v=1';
+      script.async = false;
+      script.setAttribute('data-depth-premium-safari', 'true');
+      document.body.appendChild(script);
+    }
   }
   loadDepthPremium();
 

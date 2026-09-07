@@ -1,8 +1,8 @@
-const CACHE='nova-plus-v21';
+const CACHE='nova-plus-v22';
 const ASSETS=[
-  './','./index.html','./nova-v20.css?v=nova21','./nova-hero-v21.css?v=nova21',
-  './nova-v20.js?v=nova21','./nova-hero-v21.js?v=nova21',
-  './manifest.webmanifest?v=nova21','./assets/nova-orb.svg?v=nova21'
+  './','./index.html','./nova-v20.css?v=nova22','./nova-home-v22.css?v=nova22',
+  './nova-v20.js?v=nova22','./nova-home-v22.js?v=nova22',
+  './manifest.webmanifest?v=nova22','./assets/nova-orb.svg?v=nova22'
 ];
 self.addEventListener('install',e=>{
   self.skipWaiting();

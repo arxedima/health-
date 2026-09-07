@@ -1,75 +1,230 @@
 (() => {
+  'use strict';
+
   const shell = document.getElementById('appShell');
   if (!shell) return;
 
-  const defaults = {
+  const METRIC_DEFAULTS = {
     sport: { current: 2, max: 3 },
     food: { current: 3, max: 8 },
     water: { current: 4, max: 8 },
     sleep: { current: 1, max: 8 }
   };
 
-  const meta = {
-    sport: { title: 'Спорт', subtitle: 'Движение делает жизнь ярче', action: 'Начать тренировку' },
-    water: { title: 'Вода', subtitle: 'Маленькие шаги к большему', action: 'Добавить воду' },
-    food: { title: 'Питание', subtitle: 'Хорошая еда даёт энергию', action: 'Добавить приём пищи' },
-    sleep: { title: 'Сон', subtitle: 'Больше отдыха — больше возможностей', action: 'Начать сон' }
+  const DETAIL_DEFAULTS = {
+    sport: { steps: 7432, calories: 320, minutes: 42 },
+    water: { ml: 1500 },
+    food: { kcal: 1540, protein: 120, fat: 56, carbs: 180 },
+    sleep: { minutes: 448, quality: 91, mode: false }
   };
 
-  const icons = {
-    home: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5V21h-6v-6H9v6H3V10.5Z" fill="currentColor"/></svg>`,
-    sun: `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="currentColor"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>`,
-    moonSmall: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.4 17.2A8.2 8.2 0 0 1 8.2 4.7 8 8 0 1 0 18.4 17.2Z" fill="currentColor"/></svg>`,
-    play: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 5 11 7-11 7V5Z" fill="currentColor"/></svg>`,
-    plus: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`,
-    flame: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.7 2c1 3 4.5 4.1 4.5 7.3A4.8 4.8 0 0 1 12.4 14a4.8 4.8 0 0 1-4.7-4.9c0-2.7 2-4.6 5-7.1Z" fill="currentColor"/><path d="M11.2 13c-2 1.8-3.5 3.6-3.5 5.7A4.3 4.3 0 0 0 12 23a4.3 4.3 0 0 0 4.3-4.4c0-2.1-1.4-3.9-3.4-5.7.2 1.9-.4 3-1.7 3.8.3-1.5.1-2.6 0-3.7Z" fill="currentColor" opacity=".68"/></svg>`,
-    clock: `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 7v5l3 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`,
-    sport: `<svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="43" cy="11" r="5.5" fill="currentColor"/><path d="M34 21 25 30l-8-3-3 6 11 4 6-5 4 6-6 7-9 9 6 5 10-10 6-5 5 4 4 10 7-2-4-12-8-7-5-10 3-4 7 4 3-6-11-6a7 7 0 0 0-8 1Z" fill="currentColor"/></svg>`,
-    water: `<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 6c-5 8.7-15 20.1-15 30.7a15 15 0 1 0 30 0C47 26 37 14.7 32 6Z" fill="currentColor"/><path d="M24.6 34.7c.7-4.8 4.1-9.4 7.8-14.3-2.3 9.6-1.6 16.4 3.7 21.4-6 .8-12.3-1.8-11.5-7.1Z" fill="rgba(230,249,255,.72)"/></svg>`,
-    food: `<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M50 11C35 12.8 23.5 20 17 30.5c-5 8-4.1 17.3 4.8 22.3 8 4.5 17.1 1.6 22.5-6.6C51 36 54.6 24.6 50 11Z" fill="currentColor"/><path d="M19 44c10.4-5.4 18-14 24.4-26.2" fill="none" stroke="rgba(226,255,241,.78)" stroke-width="3.3" stroke-linecap="round"/></svg>`,
-    sleep: `<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M48.5 47.7A22 22 0 0 1 21 14.3a21.4 21.4 0 1 0 27.5 33.4Z" fill="currentColor"/></svg>`
+  const META = {
+    sport: { title: 'Спорт', subtitle: 'Движение делает жизнь ярче', primary: 'Начать тренировку' },
+    water: { title: 'Вода', subtitle: 'Маленькие шаги к большему', primary: 'Добавить воду' },
+    food: { title: 'Питание', subtitle: 'Хорошая еда даёт энергию', primary: 'Овощной боул' },
+    sleep: { title: 'Сон', subtitle: 'Больше отдыха — больше возможностей', primary: 'Начать сон' }
   };
 
-  let state = loadState();
+  const metricState = loadObject('nova.metrics', METRIC_DEFAULTS, sanitizeMetricState);
+  const detailState = loadObject('nova.details', DETAIL_DEFAULTS, sanitizeDetailState);
+
   let screen = null;
   let activeKind = null;
-  let toastTimer;
+  let previousFocus = null;
+  let toastTimer = null;
 
-  function loadState() {
+  function clone(value) { return JSON.parse(JSON.stringify(value)); }
+  function clamp(value, min, max) { return Math.min(max, Math.max(min, value)); }
+
+  function loadObject(key, fallback, sanitizer) {
     try {
-      const saved = JSON.parse(localStorage.getItem('nova.metrics') || '{}');
-      const next = {};
-      Object.keys(defaults).forEach(kind => {
-        const raw = Number(saved?.[kind]?.current);
-        next[kind] = {
-          current: Number.isFinite(raw) ? Math.max(0, Math.min(defaults[kind].max, raw)) : defaults[kind].current,
-          max: defaults[kind].max
-        };
-      });
-      return next;
+      const parsed = JSON.parse(localStorage.getItem(key) || 'null');
+      return sanitizer(parsed, fallback);
     } catch (_) {
-      return JSON.parse(JSON.stringify(defaults));
+      return clone(fallback);
     }
   }
 
-  function saveState() {
-    localStorage.setItem('nova.metrics', JSON.stringify(state));
+  function sanitizeMetricState(source, fallback) {
+    const out = clone(fallback);
+    if (!source || typeof source !== 'object') return out;
+    Object.keys(out).forEach((kind) => {
+      const raw = Number(source?.[kind]?.current);
+      if (Number.isFinite(raw)) out[kind].current = clamp(raw, 0, out[kind].max);
+    });
+    return out;
   }
 
-  function pct(kind) {
-    return Math.round((state[kind].current / state[kind].max) * 100);
+  function sanitizeDetailState(source, fallback) {
+    const out = clone(fallback);
+    if (!source || typeof source !== 'object') return out;
+    const copyNumber = (group, key, min, max) => {
+      const raw = Number(source?.[group]?.[key]);
+      if (Number.isFinite(raw)) out[group][key] = clamp(raw, min, max);
+    };
+    copyNumber('sport', 'steps', 0, 10000);
+    copyNumber('sport', 'calories', 0, 9999);
+    copyNumber('sport', 'minutes', 0, 999);
+    copyNumber('water', 'ml', 0, 2000);
+    copyNumber('food', 'kcal', 0, 2000);
+    copyNumber('food', 'protein', 0, 999);
+    copyNumber('food', 'fat', 0, 999);
+    copyNumber('food', 'carbs', 0, 999);
+    copyNumber('sleep', 'minutes', 0, 720);
+    copyNumber('sleep', 'quality', 0, 100);
+    out.sleep.mode = Boolean(source?.sleep?.mode ?? out.sleep.mode);
+    return out;
+  }
+
+  function saveState() {
+    try {
+      localStorage.setItem('nova.metrics', JSON.stringify(metricState));
+      localStorage.setItem('nova.details', JSON.stringify(detailState));
+    } catch (_) {}
+  }
+
+  function formatNumber(value) { return new Intl.NumberFormat('ru-RU').format(Math.round(value)); }
+  function formatLiters(ml) { return `${(ml / 1000).toFixed(ml % 1000 === 0 ? 1 : 2).replace('.', ',').replace(/,00$/, ',0')} л`; }
+  function formatSleep(minutes) {
+    const h = Math.floor(minutes / 60);
+    const m = Math.round(minutes % 60);
+    return `${h} ч ${String(m).padStart(2, '0')} мин`;
+  }
+
+  function detailProgress(kind) {
+    if (kind === 'sport') return clamp(detailState.sport.steps / 10000, 0, 1);
+    if (kind === 'water') return clamp(detailState.water.ml / 2000, 0, 1);
+    if (kind === 'food') return clamp(detailState.food.kcal / 2000, 0, 1);
+    return clamp(detailState.sleep.minutes / 480, 0, 1);
+  }
+
+  function metricProgress(kind) {
+    const item = metricState[kind];
+    return item.max ? clamp(item.current / item.max, 0, 1) : 0;
   }
 
   function syncHome() {
-    document.querySelectorAll('.metric').forEach(metric => {
+    document.querySelectorAll('.metric[data-kind]').forEach((metric) => {
       const kind = metric.dataset.kind;
-      if (!state[kind]) return;
-      const value = metric.querySelector('strong');
+      const item = metricState[kind];
+      if (!item) return;
+      const strong = metric.querySelector('strong');
       const bar = metric.querySelector('.metric-track i');
-      if (value) value.textContent = `${state[kind].current} / ${state[kind].max}`;
-      if (bar) bar.style.width = `${pct(kind)}%`;
+      if (strong) strong.textContent = `${item.current} / ${item.max}`;
+      if (bar) bar.style.width = `${Math.round(metricProgress(kind) * 100)}%`;
     });
     window.NovaBalance?.update?.();
+  }
+
+  function icon(kind, extraClass = '') {
+    const common = `class="gf-svg ${extraClass}" viewBox="0 0 64 64" aria-hidden="true"`;
+    if (kind === 'sport') return `<svg ${common}><circle cx="43" cy="10.5" r="5.7" fill="currentColor"/><path d="M34.5 20.3 25 29.7l-8.2-2.9-3 6.4 11.3 4.1 6.1-5.1 4.1 6.1-6.2 6.8-9.5 9.5 6 5 10.1-10 6.1-5.4 4.8 4.2 3.9 10.4 7.5-2.4-4.1-12.1-9.1-8.5-5.8-10.9 3.5-4.2 6.4 3.8 3.8-6.3-10.6-6.3a7.2 7.2 0 0 0-8.1 1Z" fill="currentColor"/><path d="m31.7 25.4-4.5 4.4 4.3 1.5M38 39.2l-5.2 5.7" fill="none" stroke="rgba(255,255,255,.72)" stroke-width="2.2" stroke-linecap="round"/></svg>`;
+    if (kind === 'water') return `<svg ${common}><path d="M32 5.6C27 14.7 16.7 26 16.7 36.9a15.3 15.3 0 1 0 30.6 0C47.3 26 37 14.7 32 5.6Z" fill="currentColor"/><path d="M24.1 35.7c.8-5.2 4.1-10.1 8.5-15.8-2.6 10.2-1.7 17.7 4.1 23.1-6.7.8-13.4-1.8-12.6-7.3Z" fill="rgba(255,255,255,.58)"/><path d="M27.4 20.7c-3.9 6-6.4 10.4-6.7 14.7" fill="none" stroke="rgba(255,255,255,.78)" stroke-width="2.4" stroke-linecap="round"/></svg>`;
+    if (kind === 'food') return `<svg ${common}><path d="M51 10.2C36 11.9 24.1 18.8 17.4 29.4c-5.4 8.6-4.6 18.2 4.7 23.4 8.3 4.7 17.9 1.6 23.6-7C52.5 35.4 56 23.9 51 10.2Z" fill="currentColor"/><path d="M18.8 45.7c11.2-5.8 19.2-14.5 26.2-27.8" fill="none" stroke="rgba(255,255,255,.76)" stroke-width="3.1" stroke-linecap="round"/><path d="M29 39.6c4.3-1.1 8-3.2 11.4-6.1" fill="none" stroke="rgba(255,255,255,.42)" stroke-width="1.8" stroke-linecap="round"/></svg>`;
+    return `<svg ${common}><path d="M49.8 47.6A22.5 22.5 0 0 1 21.3 13.7a21.9 21.9 0 1 0 28.5 33.9Z" fill="currentColor"/><path d="M25.7 16.2c-5.9 10.2-5.7 20.7 1.5 28.4" fill="none" stroke="rgba(255,255,255,.62)" stroke-width="2.8" stroke-linecap="round"/></svg>`;
+  }
+
+  function uiIcon(name) {
+    if (name === 'back') return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.5 5.5 9 12l6.5 6.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    if (name === 'sun') return '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="currentColor"/><path d="M12 2.5v2.3M12 19.2v2.3M21.5 12h-2.3M4.8 12H2.5M18.7 5.3 17 7M7 17l-1.7 1.7M18.7 18.7 17 17M7 7 5.3 5.3" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>';
+    if (name === 'moon') return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.5 16.8A8 8 0 0 1 8.2 5.1a7.7 7.7 0 1 0 10.3 11.7Z" fill="currentColor"/></svg>';
+    if (name === 'play') return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 9 6-9 6V6Z" fill="currentColor"/></svg>';
+    if (name === 'plus') return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>';
+    if (name === 'arrow') return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    return '';
+  }
+
+  function toolbar() {
+    const dark = shell.classList.contains('dark');
+    return `<div class="gf-toolbar"><button class="gf-tool" type="button" data-gf-close aria-label="Вернуться на главную">${uiIcon('back')}</button><div class="gf-mini-brand" aria-label="Nova+"><span class="gf-mini-orb"></span><strong>Nova+</strong></div><button class="gf-tool" type="button" data-gf-theme aria-label="Переключить тему"><span data-gf-theme-icon>${uiIcon(dark ? 'moon' : 'sun')}</span></button></div>`;
+  }
+
+  function heading(kind) {
+    return `<header class="gf-heading"><div class="gf-heading-line"><span class="gf-heading-icon">${icon(kind)}</span><h1>${META[kind].title}</h1></div><p>${META[kind].subtitle}</p></header>`;
+  }
+
+  function orb(kind) {
+    const progress = Math.round(detailProgress(kind) * 100);
+    return `<section class="gf-stage" aria-label="${META[kind].title}: ${progress}% цели"><svg class="gf-ring" viewBox="0 0 260 150" aria-hidden="true"><path class="gf-ring-track" pathLength="100" d="M31 130 A99 99 0 0 1 229 130"/><path class="gf-ring-value" pathLength="100" style="stroke-dasharray:${progress} 100" d="M31 130 A99 99 0 0 1 229 130"/></svg><div class="gf-orb" aria-hidden="true"><span class="gf-orb-depth"></span><span class="gf-orb-ambient"></span><span class="gf-orb-caustic gf-orb-caustic-a"></span><span class="gf-orb-caustic gf-orb-caustic-b"></span><span class="gf-orb-glint"></span><span class="gf-orb-rim"></span><span class="gf-symbol">${icon(kind)}</span></div></section>`;
+  }
+
+  function mainValue(kind) {
+    if (kind === 'sport') return `<div class="gf-value"><strong>${formatNumber(detailState.sport.steps)}</strong><span>шага из 10 000</span></div>`;
+    if (kind === 'water') return `<div class="gf-value"><strong>${formatLiters(detailState.water.ml)}</strong><span>из 2,0 л</span></div>`;
+    if (kind === 'food') return `<div class="gf-value"><strong>${formatNumber(detailState.food.kcal)}</strong><span>ккал из 2 000</span></div>`;
+    return `<div class="gf-value"><strong>${formatSleep(detailState.sleep.minutes)}</strong><span>из 8 часов · качество ${detailState.sleep.quality}%</span></div>`;
+  }
+
+  function sportFooter() {
+    return `<div class="gf-footer"><button class="gf-cta gf-solid" type="button" data-gf-action="sport"><span class="gf-cta-icon">${uiIcon('play')}</span><span>Начать тренировку</span></button></div>`;
+  }
+  function waterFooter() {
+    return `<div class="gf-footer"><button class="gf-cta gf-ghost" type="button" data-gf-action="water" ${detailState.water.ml >= 2000 ? 'disabled' : ''}><span class="gf-cta-icon">${uiIcon('plus')}</span><span>${detailState.water.ml >= 2000 ? 'Цель по воде выполнена' : 'Добавить воду'}</span></button></div>`;
+  }
+  function foodFooter() {
+    return `<div class="gf-footer"><button class="gf-food-card" type="button" data-gf-action="food"><span class="gf-food-thumb" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="gf-food-copy"><strong>Овощной боул</strong><small>Лёгкий и полезный</small></span><span class="gf-food-arrow">${uiIcon('arrow')}</span></button></div>`;
+  }
+  function sleepFooter() {
+    return `<div class="gf-footer"><button class="gf-cta gf-sleep-cta ${detailState.sleep.mode ? 'is-active' : ''}" type="button" data-gf-action="sleep"><span class="gf-cta-icon">${icon('sleep')}</span><span>${detailState.sleep.mode ? 'Режим сна включён' : 'Начать сон'}</span></button></div>`;
+  }
+  function footer(kind) {
+    if (kind === 'sport') return sportFooter();
+    if (kind === 'water') return waterFooter();
+    if (kind === 'food') return foodFooter();
+    return sleepFooter();
+  }
+
+  function template(kind) {
+    return `<div class="gf-content gf-${kind}"><span class="gf-bubble gf-bubble-1"></span><span class="gf-bubble gf-bubble-2"></span><span class="gf-bubble gf-bubble-3"></span><span class="gf-bubble gf-bubble-4"></span>${toolbar()}${heading(kind)}${orb(kind)}${mainValue(kind)}${footer(kind)}</div>`;
+  }
+
+  function ensureScreen() {
+    if (screen) return screen;
+    screen = document.createElement('section');
+    screen.className = 'gf-screen';
+    screen.hidden = true;
+    screen.setAttribute('role', 'dialog');
+    screen.setAttribute('aria-modal', 'true');
+    screen.setAttribute('aria-label', 'Раздел Nova+');
+    shell.appendChild(screen);
+    return screen;
+  }
+
+  function render({ preserveFocus = false } = {}) {
+    if (!activeKind) return;
+    const el = ensureScreen();
+    el.innerHTML = template(activeKind);
+    el.setAttribute('aria-label', `${META[activeKind].title} — Nova+`);
+    el.dataset.kind = activeKind;
+    if (preserveFocus) el.querySelector('[data-gf-action]')?.focus({ preventScroll: true });
+  }
+
+  function open(kind, source) {
+    if (!META[kind]) return;
+    previousFocus = source || document.activeElement;
+    activeKind = kind;
+    const el = ensureScreen();
+    render();
+    el.hidden = false;
+    shell.classList.add('feature-open');
+    document.documentElement.classList.add('nova-modal-open');
+    document.body.classList.add('nova-modal-open');
+    requestAnimationFrame(() => el.classList.add('is-visible'));
+    el.querySelector('[data-gf-close]')?.focus({ preventScroll: true });
+  }
+
+  function close() {
+    if (!screen || screen.hidden) return;
+    screen.classList.remove('is-visible');
+    shell.classList.remove('feature-open');
+    document.documentElement.classList.remove('nova-modal-open');
+    document.body.classList.remove('nova-modal-open');
+    window.setTimeout(() => {
+      if (screen) screen.hidden = true;
+      const target = previousFocus;
+      activeKind = null;
+      if (target && typeof target.focus === 'function') target.focus({ preventScroll: true });
+    }, 220);
   }
 
   function showToast(text) {
@@ -78,193 +233,65 @@
     clearTimeout(toastTimer);
     toast.textContent = text;
     toast.classList.add('show');
-    toastTimer = setTimeout(() => toast.classList.remove('show'), 1500);
+    toastTimer = window.setTimeout(() => toast.classList.remove('show'), 1600);
   }
 
-  function ensureScreen() {
-    if (screen) return screen;
-    screen = document.createElement('section');
-    screen.className = 'gf-screen';
-    screen.hidden = true;
-    shell.appendChild(screen);
-    return screen;
-  }
-
-  function ring(progress) {
-    return `<svg class="gf-ring" viewBox="0 0 260 150" aria-hidden="true">
-      <path class="gf-ring-track" pathLength="100" d="M20 130 A110 110 0 0 1 240 130"/>
-      <path class="gf-ring-value" pathLength="100" stroke-dasharray="${Math.max(4, progress)} 100" d="M20 130 A110 110 0 0 1 240 130"/>
-    </svg>`;
-  }
-
-  function orb(kind) {
-    return `<div class="gf-orb-wrap">
-      ${ring(pct(kind))}
-      <div class="gf-orb">
-        <span class="gf-orb-caustic"></span>
-        <span class="gf-orb-shine"></span>
-        <span class="gf-orb-inner"></span>
-        <span class="gf-symbol">${icons[kind]}</span>
-      </div>
-    </div>`;
-  }
-
-  function top(kind) {
-    return `<div class="gf-toolbar">
-      <button type="button" class="gf-tool" data-close-feature aria-label="На главную">${icons.home}</button>
-      <button type="button" class="gf-tool" data-toggle-feature-theme aria-label="Сменить тему"><span class="gf-theme-icon"></span></button>
-    </div>
-    <header class="gf-heading">
-      <div class="gf-heading-line"><span class="gf-heading-icon">${icons[kind]}</span><h1>${meta[kind].title}</h1></div>
-      <p>${meta[kind].subtitle}</p>
-    </header>`;
-  }
-
-  function mainValue(kind) {
-    if (kind === 'sport') return `<div class="gf-value"><strong>7 432</strong><span>шага из 10 000</span></div>`;
-    if (kind === 'water') {
-      const liters = (state.water.current * .25).toLocaleString('ru-RU', { minimumFractionDigits: 1, maximumFractionDigits: 2 });
-      return `<div class="gf-value"><strong>${liters} л</strong><span>из 2,0 л</span></div>`;
+  function act(kind) {
+    if (kind === 'sport') {
+      detailState.sport.steps = clamp(detailState.sport.steps + 420, 0, 10000);
+      detailState.sport.calories = clamp(detailState.sport.calories + 28, 0, 9999);
+      detailState.sport.minutes = clamp(detailState.sport.minutes + 6, 0, 999);
+      metricState.sport.current = clamp(metricState.sport.current + 1, 0, metricState.sport.max);
+      showToast('Тренировка добавлена');
     }
-    if (kind === 'food') return `<div class="gf-value"><strong>1 540</strong><span>ккал из 2 000</span></div>`;
-    return `<div class="gf-value"><strong>7 ч 28 мин</strong><span>из 8 часов</span></div>`;
-  }
-
-  function sportBody() {
-    return `<div class="gf-mini-grid gf-two">
-      <div class="gf-mini"><span>${icons.flame}</span><strong>320</strong><small>ккал</small></div>
-      <div class="gf-mini"><span>${icons.clock}</span><strong>42</strong><small>минуты</small></div>
-    </div>
-    <button class="gf-cta gf-solid" type="button" data-action="sport"> <span class="gf-cta-icon">${icons.play}</span>Начать тренировку</button>`;
-  }
-
-  function waterBody() {
-    const count = 5;
-    const filled = Math.round((pct('water') / 100) * count);
-    const glasses = Array.from({ length: count }, (_, i) => `<span class="gf-glass ${i < filled ? 'filled' : ''}"></span>`).join('');
-    return `<div class="gf-glasses">${glasses}</div>
-      <button class="gf-cta gf-ghost" type="button" data-action="water"><span class="gf-cta-icon">${icons.plus}</span>Добавить воду</button>`;
-  }
-
-  function foodBody() {
-    return `<button class="gf-food-card" type="button" data-action="food">
-      <span class="gf-food-thumb"><i></i><b></b><em></em></span>
-      <span class="gf-food-copy"><strong>Овощной боул</strong><small>Лёгкий и полезный</small></span>
-      <span class="gf-chevron">›</span>
-    </button>`;
-  }
-
-  function sleepBody() {
-    return `<div class="gf-quality"><span class="gf-quality-moon">${icons.sleep}</span><strong>91%</strong><small>Качество сна</small></div>
-      <button class="gf-cta gf-sleep-cta" type="button" data-action="sleep"><span class="gf-cta-icon">${icons.sleep}</span>Начать сон</button>`;
-  }
-
-  function tabs(kind) {
-    return `<nav class="gf-tabs" aria-label="Разделы здоровья">
-      ${['sport','water','food','sleep'].map(k => `<button type="button" class="gf-tab ${k === kind ? 'active' : ''}" data-open-feature="${k}">${icons[k]}<span>${meta[k].title}</span></button>`).join('')}
-    </nav>`;
-  }
-
-  function template(kind) {
-    const body = kind === 'sport' ? sportBody() : kind === 'water' ? waterBody() : kind === 'food' ? foodBody() : sleepBody();
-    return `<div class="gf-bubble gf-b1"></div><div class="gf-bubble gf-b2"></div><div class="gf-bubble gf-b3"></div>
-      <div class="gf-content gf-${kind}">
-        ${top(kind)}
-        ${orb(kind)}
-        ${mainValue(kind)}
-        <div class="gf-actions">${body}</div>
-      </div>
-      ${tabs(kind)}`;
-  }
-
-  function open(kind) {
-    if (!meta[kind]) return;
-    activeKind = kind;
-    const el = ensureScreen();
-    el.dataset.kind = kind;
-    el.innerHTML = template(kind);
-    el.hidden = false;
-    shell.classList.add('feature-open');
-    document.documentElement.classList.add('nova-modal-open');
-    syncFeatureThemeIcon();
-  }
-
-  function close() {
-    if (!screen) return;
-    screen.hidden = true;
-    shell.classList.remove('feature-open');
-    document.documentElement.classList.remove('nova-modal-open');
-    activeKind = null;
-  }
-
-  function syncFeatureThemeIcon() {
-    if (!screen || screen.hidden) return;
-    const host = screen.querySelector('.gf-theme-icon');
-    if (!host) return;
-    host.innerHTML = shell.classList.contains('dark') ? icons.sun : icons.moonSmall;
-  }
-
-  function rerender() {
-    if (!activeKind || !screen || screen.hidden) return;
-    screen.dataset.kind = activeKind;
-    screen.innerHTML = template(activeKind);
-    syncFeatureThemeIcon();
-  }
-
-  function increment(kind) {
-    if (state[kind].current < state[kind].max) state[kind].current += 1;
+    if (kind === 'water') {
+      if (detailState.water.ml >= 2000) { showToast('Цель по воде уже выполнена'); return; }
+      detailState.water.ml = clamp(detailState.water.ml + 250, 0, 2000);
+      metricState.water.current = clamp(Math.round(detailState.water.ml / 250), 0, metricState.water.max);
+      showToast('+250 мл воды');
+    }
+    if (kind === 'food') {
+      if (detailState.food.kcal >= 2000) { showToast('Дневная цель уже достигнута'); return; }
+      detailState.food.kcal = clamp(detailState.food.kcal + 210, 0, 2000);
+      metricState.food.current = clamp(metricState.food.current + 1, 0, metricState.food.max);
+      showToast('Приём пищи добавлен');
+    }
+    if (kind === 'sleep') {
+      detailState.sleep.mode = !detailState.sleep.mode;
+      if (detailState.sleep.mode) metricState.sleep.current = clamp(metricState.sleep.current + 1, 0, metricState.sleep.max);
+      showToast(detailState.sleep.mode ? 'Режим сна включён' : 'Режим сна выключен');
+    }
     saveState();
     syncHome();
-    rerender();
+    render({ preserveFocus: true });
   }
 
-  document.addEventListener('click', e => {
-    const metric = e.target.closest('.metric');
-    if (metric && meta[metric.dataset.kind]) {
-      e.preventDefault();
-      e.stopImmediatePropagation();
-      open(metric.dataset.kind);
+  function toggleTheme() {
+    if (window.NovaTheme?.toggle) window.NovaTheme.toggle();
+    else shell.classList.toggle('dark');
+    render();
+  }
+
+  document.addEventListener('click', (event) => {
+    const metric = event.target.closest('.metric[data-kind]');
+    if (metric && META[metric.dataset.kind]) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      open(metric.dataset.kind, metric);
       return;
     }
-
-    const openBtn = e.target.closest('[data-open-feature]');
-    if (openBtn) {
-      e.preventDefault();
-      open(openBtn.dataset.openFeature);
-      return;
-    }
-
-    if (e.target.closest('[data-close-feature]')) {
-      e.preventDefault();
-      close();
-      return;
-    }
-
-    if (e.target.closest('[data-toggle-feature-theme]')) {
-      e.preventDefault();
-      shell.classList.toggle('dark');
-      syncFeatureThemeIcon();
-      return;
-    }
-
-    const action = e.target.closest('[data-action]')?.dataset.action;
-    if (!action) return;
-
-    if (action === 'water') {
-      increment('water');
-      showToast('Добавлено 250 мл воды');
-    } else if (action === 'sport') {
-      increment('sport');
-      showToast('Тренировка добавлена в прогресс');
-    } else if (action === 'food') {
-      increment('food');
-      showToast('Приём пищи добавлен');
-    } else if (action === 'sleep') {
-      increment('sleep');
-      showToast('Вечерний режим запущен');
-    }
+    if (!screen || screen.hidden) return;
+    const closeButton = event.target.closest('[data-gf-close]');
+    if (closeButton) { event.preventDefault(); close(); return; }
+    const themeButton = event.target.closest('[data-gf-theme]');
+    if (themeButton) { event.preventDefault(); toggleTheme(); return; }
+    const action = event.target.closest('[data-gf-action]');
+    if (action) { event.preventDefault(); act(action.dataset.gfAction); }
   }, true);
 
-  window.addEventListener('popstate', close);
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && screen && !screen.hidden) close();
+  });
+
   syncHome();
 })();

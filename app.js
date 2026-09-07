@@ -23,6 +23,8 @@
   loadScript('./premium-tabs.js?v=1', 'data-premium-tabs');
   loadCss('./nova-features.css?v=2', 'data-nova-features');
   loadScript('./nova-features.js?v=2', 'data-nova-features');
+  loadCss('./quick-actions.css?v=1', 'data-quick-actions');
+  loadScript('./quick-actions.js?v=1', 'data-quick-actions');
 
   const toast = document.getElementById('toast');
   const sheet = document.getElementById('actionSheet');

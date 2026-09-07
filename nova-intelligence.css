@@ -6,9 +6,12 @@
 .nova-orb.nova-mood-low{box-shadow:0 18px 48px rgba(70,100,160,.18),inset 0 0 50px rgba(112,147,205,.08)}
 .nova-orb.nova-mood-steady{box-shadow:0 20px 58px rgba(69,133,235,.23),0 0 44px rgba(76,152,255,.08)}
 .nova-orb.nova-mood-high{box-shadow:0 26px 72px rgba(44,134,255,.3),0 0 58px rgba(86,177,255,.18);transform:translateY(-2px) scale(1.008)}
-.nova-orb .orb-light{opacity:calc(.34 + var(--nova-sleep-live) * .52)!important;animation:novaLiveBreath calc(6.8s - var(--nova-sport-live) * 2.6s) ease-in-out infinite}
-.nova-orb .orb-caustic{opacity:calc(.24 + var(--nova-water-live) * .58)!important;animation:novaLiveDrift calc(7s - var(--nova-sport-live) * 2.4s) ease-in-out infinite}
-.nova-orb .orb-wave{opacity:calc(.55 + var(--nova-water-live) * .4)!important;animation:novaLiveWave calc(6.5s - var(--nova-sport-live) * 2.4s) ease-in-out infinite}
+.nova-orb .orb-light{opacity:.78!important;animation:novaLiveBreath 5.5s ease-in-out infinite}
+.nova-orb .orb-caustic{opacity:.62!important;animation:novaLiveDrift 6s ease-in-out infinite}
+.nova-orb .orb-wave{opacity:.88!important;animation:novaLiveWave 5.8s ease-in-out infinite}
+.nova-orb.nova-mood-low .orb-light,.nova-orb.nova-mood-low .orb-caustic,.nova-orb.nova-mood-low .orb-wave{animation-duration:7.2s}
+.nova-orb.nova-mood-steady .orb-light,.nova-orb.nova-mood-steady .orb-caustic,.nova-orb.nova-mood-steady .orb-wave{animation-duration:5.6s}
+.nova-orb.nova-mood-high .orb-light,.nova-orb.nova-mood-high .orb-caustic,.nova-orb.nova-mood-high .orb-wave{animation-duration:4.3s}
 @keyframes novaLiveBreath{0%,100%{transform:scale(.98);opacity:.48}50%{transform:scale(1.035);opacity:.92}}
 @keyframes novaLiveDrift{0%,100%{transform:translate3d(-2%,1%,0) rotate(-2deg)}50%{transform:translate3d(3%,-2%,0) rotate(2deg)}}
 @keyframes novaLiveWave{0%,100%{transform:translateX(-1.5%) translateY(0)}50%{transform:translateX(1.5%) translateY(-2px)}}

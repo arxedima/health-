@@ -2,29 +2,76 @@
 <html lang="ru">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#f6faff">
-  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f7fbff">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Nova+">
-  <meta name="description" content="Nova+ — здоровье, баланс и развитие в одном приложении.">
-  <link rel="manifest" href="./manifest.webmanifest?v=nova23">
-  <link rel="icon" href="./assets/nova-orb.svg?v=nova23" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="./assets/nova-orb.svg?v=nova23">
-  <link rel="stylesheet" href="./nova-v20.css?v=nova23">
-  <link rel="stylesheet" href="./nova-home-v23.css?v=nova23">
   <title>Nova+</title>
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="stylesheet" href="./app.css?v=1">
 </head>
 <body>
-  <div id="novaApp" class="nova-shell"></div>
-  <input id="photoInput" type="file" accept="image/*" capture="environment" hidden>
-  <script type="module" src="./nova-v20.js?v=nova23"></script>
-  <script src="./nova-home-v23.js?v=nova23" defer></script>
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js?v=nova23').catch(() => {}));
-    }
-  </script>
+  <div class="app-shell">
+    <main class="home-screen" aria-label="Главная Nova+">
+      <header class="brand-row">
+        <div class="brand">
+          <span class="brand-orb" aria-hidden="true"></span>
+          <span class="brand-copy"><strong>Nova+</strong><small>Суббота, 5 сентября</small></span>
+        </div>
+        <button class="round-icon sun-button" type="button" aria-label="Светлая тема"><span class="sun-core"></span></button>
+      </header>
+
+      <section class="hero-copy">
+        <h1>Доброе утро,<br>Дмитрий</h1>
+        <p>Пора сделать первый шаг.</p>
+      </section>
+
+      <section class="nova-stage" aria-label="Баланс дня">
+        <div class="ring ring-bg"></div>
+        <div class="ring ring-active"></div>
+        <div class="nova-orb" aria-hidden="true"><span class="orb-glow"></span><span class="orb-cloud orb-cloud-a"></span><span class="orb-cloud orb-cloud-b"></span><span class="orb-cloud orb-cloud-c"></span><span class="orb-shine"></span></div>
+      </section>
+
+      <section class="metrics" aria-label="Показатели дня">
+        <button class="metric" type="button" data-kind="sport">
+          <span class="metric-icon"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="21.4" cy="5.6" r="2.7" fill="currentColor"/><path d="M17.6 10.1 13 14.5l-4.1-1.4-1.4 3.2 6.1 2.2 3.1-2.7 2.1 3.2-3 3.2-4.7 4.8 3 2.5 5-5 3.1-2.7 2.3 2.1 1.9 5.2 3.8-1.2-2.1-6-4.6-4.3-2.9-5.5 1.8-2.1 3.2 1.9 1.9-3.2-5.3-3.2a3.6 3.6 0 0 0-4.1.5Z" fill="currentColor"/></svg></span>
+          <span class="metric-label">Спорт</span><strong>2 / 3</strong><span class="metric-track"><i style="width:66%"></i></span>
+        </button>
+        <button class="metric" type="button" data-kind="food">
+          <span class="metric-icon"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16.6 9.2c-1.2-3.2.7-5.5 3.9-6.5-.1 3.2-1.4 5.2-3.9 6.5Z" fill="#163b79"/><path d="M15.1 9.7c-3-3.2-7-1.7-8.3 1.9-1.9 5.4 2.8 15.2 7 15.4 1 .1 1.8-.5 2.7-.5s1.6.7 2.7.5c4.4-.5 8.6-10.2 6.8-15.5-1.4-4.1-6-4.9-8.3-1.9-.8.9-1.8.9-2.6.1Z" fill="#287cd9"/><path d="M8.3 11.6c2.1-3.5 5.3-2.9 7.1-.8-2.8.2-5.2 1.1-7.1.8Z" fill="#4fc2ff" opacity=".9"/></svg></span>
+          <span class="metric-label">Питание</span><strong>3 / 8</strong><span class="metric-track"><i style="width:38%"></i></span>
+        </button>
+        <button class="metric" type="button" data-kind="water">
+          <span class="metric-icon"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3.1C13.5 7.5 8.2 13.5 8.2 19a7.8 7.8 0 0 0 15.6 0c0-5.5-5.2-11.5-7.8-15.9Z" fill="#4ba6ed"/><path d="M11.2 18.1c.3-2.6 2.2-5.1 4.1-7.8-1.2 5.2-.8 9 2 11.7-3.2.4-6.5-1-6.1-3.9Z" fill="#9edcff" opacity=".85"/></svg></span>
+          <span class="metric-label">Вода</span><strong>4 / 8</strong><span class="metric-track"><i style="width:50%"></i></span>
+        </button>
+        <button class="metric" type="button" data-kind="sleep">
+          <span class="metric-icon"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M23.9 23.7A11 11 0 0 1 10.3 7.1 10.6 10.6 0 1 0 23.9 23.7Z" fill="currentColor"/><path d="M23.5 6.6 24.4 9l2.4.9-2.4.9-.9 2.4-.9-2.4-2.4-.9 2.4-.9.9-2.4Z" fill="currentColor"/></svg></span>
+          <span class="metric-label">Сон</span><strong>1 / 8</strong><span class="metric-track"><i style="width:13%"></i></span>
+        </button>
+      </section>
+
+      <button class="primary-action" type="button" id="planButton"><span class="plus">＋</span><span>Составить план дня</span></button>
+
+      <button class="tip-card" type="button" id="tipButton">
+        <span class="tip-icon" aria-hidden="true"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="9" fill="#2f86db"/><g stroke="#2f86db" stroke-width="2.6" stroke-linecap="round"><path d="M24 4v6M24 38v6M4 24h6M38 24h6M9.9 9.9l4.2 4.2M33.9 33.9l4.2 4.2M38.1 9.9l-4.2 4.2M14.1 33.9l-4.2 4.2"/></g></svg></span>
+        <span class="tip-copy"><small>Совет дня</small><strong>Стакан воды</strong><span>После пробуждения<br>запускает метаболизм.</span></span><span class="tip-arrow">›</span>
+      </button>
+    </main>
+
+    <nav class="bottom-nav" aria-label="Навигация">
+      <button class="nav-item active" type="button" data-nav="home"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V21h-6v-6H9v6H3V10.5Z" fill="currentColor"/></svg><span>Главная</span></button>
+      <button class="nav-item" type="button" data-nav="plan"><svg viewBox="0 0 24 24"><rect x="4" y="5.8" width="16" height="14" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M7 3v5M17 3v5M4 10h16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>План</span></button>
+      <button class="nav-plus" type="button" id="addButton" aria-label="Добавить">＋</button>
+      <button class="nav-item" type="button" data-nav="analytics"><svg viewBox="0 0 24 24"><path d="M5 19V12M10 19V7M15 19V10M20 19V4" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/></svg><span>Аналитика</span></button>
+      <button class="nav-item" type="button" data-nav="profile"><svg viewBox="0 0 24 24"><circle cx="12" cy="7.5" r="3.6" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M5.2 20c.8-4 3.1-6 6.8-6s6 2 6.8 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>Я</span></button>
+    </nav>
+  </div>
+
+  <div class="sheet-backdrop" id="sheetBackdrop" hidden></div>
+  <section class="action-sheet" id="actionSheet" aria-hidden="true"><div class="sheet-handle"></div><h2>Добавить</h2><div class="sheet-grid"><button type="button">Тренировку</button><button type="button">Еду</button><button type="button">Воду</button><button type="button">Сон</button></div></section>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="./app.js?v=1"></script>
 </body>
 </html>

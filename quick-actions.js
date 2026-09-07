@@ -53,6 +53,13 @@
         </div>
 
         <svg class="qa-curve" viewBox="0 0 320 720" preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="qaLine" x1="0" y1="1" x2="1" y2="0">
+              <stop offset="0%" stop-color="rgba(110,157,255,.15)"/>
+              <stop offset="50%" stop-color="rgba(134,171,255,.92)"/>
+              <stop offset="100%" stop-color="rgba(255,255,255,.98)"/>
+            </linearGradient>
+          </defs>
           <path d="M145 642 C 182 560, 226 472, 238 382 C 248 305, 250 232, 244 150" pathLength="100"/>
           <circle cx="244" cy="150" r="4.5"/>
           <circle cx="246" cy="266" r="4.5"/>
@@ -106,24 +113,27 @@
 
   function run(action) {
     close();
-    const api = window.NovaFeatures;
+    const depth = window.NovaDepthV2;
+    const legacy = window.NovaFeatures;
 
     if (action === 'food') {
-      toast('Пока открываю быстрый ввод еды. Камеру можно добавить следующим шагом.');
-      return api?.quick ? api.quick('food') : toast('Модуль еды ещё не готов');
+      if (depth?.openFoodCamera) return depth.openFoodCamera();
+      return legacy?.quick ? legacy.quick('food') : toast('Модуль еды ещё не готов');
     }
     if (action === 'water') {
-      return api?.quick ? api.quick('water') : toast('Модуль воды ещё не готов');
+      if (depth?.quickWater) return depth.quickWater();
+      return legacy?.quick ? legacy.quick('water') : toast('Модуль воды ещё не готов');
     }
     if (action === 'timer') {
-      if (!api?.openPage) return toast('Таймер ещё не готов');
-      api.openPage('plan');
+      if (depth?.openTimer) return depth.openTimer();
+      if (!legacy?.openPage) return toast('Таймер ещё не готов');
+      legacy.openPage('plan');
       return setTimeout(() => document.querySelector('[data-open-timer]')?.click(), 80);
     }
     if (action === 'reminder') {
-      if (!api?.openPage) return toast('План пока не готов');
-      toast('Открыл быстрое напоминание в плане дня');
-      api.openPage('plan');
+      if (depth?.openReminders) return depth.openReminders();
+      if (!legacy?.openPage) return toast('Напоминания ещё не готовы');
+      legacy.openPage('plan');
       return setTimeout(() => document.querySelector('[data-add-task]')?.click(), 80);
     }
   }

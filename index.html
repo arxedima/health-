@@ -7,11 +7,18 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Nova+">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="format-detection" content="telephone=no">
   <title>Nova+</title>
-  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="manifest" href="./manifest.webmanifest?v=2">
+  <link rel="icon" type="image/png" href="./icons/nova-icon-192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="./icons/nova-icon-180.png">
   <link rel="stylesheet" href="./app.css?v=4">
   <link rel="stylesheet" href="./balance.css?v=1">
-  <link rel="stylesheet" href="./sections.css?v=3">
+  <link rel="stylesheet" href="./nova-features.css?v=2">
+  <link rel="stylesheet" href="./quick-actions.css?v=1">
+  <link rel="stylesheet" href="./nova-intelligence.css?v=2">
+  <link rel="stylesheet" href="./depth-v2.css?v=1">
 </head>
 <body>
   <div class="app-shell" id="appShell">
@@ -19,7 +26,7 @@
       <header class="brand-row">
         <div class="brand">
           <span class="brand-orb" aria-hidden="true"></span>
-          <span class="brand-copy"><strong>Nova+</strong><small>Суббота, 5 сентября</small></span>
+          <span class="brand-copy"><strong>Nova+</strong><small>Сегодня</small></span>
         </div>
         <button class="round-icon theme-button" id="themeButton" type="button" aria-label="Переключить тему"><span class="theme-glyph" aria-hidden="true"></span></button>
       </header>
@@ -33,9 +40,7 @@
         <div class="ring ring-bg"></div>
         <div class="ring ring-active"></div>
         <div class="nova-orb" aria-hidden="true">
-          <span class="orb-ambient"></span>
-          <span class="orb-light"></span>
-          <span class="orb-caustic"></span>
+          <span class="orb-ambient"></span><span class="orb-light"></span><span class="orb-caustic"></span>
           <svg class="orb-wave" viewBox="0 0 240 138" preserveAspectRatio="none">
             <path class="wave-back" d="M-12 76 C31 43 70 109 117 77 S191 45 252 76 L252 150 L-12 150 Z"/>
             <path class="wave-glow" d="M-12 73 C31 40 70 106 117 74 S191 42 252 73"/>
@@ -53,9 +58,7 @@
       </section>
 
       <button class="primary-action" type="button" id="planButton"><span class="plus">＋</span><span>Составить план дня</span></button>
-
-      <button class="tip-card" type="button" id="tipButton"><span class="tip-icon day-tip-icon" aria-hidden="true"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="9" fill="currentColor"/><g stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M24 4v6M24 38v6M4 24h6M38 24h6M9.9 9.9l4.2 4.2M33.9 33.9l4.2 4.2M38.1 9.9l-4.2 4.2M14.1 33.9l-4.2 4.2"/></g></svg></span><span class="tip-copy"><small id="tipEyebrow">Совет дня</small><strong id="tipTitle">Стакан воды</strong><span id="tipText">После пробуждения<br>запускает метаболизм.</span></span><span class="tip-arrow">›</span></button>
-
+      <button class="tip-card" type="button" id="tipButton"><span class="tip-icon day-tip-icon" aria-hidden="true"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="9" fill="currentColor"/><g stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M24 4v6M24 38v6M4 24h6M38 24h6M9.9 9.9l4.2 4.2M33.9 33.9l4.2 4.2M38.1 9.9l-4.2 4.2M14.1 33.9l-4.2 4.2"/></g></svg></span><span class="tip-copy"><small id="tipEyebrow">Совет дня</small><strong id="tipTitle">Стакан воды</strong><span id="tipText">После пробуждения<br>помогает начать день.</span></span><span class="tip-arrow">›</span></button>
       <section class="today-section" aria-label="Сегодня"><div class="today-head"><h2>Сегодня</h2><span>3 из 5</span></div><div class="timeline"><button class="timeline-row done" type="button"><span class="time-dot"><i>✓</i></span><time>08:00</time><strong>Утренняя зарядка</strong></button><button class="timeline-row" type="button"><span class="time-dot"></span><time>13:00</time><strong>Обед</strong></button><button class="timeline-row active" type="button"><span class="time-dot"></span><time>18:30</time><strong>Прогулка</strong></button><button class="timeline-row" type="button"><span class="time-dot"></span><time>22:30</time><strong>Дыхательная практика</strong></button></div></section>
     </main>
 
@@ -65,9 +68,13 @@
   <div class="sheet-backdrop" id="sheetBackdrop" hidden></div>
   <section class="action-sheet" id="actionSheet" aria-hidden="true"><div class="sheet-handle"></div><h2>Добавить</h2><div class="sheet-grid"><button type="button">Тренировку</button><button type="button">Еду</button><button type="button">Воду</button><button type="button">Сон</button></div></section>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <script src="./app.js?v=4"></script>
+
   <script src="./theme.js?v=3"></script>
   <script src="./balance.js?v=1"></script>
-  <script src="./sections.js?v=3"></script>
+  <script src="./nova-features.js?v=2"></script>
+  <script src="./quick-actions.js?v=2"></script>
+  <script src="./nova-intelligence.js?v=1"></script>
+  <script src="./depth-v2.js?v=1"></script>
+  <script src="./app.js?v=5"></script>
 </body>
 </html>

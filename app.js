@@ -37,6 +37,11 @@
     showToast(btn.querySelector('span').textContent + ' — следующий экран');
   }));
 
+  const balanceScript = document.createElement('script');
+  balanceScript.src = './balance.js?v=1';
+  balanceScript.defer = true;
+  document.head.appendChild(balanceScript);
+
   if('serviceWorker' in navigator){
     window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(()=>{}));
   }

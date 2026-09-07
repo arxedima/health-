@@ -14,7 +14,7 @@
     if (document.querySelector(`script[${marker}]`)) return;
     const script = document.createElement('script');
     script.src = src;
-    script.defer = true;
+    script.async = false;
     script.setAttribute(marker, 'true');
     document.body.appendChild(script);
   }
@@ -25,6 +25,8 @@
   loadScript('./nova-features.js?v=2', 'data-nova-features');
   loadCss('./quick-actions.css?v=1', 'data-quick-actions');
   loadScript('./quick-actions.js?v=1', 'data-quick-actions');
+  loadCss('./nova-intelligence.css?v=1', 'data-nova-intelligence');
+  loadScript('./nova-intelligence.js?v=1', 'data-nova-intelligence');
 
   const toast = document.getElementById('toast');
   const sheet = document.getElementById('actionSheet');

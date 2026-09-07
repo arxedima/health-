@@ -9,21 +9,21 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Nova+">
   <meta name="description" content="Nova+ — здоровье, баланс и развитие в одном приложении.">
-  <link rel="manifest" href="./manifest.webmanifest?v=nova21">
-  <link rel="icon" href="./assets/nova-orb.svg?v=nova21" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="./assets/nova-orb.svg?v=nova21">
-  <link rel="stylesheet" href="./nova-v20.css?v=nova21">
-  <link rel="stylesheet" href="./nova-hero-v21.css?v=nova21">
+  <link rel="manifest" href="./manifest.webmanifest?v=nova22">
+  <link rel="icon" href="./assets/nova-orb.svg?v=nova22" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="./assets/nova-orb.svg?v=nova22">
+  <link rel="stylesheet" href="./nova-v20.css?v=nova22">
+  <link rel="stylesheet" href="./nova-home-v22.css?v=nova22">
   <title>Nova+</title>
 </head>
 <body>
   <div id="novaApp" class="nova-shell"></div>
   <input id="photoInput" type="file" accept="image/*" capture="environment" hidden>
-  <script type="module" src="./nova-v20.js?v=nova21"></script>
-  <script src="./nova-hero-v21.js?v=nova21" defer></script>
+  <script type="module" src="./nova-v20.js?v=nova22"></script>
+  <script src="./nova-home-v22.js?v=nova22" defer></script>
   <script>
     if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js?v=nova21').catch(() => {}));
+      window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js?v=nova22').catch(() => {}));
     }
   </script>
 </body>

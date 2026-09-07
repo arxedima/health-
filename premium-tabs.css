@@ -1,0 +1,95 @@
+/* Nova+ premium volumetric refinements for Water and Sleep */
+.gf-water{--pt-accent:#278df4;--pt-rgb:39,141,244;--pt-water-level:75%}
+.gf-sleep{--pt-accent:#8a63f4;--pt-rgb:138,99,244}
+
+/* Shared premium icon treatment */
+.pt-water-drop-3d,.pt-moon-3d{display:block;width:100%;height:100%;overflow:visible}
+.gf-water .gf-heading-icon,.gf-sleep .gf-heading-icon{width:31px;height:31px;filter:none}
+.gf-water .gf-heading-icon .pt-water-drop-3d,.gf-sleep .gf-heading-icon .pt-moon-3d{width:31px;height:31px}
+.gf-water .gf-symbol .pt-water-drop-3d,.gf-sleep .gf-symbol .pt-moon-3d{width:76px;height:76px}
+.gf-sleep .gf-cta-icon .pt-moon-3d{width:25px;height:25px}
+
+/* Water glass sphere */
+.gf-water .gf-orb{
+  background:
+    radial-gradient(circle at 27% 17%,rgba(255,255,255,.99) 0 3%,rgba(255,255,255,.55) 9%,transparent 24%),
+    radial-gradient(circle at 69% 32%,rgba(255,255,255,.31),transparent 32%),
+    radial-gradient(circle at 50% 48%,rgba(235,249,255,.99),rgba(160,216,250,.74) 39%,rgba(78,160,233,.44) 67%,rgba(237,249,255,.95) 100%);
+  border-color:rgba(255,255,255,.92);
+  box-shadow:
+    inset 0 0 38px rgba(255,255,255,.86),
+    inset -20px -24px 34px rgba(27,104,196,.16),
+    inset 14px 14px 24px rgba(255,255,255,.38),
+    0 0 44px rgba(var(--pt-rgb),.17),
+    0 23px 42px rgba(var(--pt-rgb),.12);
+  animation:ptWaterOrbFloat 6.4s cubic-bezier(.45,0,.55,1) infinite,ptWaterOrbGlow 5.2s ease-in-out infinite;
+}
+.gf-water .gf-orb-depth{background:radial-gradient(ellipse at 50% 80%,rgba(34,133,231,.18),transparent 50%)}
+.gf-water .gf-orb-caustic{display:none}
+.gf-water .gf-orb-glint{opacity:.86;animation:ptGlint 7.2s ease-in-out infinite}
+.gf-water .gf-orb-rim{box-shadow:inset 0 0 0 1px rgba(255,255,255,.34),inset -5px -8px 15px rgba(18,95,191,.07)}
+.gf-water .gf-symbol{z-index:7}
+.gf-water .gf-symbol .pt-water-drop-3d{filter:drop-shadow(0 6px 13px rgba(26,124,229,.28)) drop-shadow(0 0 19px rgba(97,199,255,.30));animation:ptWaterDropFloat 5.1s ease-in-out infinite}
+
+.pt-water-liquid{position:absolute;z-index:1;left:0;right:0;bottom:0;height:var(--pt-water-level);background:linear-gradient(180deg,rgba(139,221,255,.08),rgba(54,164,245,.19) 43%,rgba(18,103,214,.32) 100%);transition:height .7s cubic-bezier(.2,.8,.2,1);pointer-events:none}
+.pt-water-wave{position:absolute;z-index:3;left:-19%;width:138%;height:46px;border-radius:50%;pointer-events:none;transition:bottom .7s cubic-bezier(.2,.8,.2,1)}
+.pt-water-wave-a{bottom:calc(var(--pt-water-level) - 20px);border-top:1.8px solid rgba(255,255,255,.88);box-shadow:0 -1px 9px rgba(255,255,255,.45);animation:ptWaterWaveA 5.8s ease-in-out infinite}
+.pt-water-wave-b{bottom:calc(var(--pt-water-level) - 15px);border-top:1px solid rgba(164,224,255,.48);opacity:.66;animation:ptWaterWaveB 7s ease-in-out infinite}
+
+/* Sleep sphere: calmer surface, stronger moon */
+.gf-sleep .gf-orb{
+  background:
+    radial-gradient(circle at 27% 17%,rgba(255,255,255,.99) 0 3%,rgba(255,255,255,.52) 9%,transparent 24%),
+    radial-gradient(circle at 67% 31%,rgba(255,255,255,.22),transparent 33%),
+    radial-gradient(circle at 50% 48%,rgba(248,245,255,.99),rgba(211,198,255,.76) 39%,rgba(157,126,247,.48) 67%,rgba(247,244,255,.95) 100%);
+  border-color:rgba(255,255,255,.92);
+  box-shadow:
+    inset 0 0 38px rgba(255,255,255,.86),
+    inset -20px -24px 34px rgba(91,56,198,.17),
+    inset 13px 13px 24px rgba(255,255,255,.34),
+    0 0 46px rgba(var(--pt-rgb),.20),
+    0 23px 42px rgba(var(--pt-rgb),.12);
+  animation:ptSleepOrbFloat 7.2s cubic-bezier(.45,0,.55,1) infinite,ptSleepOrbGlow 5.8s ease-in-out infinite;
+}
+.gf-sleep .gf-orb-caustic{opacity:.08;height:30px;bottom:13px;border-top-color:rgba(255,255,255,.32);box-shadow:0 -1px 5px rgba(255,255,255,.10);animation-duration:8.4s}
+.gf-sleep .gf-orb-caustic-b{opacity:.04}
+.gf-sleep .gf-orb-glint{opacity:.84;animation:ptGlint 8.1s ease-in-out infinite}
+.gf-sleep .gf-orb-rim{box-shadow:inset 0 0 0 1px rgba(255,255,255,.34),inset -6px -8px 15px rgba(77,47,170,.07)}
+.gf-sleep .gf-symbol .pt-moon-3d{filter:drop-shadow(0 5px 11px rgba(255,255,255,.12)) drop-shadow(0 0 22px rgba(172,139,255,.46));animation:ptMoonFloat 6s ease-in-out infinite}
+.gf-sleep .gf-sleep-cta{background:linear-gradient(180deg,#8f6cff,#6e4be1);color:#fff;border-color:rgba(218,204,255,.20);box-shadow:0 12px 28px rgba(var(--pt-rgb),.27)}
+.gf-sleep .gf-sleep-cta.is-active{background:linear-gradient(180deg,#7355dc,#5637bd);box-shadow:0 10px 24px rgba(var(--pt-rgb),.22)}
+
+/* Dark theme */
+.app-shell.dark .gf-water .gf-orb{
+  background:
+    radial-gradient(circle at 27% 17%,rgba(255,255,255,.96) 0 3%,rgba(255,255,255,.27) 9%,transparent 24%),
+    radial-gradient(circle at 68% 32%,rgba(128,208,255,.15),transparent 32%),
+    radial-gradient(circle at 50% 48%,rgba(83,181,255,.80),rgba(31,111,208,.79) 44%,rgba(4,46,111,.96) 74%,rgba(61,161,248,.76) 100%);
+  border-color:rgba(143,212,255,.67);
+  box-shadow:inset 0 0 35px rgba(73,172,255,.31),inset -20px -23px 30px rgba(0,19,61,.59),0 0 48px rgba(var(--pt-rgb),.32),0 24px 44px rgba(0,0,0,.25)
+}
+.app-shell.dark .pt-water-liquid{background:linear-gradient(180deg,rgba(86,194,255,.08),rgba(29,121,221,.22) 43%,rgba(3,58,136,.42) 100%)}
+.app-shell.dark .pt-water-wave-a{border-top-color:rgba(173,226,255,.78);box-shadow:0 -1px 10px rgba(85,181,255,.30)}
+.app-shell.dark .gf-sleep .gf-orb{
+  background:
+    radial-gradient(circle at 27% 17%,rgba(255,255,255,.94) 0 3%,rgba(255,255,255,.24) 9%,transparent 24%),
+    radial-gradient(circle at 67% 31%,rgba(214,194,255,.13),transparent 33%),
+    radial-gradient(circle at 50% 48%,rgba(181,148,255,.80),rgba(110,80,219,.79) 44%,rgba(38,25,103,.96) 74%,rgba(151,115,250,.73) 100%);
+  border-color:rgba(197,176,255,.64);
+  box-shadow:inset 0 0 34px rgba(170,136,255,.27),inset -20px -23px 30px rgba(11,7,42,.59),0 0 49px rgba(var(--pt-rgb),.34),0 24px 44px rgba(0,0,0,.25)
+}
+.app-shell.dark .gf-sleep .gf-sleep-cta{color:#fff;background:linear-gradient(180deg,#8c68ff,#6542d4);border-color:rgba(194,172,255,.25)}
+
+@keyframes ptWaterOrbFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-5px) scale(1.008)}}
+@keyframes ptSleepOrbFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-4px) scale(1.006)}}
+@keyframes ptWaterOrbGlow{50%{box-shadow:inset 0 0 42px rgba(255,255,255,.88),inset -20px -24px 34px rgba(27,104,196,.15),0 0 51px rgba(var(--pt-rgb),.22),0 25px 44px rgba(var(--pt-rgb),.12)}}
+@keyframes ptSleepOrbGlow{50%{box-shadow:inset 0 0 42px rgba(255,255,255,.88),inset -20px -24px 34px rgba(91,56,198,.15),0 0 53px rgba(var(--pt-rgb),.24),0 25px 44px rgba(var(--pt-rgb),.12)}}
+@keyframes ptGlint{0%,100%{transform:translate(0,0) scale(1);opacity:.78}50%{transform:translate(9px,6px) scale(1.05);opacity:.94}}
+@keyframes ptWaterDropFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-4px) scale(1.025)}}
+@keyframes ptMoonFloat{0%,100%{transform:translateY(0) rotate(-1deg) scale(1)}50%{transform:translateY(-4px) rotate(1.2deg) scale(1.02)}}
+@keyframes ptWaterWaveA{0%,100%{transform:translateX(-3%) rotate(-4deg) scaleX(.97)}50%{transform:translateX(3%) rotate(3deg) scaleX(1.05)}}
+@keyframes ptWaterWaveB{0%,100%{transform:translateX(3%) rotate(3deg) scaleX(1.03)}50%{transform:translateX(-3%) rotate(-3deg) scaleX(.97)}}
+
+@media (prefers-reduced-motion:reduce){
+  .gf-water .gf-orb,.gf-sleep .gf-orb,.gf-water .gf-symbol .pt-water-drop-3d,.gf-sleep .gf-symbol .pt-moon-3d,.pt-water-wave,.gf-water .gf-orb-glint,.gf-sleep .gf-orb-glint{animation:none!important}
+}

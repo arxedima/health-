@@ -1,0 +1,262 @@
+/* Nova+ v21 — hero atmosphere + detailed glass sphere with water.
+   Clouds are a background layer of the hero; the sphere stays visually separate. */
+
+.home-hero.nova21-hero{
+  position:relative;
+  height:262px;
+  margin-top:4px;
+  display:grid;
+  place-items:center;
+  isolation:isolate;
+  overflow:hidden;
+  border-radius:30px;
+}
+
+/* Wide cloud field behind the sphere, not a separate white strip. */
+.home-hero.nova21-hero::before{
+  content:"";
+  position:absolute;
+  z-index:0;
+  left:50%;
+  bottom:18px;
+  width:470px;
+  height:158px;
+  transform:translateX(-50%);
+  border-radius:50%;
+  background:
+    radial-gradient(ellipse at 7% 63%,rgba(189,219,242,.68) 0 19%,transparent 45%),
+    radial-gradient(ellipse at 22% 46%,rgba(225,241,252,.88) 0 23%,transparent 49%),
+    radial-gradient(ellipse at 40% 66%,rgba(201,228,247,.78) 0 26%,transparent 51%),
+    radial-gradient(ellipse at 57% 45%,rgba(233,246,254,.92) 0 25%,transparent 51%),
+    radial-gradient(ellipse at 75% 64%,rgba(198,227,247,.76) 0 24%,transparent 49%),
+    radial-gradient(ellipse at 94% 50%,rgba(211,233,249,.72) 0 21%,transparent 46%);
+  filter:blur(17px);
+  opacity:.92;
+  pointer-events:none;
+}
+
+.home-hero.nova21-hero::after{
+  content:"";
+  position:absolute;
+  z-index:1;
+  left:50%;
+  bottom:6px;
+  width:420px;
+  height:108px;
+  transform:translateX(-50%);
+  border-radius:50%;
+  background:
+    radial-gradient(ellipse at 16% 55%,rgba(249,253,255,.82) 0 22%,transparent 48%),
+    radial-gradient(ellipse at 38% 68%,rgba(235,247,254,.92) 0 28%,transparent 52%),
+    radial-gradient(ellipse at 61% 50%,rgba(250,253,255,.88) 0 27%,transparent 53%),
+    radial-gradient(ellipse at 84% 66%,rgba(229,244,253,.85) 0 24%,transparent 49%);
+  filter:blur(12px);
+  opacity:.82;
+  pointer-events:none;
+}
+
+.dark .home-hero.nova21-hero::before{
+  background:
+    radial-gradient(ellipse at 7% 63%,rgba(37,92,139,.54) 0 19%,transparent 45%),
+    radial-gradient(ellipse at 22% 46%,rgba(72,133,180,.58) 0 23%,transparent 49%),
+    radial-gradient(ellipse at 40% 66%,rgba(43,104,153,.56) 0 26%,transparent 51%),
+    radial-gradient(ellipse at 57% 45%,rgba(83,145,191,.60) 0 25%,transparent 51%),
+    radial-gradient(ellipse at 75% 64%,rgba(42,104,153,.55) 0 24%,transparent 49%),
+    radial-gradient(ellipse at 94% 50%,rgba(54,114,160,.52) 0 21%,transparent 46%);
+  opacity:.90;
+}
+
+.dark .home-hero.nova21-hero::after{
+  background:
+    radial-gradient(ellipse at 16% 55%,rgba(86,151,198,.34) 0 22%,transparent 48%),
+    radial-gradient(ellipse at 38% 68%,rgba(66,132,181,.42) 0 28%,transparent 52%),
+    radial-gradient(ellipse at 61% 50%,rgba(101,165,209,.36) 0 27%,transparent 53%),
+    radial-gradient(ellipse at 84% 66%,rgba(59,123,172,.38) 0 24%,transparent 49%);
+  opacity:.86;
+}
+
+/* New partial progress arc. */
+.nova21-arc{
+  position:absolute;
+  z-index:3;
+  width:232px;
+  height:232px;
+  top:4px;
+  left:50%;
+  transform:translateX(-50%);
+  overflow:visible;
+}
+.nova21-arc path{
+  fill:none;
+  stroke-linecap:round;
+  stroke-width:7.5;
+}
+.nova21-arc .nova21-arc-track{
+  stroke:rgba(42,103,173,.12);
+}
+.nova21-arc .nova21-arc-value{
+  stroke:#2b7fdf;
+  filter:drop-shadow(0 2px 4px rgba(29,112,207,.16));
+  transition:stroke-dasharray .7s ease;
+}
+.dark .nova21-arc .nova21-arc-track{stroke:rgba(111,174,219,.13)}
+.dark .nova21-arc .nova21-arc-value{
+  stroke:#eef9ff;
+  filter:drop-shadow(0 0 6px rgba(110,190,244,.42));
+}
+
+/* Glass shell. Cloud field remains visible through the translucent glass. */
+.nova21-orb{
+  --water-level:42%;
+  position:relative;
+  z-index:4;
+  width:184px;
+  height:184px;
+  border-radius:50%;
+  overflow:hidden;
+  border:1.7px solid rgba(255,255,255,.94);
+  background:
+    radial-gradient(circle at 27% 20%,rgba(255,255,255,.96) 0 3%,rgba(255,255,255,.44) 10%,transparent 24%),
+    radial-gradient(ellipse at 70% 22%,rgba(161,207,240,.13),transparent 38%),
+    radial-gradient(ellipse at 52% 74%,rgba(91,151,209,.10),transparent 59%),
+    linear-gradient(145deg,rgba(250,253,255,.76),rgba(219,237,249,.55) 46%,rgba(182,214,237,.42) 72%,rgba(246,251,254,.62));
+  -webkit-backdrop-filter:blur(4px) saturate(1.12);
+  backdrop-filter:blur(4px) saturate(1.12);
+  box-shadow:
+    inset 9px 9px 22px rgba(255,255,255,.58),
+    inset -15px -18px 29px rgba(48,110,171,.12),
+    inset 0 0 0 1px rgba(142,194,231,.13),
+    0 15px 30px rgba(57,112,170,.10),
+    0 0 20px rgba(94,163,221,.06);
+}
+
+.dark .nova21-orb{
+  border-color:rgba(211,239,255,.76);
+  background:
+    radial-gradient(circle at 27% 20%,rgba(255,255,255,.93) 0 3%,rgba(220,239,253,.34) 10%,transparent 24%),
+    radial-gradient(ellipse at 72% 24%,rgba(83,149,197,.12),transparent 38%),
+    radial-gradient(ellipse at 52% 75%,rgba(9,41,76,.34),transparent 60%),
+    linear-gradient(150deg,rgba(82,126,165,.66),rgba(40,86,126,.72) 43%,rgba(17,59,96,.78) 72%,rgba(8,39,70,.82));
+  box-shadow:
+    inset 12px 12px 24px rgba(187,221,247,.10),
+    inset -17px -20px 30px rgba(0,14,31,.35),
+    inset 0 0 0 1px rgba(148,207,247,.12),
+    0 15px 31px rgba(0,9,22,.28),
+    0 0 24px rgba(73,145,201,.10);
+}
+
+/* Water: height is controlled by the four-metric average. */
+.nova21-water{
+  position:absolute;
+  z-index:2;
+  left:-4%;
+  right:-4%;
+  bottom:-1px;
+  height:var(--water-level);
+  min-height:0;
+  background:
+    linear-gradient(180deg,rgba(99,181,239,.28) 0%,rgba(74,157,220,.34) 34%,rgba(45,126,195,.42) 100%);
+  box-shadow:
+    inset 0 12px 22px rgba(218,242,255,.13),
+    inset 0 -28px 34px rgba(45,109,173,.12);
+  transition:height .75s cubic-bezier(.2,.8,.2,1);
+}
+.dark .nova21-water{
+  background:
+    linear-gradient(180deg,rgba(64,158,226,.35) 0%,rgba(37,124,197,.47) 38%,rgba(17,82,151,.62) 100%);
+  box-shadow:
+    inset 0 12px 22px rgba(158,218,252,.12),
+    inset 0 -32px 38px rgba(1,35,76,.24);
+}
+
+/* Soft water surface: no hard horizontal line. */
+.nova21-water::before,
+.nova21-water::after{
+  content:"";
+  position:absolute;
+  left:-18%;
+  width:136%;
+  height:34px;
+  top:-17px;
+  border-radius:50%;
+  pointer-events:none;
+}
+.nova21-water::before{
+  background:
+    radial-gradient(ellipse at 27% 62%,rgba(214,239,253,.45) 0 25%,transparent 58%),
+    radial-gradient(ellipse at 69% 44%,rgba(129,196,237,.28) 0 27%,transparent 62%);
+  transform:rotate(-3deg);
+  filter:blur(2.6px);
+}
+.nova21-water::after{
+  top:-13px;
+  background:radial-gradient(ellipse at 52% 56%,rgba(255,255,255,.18),transparent 64%);
+  transform:rotate(3deg);
+  filter:blur(3.5px);
+}
+.dark .nova21-water::before{
+  background:
+    radial-gradient(ellipse at 27% 62%,rgba(154,215,249,.45) 0 25%,transparent 58%),
+    radial-gradient(ellipse at 69% 44%,rgba(66,164,226,.35) 0 27%,transparent 62%);
+}
+
+/* Glass details stay above the water. */
+.nova21-depth{
+  position:absolute;
+  z-index:5;
+  inset:0;
+  border-radius:50%;
+  pointer-events:none;
+  box-shadow:
+    inset 0 0 24px rgba(255,255,255,.34),
+    inset -10px -14px 22px rgba(44,102,161,.10);
+}
+.dark .nova21-depth{
+  box-shadow:
+    inset 0 0 26px rgba(177,220,248,.08),
+    inset -12px -17px 24px rgba(0,22,48,.24);
+}
+.nova21-shine{
+  position:absolute;
+  z-index:7;
+  left:7%;
+  top:5%;
+  width:53%;
+  height:31%;
+  border-radius:50%;
+  background:radial-gradient(ellipse at 33% 38%,rgba(255,255,255,.98) 0%,rgba(245,251,255,.48) 29%,rgba(230,246,255,.09) 58%,transparent 77%);
+  transform:rotate(-18deg);
+  filter:blur(1.4px);
+  pointer-events:none;
+}
+.nova21-rim{
+  position:absolute;
+  z-index:8;
+  inset:3px;
+  border-radius:50%;
+  border:1px solid rgba(255,255,255,.30);
+  box-shadow:inset 0 0 13px rgba(255,255,255,.16);
+  pointer-events:none;
+}
+.dark .nova21-rim{
+  border-color:rgba(200,235,255,.18);
+  box-shadow:inset 0 0 14px rgba(124,194,238,.10);
+}
+
+.nova21-bubbles{position:absolute;z-index:6;inset:0;pointer-events:none}
+.nova21-bubbles i{position:absolute;border-radius:50%;background:rgba(238,249,255,.42);box-shadow:0 0 4px rgba(174,220,248,.15)}
+.nova21-bubbles i:nth-child(1){width:4px;height:4px;left:35%;bottom:22%}
+.nova21-bubbles i:nth-child(2){width:3px;height:3px;left:61%;bottom:31%}
+.nova21-bubbles i:nth-child(3){width:5px;height:5px;left:49%;bottom:14%;opacity:.45}
+
+@media (max-width:360px){
+  .home-hero.nova21-hero{height:248px}
+  .nova21-arc{width:220px;height:220px}
+  .nova21-orb{width:176px;height:176px}
+  .home-hero.nova21-hero::before{width:430px;height:148px}
+  .home-hero.nova21-hero::after{width:380px}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .nova21-water,.nova21-arc .nova21-arc-value{transition:none}
+}

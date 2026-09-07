@@ -1,15 +1,10 @@
 {
-  "name": "Nova+",
-  "short_name": "Nova+",
-  "description": "Персональная система здоровья, движения, питания и восстановления.",
-  "lang": "ru",
-  "start_url": "./",
-  "scope": "./",
-  "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#ffffff",
-  "icons": [
-    { "src": "./assets/nova-orb.svg?v=nova4", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
-    { "src": "./assets/nova-orb.svg?v=nova4", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
-  ]
+  "name":"Nova+",
+  "short_name":"Nova+",
+  "start_url":"./",
+  "scope":"./",
+  "display":"standalone",
+  "background_color":"#f7fbff",
+  "theme_color":"#f7fbff",
+  "lang":"ru"
 }

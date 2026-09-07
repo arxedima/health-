@@ -80,6 +80,17 @@
 
   document.getElementById('tipButton')?.addEventListener('click', () => showToast('Стакан воды после пробуждения помогает начать день'));
 
+  window.addEventListener('click', (event) => {
+    const analytics = event.target.closest('.nav-item[data-nav="analytics"]');
+    if (analytics && sessionStorage.getItem('nova.intelligence.dirty') === '1') {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      sessionStorage.setItem('nova.returnPage', 'analytics');
+      sessionStorage.removeItem('nova.intelligence.dirty');
+      location.reload();
+    }
+  }, true);
+
   document.querySelectorAll('.nav-item').forEach((button) => {
     button.addEventListener('click', () => {
       if (button.dataset.nav === 'home' || window.NovaFeatures) return;

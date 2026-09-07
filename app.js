@@ -1,4 +1,9 @@
 (() => {
+  const referenceStyle = document.createElement('link');
+  referenceStyle.rel = 'stylesheet';
+  referenceStyle.href = './reference.css?v=1';
+  document.head.appendChild(referenceStyle);
+
   const toast = document.getElementById('toast');
   const sheet = document.getElementById('actionSheet');
   const backdrop = document.getElementById('sheetBackdrop');

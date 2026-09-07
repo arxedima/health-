@@ -1,21 +1,28 @@
 (() => {
   'use strict';
 
-  const PREMIUM_VERSION = '1';
-  if (!document.querySelector('link[data-premium-tabs]')) {
+  function loadCss(href, marker) {
+    if (document.querySelector(`link[${marker}]`)) return;
     const link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = `./premium-tabs.css?v=${PREMIUM_VERSION}`;
-    link.dataset.premiumTabs = 'true';
+    link.href = href;
+    link.setAttribute(marker, 'true');
     document.head.appendChild(link);
   }
-  if (!document.querySelector('script[data-premium-tabs]')) {
+
+  function loadScript(src, marker) {
+    if (document.querySelector(`script[${marker}]`)) return;
     const script = document.createElement('script');
-    script.src = `./premium-tabs.js?v=${PREMIUM_VERSION}`;
+    script.src = src;
     script.defer = true;
-    script.dataset.premiumTabs = 'true';
+    script.setAttribute(marker, 'true');
     document.body.appendChild(script);
   }
+
+  loadCss('./premium-tabs.css?v=1', 'data-premium-tabs');
+  loadScript('./premium-tabs.js?v=1', 'data-premium-tabs');
+  loadCss('./nova-features.css?v=2', 'data-nova-features');
+  loadScript('./nova-features.js?v=2', 'data-nova-features');
 
   const toast = document.getElementById('toast');
   const sheet = document.getElementById('actionSheet');
@@ -57,17 +64,21 @@
 
   document.querySelectorAll('.sheet-grid button').forEach((button) => {
     button.addEventListener('click', () => {
+      if (window.NovaFeatures) return;
       showToast(`${button.textContent.trim()} — скоро`);
       closeSheet();
     });
   });
 
-  document.getElementById('planButton')?.addEventListener('click', () => showToast('План дня — следующий экран'));
+  document.getElementById('planButton')?.addEventListener('click', () => {
+    if (!window.NovaFeatures) showToast('План дня — следующий экран');
+  });
+
   document.getElementById('tipButton')?.addEventListener('click', () => showToast('Стакан воды после пробуждения помогает начать день'));
 
   document.querySelectorAll('.nav-item').forEach((button) => {
     button.addEventListener('click', () => {
-      if (button.dataset.nav === 'home') return;
+      if (button.dataset.nav === 'home' || window.NovaFeatures) return;
       const label = button.querySelector('span')?.textContent?.trim() || 'Раздел';
       showToast(`${label} — следующий экран`);
     });

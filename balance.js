@@ -1,8 +1,24 @@
 (() => {
+  const styleHref = './balance.css?v=1';
+  if (!document.querySelector('link[data-nova-balance]')) {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = styleHref;
+    link.dataset.novaBalance = 'true';
+    document.head.appendChild(link);
+  }
+
   const orb = document.querySelector('.nova-orb');
   const ring = document.querySelector('.ring-active');
   const metrics = [...document.querySelectorAll('.metric')];
   if (!orb || !metrics.length) return;
+
+  if (!orb.querySelector('.orb-level-fill')) {
+    const fill = document.createElement('span');
+    fill.className = 'orb-level-fill';
+    const wave = orb.querySelector('.orb-wave');
+    orb.insertBefore(fill, wave || orb.firstChild);
+  }
 
   const clamp = (n, min, max) => Math.min(max, Math.max(min, n));
 

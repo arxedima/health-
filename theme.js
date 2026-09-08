@@ -2,20 +2,31 @@
   'use strict';
 
   function loadOnboardingPolish() {
-    if (!document.querySelector('link[data-onboarding-polish]')) {
+    const cssFiles = [
+      ['./onboarding-polish.css?v=2', 'data-onboarding-polish'],
+      ['./onboarding-theme-v2.css?v=1', 'data-onboarding-theme-v2']
+    ];
+    cssFiles.forEach(([href, attr]) => {
+      if (document.querySelector(`link[${attr}]`)) return;
       const link = document.createElement('link');
       link.rel = 'stylesheet';
-      link.href = './onboarding-polish.css?v=1';
-      link.setAttribute('data-onboarding-polish', 'true');
+      link.href = href;
+      link.setAttribute(attr, 'true');
       document.head.appendChild(link);
-    }
-    if (!document.querySelector('script[data-onboarding-polish]')) {
+    });
+
+    const jsFiles = [
+      ['./onboarding-polish.js?v=2', 'data-onboarding-polish'],
+      ['./onboarding-theme-v2.js?v=1', 'data-onboarding-theme-v2']
+    ];
+    jsFiles.forEach(([src, attr]) => {
+      if (document.querySelector(`script[${attr}]`)) return;
       const script = document.createElement('script');
-      script.src = './onboarding-polish.js?v=1';
+      script.src = src;
       script.async = false;
-      script.setAttribute('data-onboarding-polish', 'true');
+      script.setAttribute(attr, 'true');
       document.head.appendChild(script);
-    }
+    });
   }
   loadOnboardingPolish();
 
@@ -70,16 +81,18 @@
     if (tipEyebrow) tipEyebrow.textContent = dark ? 'Сейчас важно' : 'Совет дня';
     if (tipTitle) tipTitle.textContent = dark ? 'Подготовка ко сну' : 'Стакан воды';
     if (tipText) tipText.innerHTML = dark ? '10 минут спокойной<br>практики перед сном.' : 'После пробуждения<br>помогает начать день.';
-    if (themeMeta) themeMeta.setAttribute('content', dark ? '#071326' : '#f8fbff');
+    if (themeMeta) themeMeta.setAttribute('content', dark ? '#030817' : '#f8fbff');
     button?.setAttribute('aria-pressed', String(dark));
     document.documentElement.style.colorScheme = dark ? 'dark' : 'light';
     if (persist) storeTheme(dark ? 'dark' : 'light');
     window.dispatchEvent(new CustomEvent('nova:themechange', { detail: { dark } }));
   }
 
+  const queryTheme = new URLSearchParams(location.search).get('theme');
   const stored = readStoredTheme();
   const systemDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches;
-  setTheme(stored ? stored === 'dark' : Boolean(systemDark), { persist: false });
+  const initialDark = queryTheme === 'dark' ? true : queryTheme === 'light' ? false : stored ? stored === 'dark' : Boolean(systemDark);
+  setTheme(initialDark, { persist: queryTheme === 'dark' || queryTheme === 'light' });
 
   button?.addEventListener('click', () => setTheme(!shell.classList.contains('dark')));
 

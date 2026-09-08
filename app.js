@@ -53,6 +53,26 @@
   const dateNode = document.querySelector('.brand-copy small');
   if (dateNode) dateNode.textContent = currentDateLabel();
 
+  /* The NOVA intro is intentionally replayable from the brand. */
+  const brand = document.querySelector('.brand');
+  if (brand) {
+    brand.setAttribute('role', 'button');
+    brand.setAttribute('tabindex', '0');
+    brand.setAttribute('aria-label', 'Повторить интро Nova');
+    brand.style.cursor = 'pointer';
+    const replayIntro = () => {
+      if (window.NovaOnboarding?.open) window.NovaOnboarding.open();
+      else showToast('Интро Nova загружается');
+    };
+    brand.addEventListener('click', replayIntro);
+    brand.addEventListener('keydown', event => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        replayIntro();
+      }
+    });
+  }
+
   function openSheet() {
     if (window.NovaQuickActions?.open) return window.NovaQuickActions.open();
     if (!sheet || !backdrop) return;

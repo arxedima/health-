@@ -26,6 +26,12 @@
   }
   loadDepthPremium();
 
+  window.setTimeout(() => {
+    if (document.documentElement.classList.contains('nova-onboarding-pending') && !document.querySelector('.nova-onboarding')) {
+      document.documentElement.classList.remove('nova-onboarding-pending');
+    }
+  }, 2500);
+
   const toast = document.getElementById('toast');
   const sheet = document.getElementById('actionSheet');
   const backdrop = document.getElementById('sheetBackdrop');

@@ -1,7 +1,7 @@
 (() => {
   'use strict';
-  if (window.NovaOrbCoachV1) return;
-  window.NovaOrbCoachV1 = true;
+  if (window.NovaOrbCoachV2) return;
+  window.NovaOrbCoachV2 = true;
 
   const shell = document.getElementById('appShell');
   const stage = shell?.querySelector('.nova-stage');
@@ -107,11 +107,11 @@
       face.className = 'nova-orb-face';
       face.setAttribute('aria-hidden', 'true');
       face.innerHTML = `
-        <span class="nova-brow nova-brow-left"></span>
-        <span class="nova-brow nova-brow-right"></span>
-        <span class="nova-eye nova-eye-left"><i></i></span>
-        <span class="nova-eye nova-eye-right"><i></i></span>
-        <span class="nova-mouth"></span>`;
+        <svg class="nova-face-svg" viewBox="0 0 120 64" aria-hidden="true">
+          <path class="nova-face-eye nova-face-eye-left" d="M17 24 Q30 34 44 24"/>
+          <path class="nova-face-eye nova-face-eye-right" d="M76 24 Q90 34 103 24"/>
+          <path class="nova-face-mouth" d="M49 45 Q60 54 71 45"/>
+        </svg>`;
       orb.appendChild(face);
     }
     if (!bubble) {

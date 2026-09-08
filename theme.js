@@ -20,16 +20,43 @@
     try { localStorage.setItem('nova.theme', value); } catch (_) {}
   }
 
+  function profileName() {
+    try {
+      const value = JSON.parse(localStorage.getItem('nova.profile') || '{}');
+      return String(value?.name || '').trim() || 'Дмитрий';
+    } catch (_) { return 'Дмитрий'; }
+  }
+
+  function greetingLabel() {
+    const hour = new Date().getHours();
+    if (hour < 6) return 'Доброй ночи';
+    if (hour < 12) return 'Доброе утро';
+    if (hour < 18) return 'Добрый день';
+    return 'Добрый вечер';
+  }
+
+  function syncTitle() {
+    if (!title) return;
+    const name = profileName();
+    title.replaceChildren(
+      document.createTextNode(`${greetingLabel()},`),
+      document.createElement('br'),
+      document.createTextNode(name)
+    );
+  }
+
   function setTheme(dark, { persist = true } = {}) {
     shell.classList.toggle('dark', dark);
-    if (title) title.innerHTML = dark ? 'Спокойный вечер,<br>Дмитрий' : 'Доброе утро,<br>Дмитрий';
-    if (greeting) greeting.textContent = dark ? 'Хороший день. Время восстановиться.' : 'Пора сделать первый шаг.';
+    syncTitle();
+    if (greeting) greeting.textContent = dark ? 'Спокойный ритм. Время восстановиться.' : 'Пора сделать первый шаг.';
     if (tipEyebrow) tipEyebrow.textContent = dark ? 'Сейчас важно' : 'Совет дня';
     if (tipTitle) tipTitle.textContent = dark ? 'Подготовка ко сну' : 'Стакан воды';
-    if (tipText) tipText.innerHTML = dark ? '10 минут дыхательной<br>практики улучшат сон.' : 'После пробуждения<br>запускает метаболизм.';
-    if (themeMeta) themeMeta.setAttribute('content', dark ? '#07192d' : '#f8fbff');
+    if (tipText) tipText.innerHTML = dark ? '10 минут спокойной<br>практики перед сном.' : 'После пробуждения<br>помогает начать день.';
+    if (themeMeta) themeMeta.setAttribute('content', dark ? '#071326' : '#f8fbff');
     button?.setAttribute('aria-pressed', String(dark));
+    document.documentElement.style.colorScheme = dark ? 'dark' : 'light';
     if (persist) storeTheme(dark ? 'dark' : 'light');
+    window.dispatchEvent(new CustomEvent('nova:themechange', { detail: { dark } }));
   }
 
   const stored = readStoredTheme();
@@ -38,9 +65,15 @@
 
   button?.addEventListener('click', () => setTheme(!shell.classList.contains('dark')));
 
+  window.addEventListener('storage', event => {
+    if (event.key === 'nova.theme') setTheme(event.newValue === 'dark', { persist: false });
+    if (event.key === 'nova.profile') syncTitle();
+  });
+
   window.NovaTheme = {
-    set: (dark) => setTheme(Boolean(dark)),
+    set: dark => setTheme(Boolean(dark)),
     toggle: () => setTheme(!shell.classList.contains('dark')),
-    isDark: () => shell.classList.contains('dark')
+    isDark: () => shell.classList.contains('dark'),
+    syncTitle
   };
 })();

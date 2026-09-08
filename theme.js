@@ -1,35 +1,6 @@
 (() => {
   'use strict';
 
-  function loadOnboardingPolish() {
-    const cssFiles = [
-      ['./onboarding-polish.css?v=2', 'data-onboarding-polish'],
-      ['./onboarding-theme-v2.css?v=1', 'data-onboarding-theme-v2']
-    ];
-    cssFiles.forEach(([href, attr]) => {
-      if (document.querySelector(`link[${attr}]`)) return;
-      const link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.href = href;
-      link.setAttribute(attr, 'true');
-      document.head.appendChild(link);
-    });
-
-    const jsFiles = [
-      ['./onboarding-polish.js?v=2', 'data-onboarding-polish'],
-      ['./onboarding-theme-v2.js?v=1', 'data-onboarding-theme-v2']
-    ];
-    jsFiles.forEach(([src, attr]) => {
-      if (document.querySelector(`script[${attr}]`)) return;
-      const script = document.createElement('script');
-      script.src = src;
-      script.async = false;
-      script.setAttribute(attr, 'true');
-      document.head.appendChild(script);
-    });
-  }
-  loadOnboardingPolish();
-
   const button = document.getElementById('themeButton');
   const shell = document.getElementById('appShell');
   if (!shell) return;

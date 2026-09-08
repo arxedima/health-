@@ -1,7 +1,7 @@
 (() => {
   'use strict';
-  if (window.NovaOrbCoachV2) return;
-  window.NovaOrbCoachV2 = true;
+  if (window.NovaOrbFocusV1) return;
+  window.NovaOrbFocusV1 = true;
 
   const shell = document.getElementById('appShell');
   const stage = shell?.querySelector('.nova-stage');
@@ -59,12 +59,6 @@
     } catch (_) { return ''; }
   }
 
-  function mood(score) {
-    if (score < 45) return 'low';
-    if (score < 75) return 'steady';
-    return 'high';
-  }
-
   function messages(score, ratios) {
     const weakest = Object.entries(ratios).sort((a, b) => a[1] - b[1])[0]?.[0];
     const labels = { sport: 'движению', water: 'воде', food: 'питанию', sleep: 'сну' };
@@ -102,24 +96,18 @@
   }
 
   function ensure() {
-    if (!orb.querySelector('.nova-orb-face')) {
-      const face = document.createElement('span');
-      face.className = 'nova-orb-face';
-      face.setAttribute('aria-hidden', 'true');
-      face.innerHTML = `
-        <svg class="nova-face-svg" viewBox="0 0 120 64" aria-hidden="true">
-          <path class="nova-face-eye nova-face-eye-left" d="M17 24 Q30 34 44 24"/>
-          <path class="nova-face-eye nova-face-eye-right" d="M76 24 Q90 34 103 24"/>
-          <path class="nova-face-mouth" d="M49 45 Q60 54 71 45"/>
-        </svg>`;
-      orb.appendChild(face);
-    }
+    /* Remove any face left in DOM by an older cached version. */
+    orb.querySelectorAll('.nova-orb-face').forEach(node => node.remove());
+
     if (!bubble) {
-      bubble = document.createElement('div');
-      bubble.className = 'nova-orb-talk';
-      bubble.setAttribute('role', 'status');
-      bubble.setAttribute('aria-live', 'polite');
-      stage.appendChild(bubble);
+      bubble = stage.querySelector('.nova-orb-talk');
+      if (!bubble) {
+        bubble = document.createElement('div');
+        bubble.className = 'nova-orb-talk';
+        bubble.setAttribute('role', 'status');
+        bubble.setAttribute('aria-live', 'polite');
+        stage.appendChild(bubble);
+      }
     }
 
     orb.setAttribute('role', 'button');
@@ -130,7 +118,7 @@
 
   function hide() {
     clearTimeout(hideTimer);
-    orb.classList.remove('nova-coach-awake', 'nova-coach-blink', 'nova-coach-pop');
+    orb.classList.remove('is-focused', 'is-pulsing');
     stage.classList.remove('nova-coach-speaking');
     bubble?.classList.remove('show');
   }
@@ -138,36 +126,25 @@
   function show() {
     ensure();
     const { score, ratios } = scoreAndRatios();
-    const currentMood = mood(score);
     let pool = messages(score, ratios);
     if (pool.length > 1 && lastMessage) pool = pool.filter(item => item !== lastMessage);
     const message = pool[Math.floor(Math.random() * pool.length)] || 'Продолжай. Ты движешься в правильную сторону.';
     lastMessage = message;
     const name = firstName();
 
-    orb.dataset.coachMood = currentMood;
     bubble.textContent = name ? `${name}, ${message.charAt(0).toLowerCase()}${message.slice(1)}` : message;
 
-    orb.classList.remove('nova-coach-awake', 'nova-coach-blink', 'nova-coach-pop');
-    stage.classList.remove('nova-coach-speaking');
-    bubble.classList.remove('show');
+    hide();
     void orb.offsetWidth;
-    orb.classList.add('nova-coach-awake', 'nova-coach-blink', 'nova-coach-pop');
+    orb.classList.add('is-focused', 'is-pulsing');
     stage.classList.add('nova-coach-speaking');
     bubble.classList.add('show');
 
-    try { navigator.vibrate?.(18); } catch (_) {}
-    clearTimeout(hideTimer);
-    hideTimer = setTimeout(hide, 4300);
-  }
-
-  function syncMood() {
-    const { score } = scoreAndRatios();
-    orb.dataset.coachMood = mood(score);
+    try { navigator.vibrate?.(16); } catch (_) {}
+    hideTimer = setTimeout(hide, 3600);
   }
 
   ensure();
-  syncMood();
   orb.addEventListener('click', show);
   orb.addEventListener('keydown', event => {
     if (event.key === 'Enter' || event.key === ' ') {
@@ -175,8 +152,6 @@
       show();
     }
   });
-  window.addEventListener('nova:data-changed', syncMood);
-  window.addEventListener('storage', syncMood);
 
-  window.NovaOrbCoach = { show, hide, sync: syncMood };
+  window.NovaOrbCoach = { show, hide };
 })();

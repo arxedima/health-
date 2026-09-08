@@ -1,6 +1,24 @@
 (() => {
   'use strict';
 
+  function loadOnboardingPolish() {
+    if (!document.querySelector('link[data-onboarding-polish]')) {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = './onboarding-polish.css?v=1';
+      link.setAttribute('data-onboarding-polish', 'true');
+      document.head.appendChild(link);
+    }
+    if (!document.querySelector('script[data-onboarding-polish]')) {
+      const script = document.createElement('script');
+      script.src = './onboarding-polish.js?v=1';
+      script.async = false;
+      script.setAttribute('data-onboarding-polish', 'true');
+      document.head.appendChild(script);
+    }
+  }
+  loadOnboardingPolish();
+
   const button = document.getElementById('themeButton');
   const shell = document.getElementById('appShell');
   if (!shell) return;

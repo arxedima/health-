@@ -24,7 +24,26 @@
       document.body.appendChild(script);
     }
   }
+
+  function loadOrbCoach() {
+    if (!document.querySelector('link[data-nova-orb-coach]')) {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = './nova-orb-coach.css?v=1';
+      link.setAttribute('data-nova-orb-coach', 'true');
+      document.head.appendChild(link);
+    }
+    if (!document.querySelector('script[data-nova-orb-coach]')) {
+      const script = document.createElement('script');
+      script.src = './nova-orb-coach.js?v=1';
+      script.async = false;
+      script.setAttribute('data-nova-orb-coach', 'true');
+      document.body.appendChild(script);
+    }
+  }
+
   loadDepthPremium();
+  loadOrbCoach();
 
   window.setTimeout(() => {
     if (document.documentElement.classList.contains('nova-onboarding-pending') && !document.querySelector('.nova-onboarding')) {

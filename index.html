@@ -11,12 +11,12 @@
   <meta name="application-name" content="IRIS">
   <meta name="description" content="IRIS — живой интерфейс здоровья.">
   <link rel="canonical" href="https://arxedima.github.io/health-/">
-  <link rel="manifest" href="/health-/manifest.webmanifest?v=iris20">
+  <link rel="manifest" href="/health-/manifest.webmanifest?v=iris21">
   <link rel="icon" type="image/png" href="/health-/app-icon.png?v=20">
   <link rel="apple-touch-icon" href="/health-/app-icon.png?v=20">
   <link rel="apple-touch-icon-precomposed" href="/health-/app-icon.png?v=20">
   <title>IRIS</title>
-  <link rel="stylesheet" href="./styles.css?v=iris20">
+  <link rel="stylesheet" href="./styles.css?v=iris21">
 </head>
 <body>
 <main id="app" class="app mode-home">
@@ -93,9 +93,10 @@
     </div>
   </aside>
 </main>
-<script src="./iris-engine.js?v=iris20"></script>
+<script src="./iris-engine.js?v=iris21"></script>
 <script>if(localStorage.getItem('irisSound')!=='off'){const b=document.getElementById('soundToggle');try{b&&b.click()}catch(e){}localStorage.setItem('irisSound','on')}</script>
-<script src="./iris-v11.js?v=iris20"></script>
+<script src="./iris-v11.js?v=iris21"></script>
+<script src="./iris-orbit-v21.js?v=iris21"></script>
 <script>
 if('serviceWorker' in navigator){
   addEventListener('load',async()=>{
@@ -103,7 +104,7 @@ if('serviceWorker' in navigator){
       const regs=await navigator.serviceWorker.getRegistrations();
       await Promise.all(regs.map(r=>r.unregister()));
       if('caches' in window){const keys=await caches.keys();await Promise.all(keys.filter(k=>k.startsWith('iris-')).map(k=>caches.delete(k)));}
-      await navigator.serviceWorker.register('./sw.js?v=iris20');
+      await navigator.serviceWorker.register('./sw.js?v=iris21');
     }catch(e){}
   },{once:true});
 }

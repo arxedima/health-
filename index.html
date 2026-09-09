@@ -8,22 +8,25 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="IRIS">
   <meta name="description" content="IRIS — живой интерфейс здоровья.">
-  <link rel="manifest" href="./manifest.webmanifest?v=iris08">
-  <link rel="icon" type="image/svg+xml" href="./iris-icon.svg?v=iris08">
+  <link rel="manifest" href="./manifest.webmanifest?v=iris09">
+  <link rel="icon" type="image/svg+xml" href="./iris-icon.svg?v=iris09">
   <title>IRIS</title>
-  <link rel="stylesheet" href="./styles.css?v=iris08">
+  <link rel="stylesheet" href="./styles.css?v=iris09">
 </head>
 <body>
 <main id="app" class="app mode-home">
+  <div class="noise" aria-hidden="true"></div>
   <div class="ambient" aria-hidden="true"></div>
 
   <header class="topbar">
-    <button id="soundToggle" class="icon-button sound-trigger" type="button" aria-label="Звук" aria-pressed="true"><span class="sound-glyph">◉</span></button>
-    <div class="brand">I R I S</div>
+    <button id="soundToggle" class="icon-button sound-trigger locked" type="button" aria-label="Музыка и эффекты" aria-pressed="true">
+      <span class="sound-dot"></span>
+    </button>
+    <div class="brand" aria-label="IRIS">I R I S</div>
     <button id="settingsTrigger" class="icon-button settings-trigger" type="button" aria-label="Настройки">••</button>
   </header>
 
-  <section id="stage" class="stage" aria-label="Интерактивный интерфейс IRIS">
+  <section id="stage" class="stage" aria-label="Интерактивный глаз IRIS">
     <canvas id="irisCanvas"></canvas>
     <div id="touchRing" class="touch-ring" aria-hidden="true"></div>
 
@@ -36,6 +39,7 @@
     </div>
 
     <div id="radialMenu" class="radial-menu" aria-hidden="true">
+      <div class="menu-orbit" aria-hidden="true"></div>
       <button class="radial-item radial-top" data-mode="sport" type="button"><span>СПОРТ</span></button>
       <button class="radial-item radial-right" data-mode="food" type="button"><span>ПИТАНИЕ</span></button>
       <button class="radial-item radial-bottom" data-mode="sleep" type="button"><span>СОН</span></button>
@@ -60,7 +64,6 @@
   <footer id="motionHint" class="motion-hint">
     <span>КАСАНИЕ</span><i></i><span>УДЕРЖАНИЕ</span><i></i><span>СВАЙП</span>
   </footer>
-
   <div id="modeDots" class="mode-dots" aria-hidden="true"></div>
 
   <aside id="settingsPanel" class="settings" aria-hidden="true">
@@ -74,17 +77,17 @@
         <button type="button">Профиль <b>›</b></button>
         <button type="button">Цели <b>›</b></button>
         <button type="button">Напоминания <b>›</b></button>
-        <button id="soundSettings" class="setting-toggle" type="button"><span>Музыка и эффекты</span><em id="soundState">ВКЛ</em></button>
+        <button id="soundSettings" class="setting-toggle" type="button"><span>Музыка и эффекты</span><em id="soundState">КОСНИСЬ</em></button>
         <button type="button">Здоровье <b>›</b></button>
         <button type="button">Внешний вид <b>›</b></button>
         <button type="button">Приватность <b>›</b></button>
         <button type="button">Данные <b>›</b></button>
       </nav>
-      <div class="settings-note">У каждого режима свой звуковой мир. На iPhone звук запускается после первого касания.</div>
+      <div class="settings-note">На iPhone звук запускается после первого касания экрана.</div>
       <div class="settings-signature">I R I S<br><small>СПОКОЙНЕЕ ВНУТРИ · ЯСНЕЕ СНАРУЖИ</small></div>
     </div>
   </aside>
 </main>
-<script src="./iris-engine.js?v=iris08"></script>
+<script src="./iris-engine.js?v=iris09"></script>
 </body>
 </html>

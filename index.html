@@ -9,14 +9,20 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="IRIS">
   <meta name="description" content="IRIS — живой интерфейс здоровья.">
-  <link rel="manifest" href="./manifest.webmanifest?v=iris13">
-  <link rel="shortcut icon" type="image/png" href="./favicon-v13.png?v=iris13">
-  <link rel="icon" type="image/png" sizes="32x32" href="./favicon-v13.png?v=iris13">
-  <link rel="icon" type="image/png" sizes="192x192" href="./icon-v13-192.png?v=iris13">
-  <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon-v13.png?v=iris13">
-  <link rel="apple-touch-icon-precomposed" sizes="180x180" href="./apple-touch-icon-v13.png?v=iris13">
+  <link rel="manifest" href="./manifest.webmanifest?v=iris14">
+  <link rel="icon" type="image/svg+xml" href="./iris-icon.svg?v=iris14">
+  <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon-v14.png">
   <title>IRIS</title>
   <link rel="stylesheet" href="./styles.css?v=iris11">
+  <script>
+    try {
+      if (!localStorage.getItem('irisPwaRepair14')) {
+        localStorage.setItem('irisPwaRepair14', '1');
+        if ('caches' in window) caches.keys().then(keys => Promise.all(keys.map(k => caches.delete(k))));
+        if ('serviceWorker' in navigator) navigator.serviceWorker.getRegistrations().then(rs => Promise.all(rs.map(r => r.unregister())));
+      }
+    } catch (e) {}
+  </script>
 </head>
 <body>
 <main id="app" class="app mode-home">
@@ -24,9 +30,7 @@
   <div class="ambient" aria-hidden="true"></div>
 
   <header class="topbar">
-    <button id="soundToggle" class="icon-button sound-trigger locked" type="button" aria-label="Мрачная музыка и эффекты" aria-pressed="true">
-      <span class="sound-dot"></span>
-    </button>
+    <button id="soundToggle" class="icon-button sound-trigger locked" type="button" aria-label="Мрачная музыка и эффекты" aria-pressed="true"><span class="sound-dot"></span></button>
     <div class="brand" aria-label="IRIS">I R I S</div>
     <button id="settingsTrigger" class="icon-button settings-trigger" type="button" aria-label="Настройки">••</button>
   </header>
@@ -34,15 +38,12 @@
   <section id="stage" class="stage" aria-label="Интерактивный глаз IRIS">
     <canvas id="irisCanvas"></canvas>
     <div id="touchRing" class="touch-ring" aria-hidden="true"></div>
-
     <div id="modeWhisper" class="mode-whisper">IRIS НАБЛЮДАЕТ</div>
-
     <div id="metric" class="metric">
       <div id="metricLabel" class="metric-label">ГЛАВНАЯ</div>
       <div id="metricValue" class="metric-value"></div>
       <div id="metricCaption" class="metric-caption">КОСНИСЬ ГЛАЗА</div>
     </div>
-
     <div id="radialMenu" class="radial-menu" aria-hidden="true">
       <div class="menu-orbit" aria-hidden="true"></div>
       <button class="radial-item radial-top" data-mode="sport" type="button"><span>СПОРТ</span></button>
@@ -51,33 +52,21 @@
       <button class="radial-item radial-left" data-mode="water" type="button"><span>ВОДА</span></button>
       <div class="radial-core" aria-hidden="true"></div>
     </div>
-
     <section id="insightPanel" class="insight-panel" aria-hidden="true">
       <div class="insight-eyebrow">СВОДКА ДНЯ</div>
       <div class="insight-title">СВЕТЛЕЕ КАЖДЫЙ ДЕНЬ</div>
-      <div class="week-row" aria-label="Неделя">
-        <span>П</span><span>В</span><span>С</span><span>Ч</span><span>П</span><span>С</span><span>В</span>
-      </div>
-      <div class="insight-stats">
-        <div><strong>92</strong><span>Энергия</span></div>
-        <div><strong>7:24</strong><span>Сон</span></div>
-        <div><strong>1 420</strong><span>Ккал</span></div>
-      </div>
+      <div class="week-row" aria-label="Неделя"><span>П</span><span>В</span><span>С</span><span>Ч</span><span>П</span><span>С</span><span>В</span></div>
+      <div class="insight-stats"><div><strong>92</strong><span>Энергия</span></div><div><strong>7:24</strong><span>Сон</span></div><div><strong>1 420</strong><span>Ккал</span></div></div>
     </section>
   </section>
 
-  <footer id="motionHint" class="motion-hint">
-    <span>КАСАНИЕ</span><i></i><span>УДЕРЖАНИЕ</span><i></i><span>СВАЙП</span>
-  </footer>
+  <footer id="motionHint" class="motion-hint"><span>КАСАНИЕ</span><i></i><span>УДЕРЖАНИЕ</span><i></i><span>СВАЙП</span></footer>
   <div id="modeDots" class="mode-dots" aria-hidden="true"></div>
 
   <aside id="settingsPanel" class="settings" aria-hidden="true">
     <div class="settings-backdrop" data-close-settings></div>
     <div class="settings-sheet" role="dialog" aria-modal="true" aria-label="Настройки">
-      <div class="settings-head">
-        <span>НАСТРОЙКИ</span>
-        <button class="icon-button close-settings" type="button" data-close-settings aria-label="Закрыть">×</button>
-      </div>
+      <div class="settings-head"><span>НАСТРОЙКИ</span><button class="icon-button close-settings" type="button" data-close-settings aria-label="Закрыть">×</button></div>
       <nav class="settings-list">
         <button type="button">Профиль <b>›</b></button>
         <button type="button">Цели <b>›</b></button>

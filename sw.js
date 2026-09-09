@@ -1,12 +1,12 @@
-const CACHE='iris-v2.1.0';
+const CACHE='iris-v2.2.0';
 const CORE=[
-  '/health-/?v=21',
-  '/health-/index.html?v=21',
-  '/health-/styles.css?v=iris21',
-  '/health-/iris-engine.js?v=iris21',
-  '/health-/iris-v11.js?v=iris21',
-  '/health-/iris-orbit-v21.js?v=iris21',
-  '/health-/manifest.webmanifest?v=iris21',
+  '/health-/?v=22',
+  '/health-/index.html?v=22',
+  '/health-/styles.css?v=iris22',
+  '/health-/iris-engine.js?v=iris22',
+  '/health-/iris-v11.js?v=iris22',
+  '/health-/iris-orbit-v22.js?v=iris22',
+  '/health-/manifest.webmanifest?v=iris22',
   '/health-/app-icon.png?v=20'
 ];
 self.addEventListener('install',event=>{
@@ -20,5 +20,5 @@ self.addEventListener('fetch',event=>{
   event.respondWith(fetch(event.request,{cache:'no-store'}).then(response=>{
     if(response&&response.ok){const copy=response.clone();caches.open(CACHE).then(cache=>cache.put(event.request,copy));}
     return response;
-  }).catch(()=>caches.match(event.request).then(response=>response||caches.match('/health-/?v=21'))));
+  }).catch(()=>caches.match(event.request).then(response=>response||caches.match('/health-/?v=22'))));
 });

@@ -1,1 +1,0 @@
-Preparing a clean PWA install metadata refresh with validated PNG icons.

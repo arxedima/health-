@@ -94,7 +94,7 @@ button { font: inherit; color: inherit; }
 .mode-whisper {
   position:absolute;
   left:50%;
-  top:calc(50% - min(34vw, 184px));
+  top:28%;
   transform:translateX(-50%);
   z-index:5;
   font-size:9px;
@@ -102,19 +102,19 @@ button { font: inherit; color: inherit; }
   margin-left:.36em;
   color:rgba(243,247,251,.48);
   white-space:nowrap;
-  transition:opacity 420ms ease, transform 520ms cubic-bezier(.16,1,.3,1);
+  transition:top 520ms cubic-bezier(.16,1,.3,1), opacity 420ms ease, transform 520ms cubic-bezier(.16,1,.3,1);
   pointer-events:none;
 }
 .metric {
   position:absolute;
   z-index:5;
   left:50%;
-  top:50%;
-  transform:translate(-50%,calc(-50% + min(40vw,188px)));
+  top:68%;
+  transform:translateX(-50%);
   width:min(88vw,430px);
   text-align:center;
   pointer-events:none;
-  transition:opacity 450ms ease, transform 600ms cubic-bezier(.16,1,.3,1);
+  transition:top 560ms cubic-bezier(.16,1,.3,1), opacity 450ms ease, transform 600ms cubic-bezier(.16,1,.3,1);
 }
 .metric-label {
   font-size:10px;
@@ -411,10 +411,6 @@ button { font: inherit; color: inherit; }
   font-size:7px;
   color:rgba(255,255,255,.28);
 }
-.app.menu-open .metric,
-.app.mode-insights .metric {
-  transform:translate(-50%,calc(-50% + min(43vw,212px)));
-}
 .app.menu-open .metric { opacity:.17; }
 .app.settings-open .brand { opacity:.15; }
 .app.mode-insights .mode-whisper {
@@ -425,8 +421,6 @@ button { font: inherit; color: inherit; }
 }
 @media (max-height:690px) {
   .topbar { height:62px; }
-  .mode-whisper { top:calc(50% - 152px); }
-  .metric { transform:translate(-50%,calc(-50% + 144px)); }
   .motion-hint { bottom:calc(var(--safe-bottom) + 14px); }
   .mode-dots { bottom:calc(var(--safe-bottom) + 42px); }
   .insight-panel { bottom:calc(var(--safe-bottom) + 98px); }

@@ -8,10 +8,10 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="IRIS">
   <meta name="description" content="IRIS — живой интерфейс здоровья.">
-  <link rel="manifest" href="./manifest.webmanifest?v=iris10">
-  <link rel="icon" type="image/svg+xml" href="./iris-icon.svg?v=iris10">
+  <link rel="manifest" href="./manifest.webmanifest?v=iris11">
+  <link rel="icon" type="image/svg+xml" href="./iris-icon.svg?v=iris11">
   <title>IRIS</title>
-  <link rel="stylesheet" href="./styles.css?v=iris10">
+  <link rel="stylesheet" href="./styles.css?v=iris11">
 </head>
 <body>
 <main id="app" class="app mode-home">
@@ -19,7 +19,7 @@
   <div class="ambient" aria-hidden="true"></div>
 
   <header class="topbar">
-    <button id="soundToggle" class="icon-button sound-trigger locked" type="button" aria-label="Музыка и эффекты" aria-pressed="true">
+    <button id="soundToggle" class="icon-button sound-trigger locked" type="button" aria-label="Мрачная музыка и эффекты" aria-pressed="true">
       <span class="sound-dot"></span>
     </button>
     <div class="brand" aria-label="IRIS">I R I S</div>
@@ -83,11 +83,12 @@
         <button type="button">Приватность <b>›</b></button>
         <button type="button">Данные <b>›</b></button>
       </nav>
-      <div class="settings-note">На iPhone звук запускается после первого касания экрана. IRIS автоматически пытается восстановить звук после возврата в приложение.</div>
+      <div class="settings-note">v1.1: отдельный аудиоплеер для мрачной фоновой музыки и Web Audio для эффектов. На iPhone один раз коснись экрана.</div>
       <div class="settings-signature">I R I S<br><small>СПОКОЙНЕЕ ВНУТРИ · ЯСНЕЕ СНАРУЖИ</small></div>
     </div>
   </aside>
 </main>
 <script src="./iris-engine.js?v=iris10"></script>
+<script src="./iris-v11.js?v=iris11"></script>
 </body>
 </html>

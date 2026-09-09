@@ -8,21 +8,15 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="IRIS">
+  <meta name="application-name" content="IRIS">
   <meta name="description" content="IRIS — живой интерфейс здоровья.">
-  <link rel="manifest" href="./manifest.webmanifest?v=iris14">
-  <link rel="icon" type="image/svg+xml" href="./iris-icon.svg?v=iris14">
-  <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon-v14.png">
+  <link rel="canonical" href="https://arxedima.github.io/health-/">
+  <link rel="manifest" href="/health-/manifest.webmanifest?v=iris15">
+  <link rel="icon" type="image/png" sizes="192x192" href="/health-/icon-v13-192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/health-/apple-touch-icon-v14.png">
+  <link rel="apple-touch-icon-precomposed" sizes="180x180" href="/health-/apple-touch-icon-v14.png">
   <title>IRIS</title>
   <link rel="stylesheet" href="./styles.css?v=iris11">
-  <script>
-    try {
-      if (!localStorage.getItem('irisPwaRepair14')) {
-        localStorage.setItem('irisPwaRepair14', '1');
-        if ('caches' in window) caches.keys().then(keys => Promise.all(keys.map(k => caches.delete(k))));
-        if ('serviceWorker' in navigator) navigator.serviceWorker.getRegistrations().then(rs => Promise.all(rs.map(r => r.unregister())));
-      }
-    } catch (e) {}
-  </script>
 </head>
 <body>
 <main id="app" class="app mode-home">
@@ -77,7 +71,7 @@
         <button type="button">Приватность <b>›</b></button>
         <button type="button">Данные <b>›</b></button>
       </nav>
-      <div class="settings-note">v1.1: отдельный аудиоплеер для мрачной фоновой музыки и Web Audio для эффектов. На iPhone один раз коснись экрана.</div>
+      <div class="settings-note">IRIS работает как веб-приложение. На iPhone звук запускается после первого касания.</div>
       <div class="settings-signature">I R I S<br><small>СПОКОЙНЕЕ ВНУТРИ · ЯСНЕЕ СНАРУЖИ</small></div>
     </div>
   </aside>

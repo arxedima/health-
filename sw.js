@@ -1,5 +1,16 @@
-const CACHE='nova-main-v33';
-const FILES=['./','./index.html','./app.css','./app.js','./theme.js','./balance.css','./balance.js','./nova-features.css','./nova-features.js','./quick-actions.css','./quick-actions.js','./nova-intelligence.css','./nova-intelligence.js','./nova-orb-coach.css','./nova-orb-coach.js','./home-fixes.css','./home-fixes.js','./depth-v2.css','./depth-v2.js','./depth-premium.css','./depth-premium.js','./depth-premium-safari.js','./onboarding.css','./onboarding.js','./manifest.webmanifest','./icons/nova-icon-180.png','./icons/nova-icon-192.png','./icons/nova-icon-512.png','./icons/nova-icon-maskable.png'];
-self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(FILES)).then(()=>self.skipWaiting())));
-self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
-self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(fetch(e.request,{cache:'no-store'}).then(r=>{const copy=r.clone();caches.open(CACHE).then(c=>c.put(e.request,copy));return r;}).catch(()=>caches.match(e.request)))});
+const CACHE = 'iris-v0.1.0';
+const CORE = ['./','./index.html','./styles.css','./iris-engine.js','./manifest.webmanifest','./iris-icon.svg'];
+self.addEventListener('install', event => {
+  event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(CORE)).then(() => self.skipWaiting()));
+});
+self.addEventListener('activate', event => {
+  event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))).then(() => self.clients.claim()));
+});
+self.addEventListener('fetch', event => {
+  if (event.request.method !== 'GET') return;
+  event.respondWith(fetch(event.request).then(response => {
+    const copy = response.clone();
+    caches.open(CACHE).then(cache => cache.put(event.request, copy));
+    return response;
+  }).catch(() => caches.match(event.request).then(r => r || caches.match('./index.html'))));
+});

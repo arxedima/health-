@@ -113,7 +113,6 @@
     ctx.fillStyle = glow;
     ctx.fillRect(0,0,W,H);
 
-    // faint vertical light veil
     ctx.save();
     ctx.globalCompositeOperation='screen';
     const veil = ctx.createLinearGradient(0,eyeCenter.y-irisRadius*2.1,0,eyeCenter.y+irisRadius*2.1);
@@ -135,7 +134,6 @@
     ctx.save();
     ctx.translate(cx,cy);
 
-    // outer halo
     for (let i=0;i<5;i++) {
       const rr = R*(1.03+i*.055);
       ctx.beginPath(); ctx.arc(0,0,rr,0,Math.PI*2);
@@ -144,7 +142,6 @@
       ctx.stroke();
     }
 
-    // iris base
     let g = ctx.createRadialGradient(0,0,R*.11,0,0,R*1.02);
     g.addColorStop(0,'rgba(0,0,0,.99)');
     g.addColorStop(.24, rgb(currentInner,.72));
@@ -157,7 +154,6 @@
     ctx.beginPath(); ctx.arc(0,0,R*.99,0,Math.PI*2); ctx.clip();
     ctx.globalCompositeOperation='screen';
 
-    // subtle concentric structures
     for(let k=0;k<9;k++){
       const rr=R*(.31+k*.075);
       ctx.beginPath(); ctx.arc(0,0,rr,0,Math.PI*2);
@@ -166,7 +162,6 @@
       ctx.stroke();
     }
 
-    // fibrous iris
     for (let i=0;i<fibers.length;i++) {
       const f=fibers[i];
       const jitter=Math.sin(t*.0012 + f.seed*20)*.008;
@@ -186,10 +181,259 @@
       ctx.stroke();
     }
 
-    // crypts / dark radial cuts
     ctx.globalCompositeOperation='source-over';
     for(let i=0;i<44;i++){
       const a=(i/44)*Math.PI*2 + rand(i*14.4)*.1;
       const r1=R*(.38+rand(i*4.5)*.15), r2=R*(.67+rand(i*9.8)*.20);
       ctx.beginPath();
-      ctx.²È="25¤ðÌí¤¬¬¥ì(€€€€€€€½¹ÍÐÁÈõ™½ÕÍAÕ±Í”©H¨ ¸ÐÀ­¤¨¸ÄÔ¤ì(€€€€€€€Ñà¹‰•¥¹A…Ñ  ¤ìÑà¹…ÉŒ¡™½ÕÍAÕ±Í•`µà±™½ÕÍAÕ±Í•dµä±ÁÈ°À±5…Ñ ¹A$¨È¤ì(€€€€€€€Ñà¹ÍÑÉ½­•MÑå±”õÉˆ¡ÕÉÉ•¹Ñ•¹Ð°¸ÈÀ¨ Äµ™½ÕÍAÕ±Í”¤¤ì(€€€€€€€Ñà¹±¥¹•]¥‘Ñ ô¸àì(€€€€€€€Ñà¹ÍÑÉ½­” ¤ì(€€€€€ô(€€€€€Ñà¹É•ÍÑ½É” ¤ì(€€€ô((€€€€¼¼Í±••À±¥è•å”Á¡åÍ¥…±±ä±½Í•Ì(€€€¥˜€¡µ½‘”ôôôÍ±••Àœ¤ì(€€€€€½¹ÍÐ±½Í”ô¸Ìà€¬5…Ñ ¹Í¥¸¡Ð¨¸ÀÀÀÔÔ¤¨¸ÀÄÔì(€€€€€Ñà¹™¥±±MÑå±”ôÉ‰„ À°À°À°¸äÜ¤œì(€€€€€Ñà¹‰•¥¹A…Ñ  ¤ì(€€€€€Ñà¹•±±¥ÁÍ” À°µH¨ Ä¸ÀÔµ±½Í”¤±H¨Ä¸ÌÔ±H¨¸àÈ°À°À±5…Ñ ¹A$¨È¤ìÑà¹™¥±° ¤ì(€€€€€Ñà¹‰•¥¹A…Ñ  ¤ì(€€€€€Ñà¹•±±¥ÁÍ” À±H¨ Ä¸ÀÔµ±½Í”¤±H¨Ä¸ÌÔ±H¨¸àÈ°À°À±5…Ñ ¹A$¨È¤ìÑà¹™¥±° ¤ì(€€€€€Ñà¹‰•¥¹A…Ñ  ¤ì(€€€€€Ñà¹…ÉŒ À±H¨¸ÀÈ±H¨¸äÌ±5…Ñ ¹A$¨¸Àà±5…Ñ ¹A$¨¸äÈ¤ì(€€€€€Ñà¹ÍÑÉ½­•MÑå±”õÉˆ¡ÕÉÉ•¹Ñ•¹Ð°¸Ää¤ìÑà¹±¥¹•]¥‘Ñ ô¸àìÑà¹ÍÑÉ½­” ¤ì(€€€€€Ñà¹É•ÍÑ½É” ¤ì(€€€ô((€€€Ñà¹É•ÍÑ½É” ¤ì((€€€€¼¼•áÑ•É¹…°‘ÕÍÐ(€€€Ñà¹Í…Ù” ¤ìÑà¹±½‰…±½µÁ½Í¥Ñ•=Á•É…Ñ¥½¸ôÍÉ••¸œì(€€€™½È¡±•Ð¤ôÀí¤ñ‘ÕÍÐ¹±•¹Ñ í¤¬¬¥ì(€€€€€½¹ÍÐõ‘ÕÍÑm¥tì(€€€€€½¹ÍÐ„õ¹„­Ð¨¸ÀÀÀÀÄÔ¨¡¤”ÈüÄè´Ä¤ì(€€€€€½¹ÍÐÉÈõ¹È¨ Ä­5…Ñ ¹Í¥¸¡Ð¨¸ÀÀÀÜ­¤¤¨¸ÀÄÈ¤ì(€€€€€½¹ÍÐàõà­5…Ñ ¹½Ì¡„¤©ÉÈ°äõä­5…Ñ ¹Í¥¸¡„¤©ÉÈì(€€€€€Ñà¹‰•¥¹A…Ñ  ¤íÑà¹…ÉŒ¡à±ä±¹Ì°À±5…Ñ ¹A$¨È¤íÑà¹™¥±±MÑå±”õÉˆ¡ÕÉÉ•¹Ñ•¹Ð±¹…±Á¡„¤íÑà¹™¥±° ¤ì(€€€ô(€€€Ñà¹É•ÍÑ½É” ¤ì(€ô((€™Õ¹Ñ¥½¸É•¹‘•È¡Ð¤ì(€€€ÕÁ‘…Ñ•A…±•ÑÑ” ¤ì(€€€•å•=™™Í•Ð¹à€¬ô€¡Ñ…É•Ñå•=™™Í•Ð¹àµ•å•=™™Í•Ð¹à¤¨¸ÀÜì(€€€•å•=™™Í•Ð¹ä€¬ô€¡Ñ…É•Ñå•=™™Í•Ð¹äµ•å•=™™Í•Ð¹ä¤¨¸ÀÜì(€€€ÁÕÁ¥±	½½ÍÐ€¬ô€ ÀµÁÕÁ¥±	½½ÍÐ¤¨¸ÀÌÔì(€€€™½ÕÍAÕ±Í”õ5…Ñ ¹µ…à À±™½ÕÍAÕ±Í”´¸ÀÄà¤ì(€€€‘É…Ý	…­É½Õ¹¡Ð¤ì(€€€‘É…Ýå”¡Ð¤ì(€€€É•ÅÕ•ÍÑ¹¥µ…Ñ¥½¹É…µ”¡É•¹‘•È¤ì(€ô((€™Õ¹Ñ¥½¸Í•Ñ5½‘”¡¹•áÐ°É•…Í½¸ô•ÍÑÕÉ”œ¤ì(€€€¥˜ …5=Mm¹•áÑt¤É•ÑÕÉ¸ì(€€€µ½‘”õ¹•áÐì(€€€Ñ…É•Ñ•¹Ðõ5=Mm¹•áÑt¹…•¹Ð¹Í±¥” ¤ì(€€€½¹ÍÐ™œõ5=Mm¹•áÑtì(€€€µ•ÑÉ¥1…‰•°¹Ñ•áÑ½¹Ñ•¹Ðõ™œ¹±…‰•°ì(€€€µ•ÑÉ¥Y…±Õ”¹Ñ•áÑ½¹Ñ•¹Ðõ™œ¹Ù…±Õ”ì(€€€µ•ÑÉ¥…ÁÑ¥½¸¹Ñ•áÑ½¹Ñ•¹Ðõ™œ¹…ÁÑ¥½¸ì(€€€…ÁÀ¹‘…Ñ…Í•Ð¹µ½‘”õ¹•áÐì(€€€ÁÕÁ¥±	½½ÍÐôÄì(€€€ÑÉäì¹…Ù¥…Ñ½È¹Ù¥‰É…Ñ”ü¸ à¤ìô…Ñ ¡”¥íô(€€€É•¹‘•É½ÑÌ ¤ì(€€€¥˜¡É•…Í½¸„ôô¥¹¥Ðœ¤¡¥‘•!¥¹Ð ¤ì(€ô((€™Õ¹Ñ¥½¸É•¹‘•É½ÑÌ ¥ì(€€€µ½‘•½ÑÌ¹¥¹¹•É!Q50ôœœì(€€€=IH¹™½É… ¡´ôùì(€€€€€½¹ÍÐÌõ‘½Õµ•¹Ð¹É•…Ñ•±•µ•¹Ð ÍÁ…¸œ¤ì(€€€€€¥˜¡´ôôõµ½‘”¥Ì¹±…ÍÍ9…µ”ô…Ñ¥Ù”œì(€€€€€µ½‘•½ÑÌ¹…ÁÁ•¹‘¡¥±¡Ì¤ì(€€€ô¤ì(€€€µ½‘•½ÑÌ¹±…ÍÍ1¥ÍÐ¹Ñ½±” Ù¥Í¥‰±”œ±µ½‘”„ôô¡½µ”œ¤ì(€ô((€™Õ¹Ñ¥½¸¡¥‘•!¥¹Ð ¥ì(€€€¥˜¡™¥ÉÍÑ%¹Ñ•É…Ñ¥½¸¥É•ÑÕÉ¸ì(€€€™¥ÉÍÑ%¹Ñ•É…Ñ¥½¸õÑÉÕ”ì(€€€µ½Ñ¥½¹!¥¹Ð¹±…ÍÍ1¥ÍÐ¹…‘ ¡¥‘‘•¸œ¤ì(€ô((€™Õ¹Ñ¥½¸ÁÕ±Í•Ð¡à±ä¥ì(€€€™½ÕÍAÕ±Í”ô¸ÀÐì™½ÕÍAÕ±Í•`õàì™½ÕÍAÕ±Í•dõäì(€€€Ñ½Õ¡I¥¹œ¹ÍÑå±”¹±•™Ðõà¬ÁàœìÑ½Õ¡I¥¹œ¹ÍÑå±”¹Ñ½Àõä¬Áàœì(€€€Ñ½Õ¡I¥¹œ¹±…ÍÍ1¥ÍÐ¹É•µ½Ù” ÁÕ±Í”œ¤ìÙ½¥Ñ½Õ¡I¥¹œ¹½™™Í•Ñ]¥‘Ñ ìÑ½Õ¡I¥¹œ¹±…ÍÍ1¥ÍÐ¹…‘ ÁÕ±Í”œ¤ì(€€€ÁÕÁ¥±	½½ÍÐôÄì(€ô((€™Õ¹Ñ¥½¸½Á•¹5•¹Ô ¥ì(€€€¥˜¡µ•¹Õ=Á•¸¥É•ÑÕÉ¸ì(€€€µ•¹Õ=Á•¸õÑÉÕ”ì(€€€µ•¹ÕM•±•Ñ¥½¸õ¹Õ±°ì(€€€É…‘¥…±5•¹Ô¹±…ÍÍ1¥ÍÐ¹…‘ ½Á•¸œ¤ì(€€€É…‘¥…±5•¹Ô¹Í•ÑÑÑÉ¥‰ÕÑ” …É¥„µ¡¥‘‘•¸œ°™…±Í”œ¤ì(€€€…ÁÀ¹±…ÍÍ1¥ÍÐ¹…‘ µ•¹Ôµ½Á•¸œ¤ì(€€€ÑÉåí¹…Ù¥…Ñ½È¹Ù¥‰É…Ñ”ü¸ ÄÈ¥õ…Ñ ¡”¥íô(€€€¡¥‘•!¥¹Ð ¤ì(€ô(€™Õ¹Ñ¥½¸±½Í•5•¹Ô¡½µµ¥ÐõÑÉÕ”¥ì(€€€¥˜ …µ•¹Õ=Á•¸¥É•ÑÕÉ¸ì(€€€¥˜¡½µµ¥Ð€˜˜µ•¹ÕM•±•Ñ¥½¸¤Í•Ñ5½‘”¡µ•¹ÕM•±•Ñ¥½¸¤ì(€€€µ•¹Õ=Á•¸õ™…±Í”ì(€€€µ•¹ÕM•±•Ñ¥½¸õ¹Õ±°ì(€€€É…‘¥…±%Ñ•µÌ¹™½É… ¡¤ôù¤¹±…ÍÍ1¥ÍÐ¹É•µ½Ù” …Ñ¥Ù”œ¤¤ì(€€€É…‘¥…±5•¹Ô¹±…ÍÍ1¥ÍÐ¹É•µ½Ù” ½Á•¸œ¤ì(€€€É…‘¥…±5•¹Ô¹Í•ÑÑÑÉ¥‰ÕÑ” …É¥„µ¡¥‘‘•¸œ°ÑÉÕ”œ¤ì(€€€…ÁÀ¹±…ÍÍ1¥ÍÐ¹É•µ½Ù” µ•¹Ôµ½Á•¸œ¤ì(€ô((€™Õ¹Ñ¥½¸ÕÁ‘…Ñ•5•¹ÕM•±•Ñ¥½¸¡à±ä¥ì(€€€¥˜ …µ•¹Õ=Á•¸¥É•ÑÕÉ¸ì(€€€½¹ÍÐ‘àõàµ•¹Ñ•È¹à°‘äõäµ•¹Ñ•È¹äì(€€€½¹ÍÐ‘¥ÍÐõ5…Ñ ¹¡åÁ½Ð¡‘à±‘ä¤ì(€€€¥˜¡‘¥ÍÐñ¥É¥ÍI…‘¥ÕÌ¨¸ÌÈ¥ìµ•¹ÕM•±•Ñ¥½¸õ¹Õ±°ìô(€€€•±Í”ì(€€€€€½¹ÍÐ…¹±”õ5…Ñ ¹…Ñ…¸È¡‘ä±‘à¤ì(€€€€€¥˜¡…¹±”øµ5…Ñ ¹A$¨¸ÈÔ€˜˜…¹±”ðõ5…Ñ ¹A$¨¸ÈÔ¤µ•¹ÕM•±•Ñ¥½¸ô™½½œì(€€€€€•±Í”¥˜¡…¹±”ù5…Ñ ¹A$¨¸ÈÔ€˜˜…¹±”ðõ5…Ñ ¹A$¨¸ÜÔ¤µ•¹ÕM•±•Ñ¥½¸ôÍ±••Àœì(€€€€€•±Í”¥˜¡…¹±”ðôµ5…Ñ ¹A$¨¸ÈÔ€˜˜…¹±”øµ5…Ñ ¹A$¨¸ÜÔ¤µ•¹ÕM•±•Ñ¥½¸ôÍÁ½ÉÐœì(€€€€€•±Í”µ•¹ÕM•±•Ñ¥½¸ôÝ…Ñ•Èœì(€€€ô(€€€É…‘¥…±%Ñ•µÌ¹™½É… ¡¤ôù¤¹±…ÍÍ1¥ÍÐ¹Ñ½±” …Ñ¥Ù”œ±¤¹‘…Ñ…Í•Ð¹µ½‘”ôôõµ•¹ÕM•±•Ñ¥½¸¤¤ì(€ô((€™Õ¹Ñ¥½¸¡…¹‘±•A½¥¹Ñ•É½Ý¸¡”¥ì(€€€½¹ÍÐÀõÁ½¥¹Ð¡”¤ì(€€€Á½¥¹Ñ•È¹‘½Ý¸õÑÉÕ”ìÁ½¥¹Ñ•È¹ÍÑ…ÉÑ`õÀ¹àìÁ½¥¹Ñ•È¹ÍÑ…ÉÑdõÀ¹äìÁ½¥¹Ñ•È¹±…ÍÑ`õÀ¹àìÁ½¥¹Ñ•È¹±…ÍÑdõÀ¹äìÁ½¥¹Ñ•È¹ÍÑ…ÉÑPõÁ•É™½Éµ…¹”¹¹½Ü ¤ì(€€€Ñ…É•Ñå•=™™Í•Ð¹àô ¡À¹àµ•¹Ñ•È¹à¤½5…Ñ ¹µ…à¡\°Ä¤¤¨Äàì(€€€Ñ…É•Ñå•=™™Í•Ð¹äô ¡À¹äµ•¹Ñ•È¹ä¤½5…Ñ ¹µ…à¡ °Ä¤¤¨Äàì(€€€±•…ÉQ¥µ•½ÕÐ¡¡½±‘Q¥µ•È¤ì(€€€¡½±‘Q¥µ•ÈõÍ•ÑQ¥µ•½ÕÐ  ¤ôùì¥˜¡Á½¥¹Ñ•È¹‘½Ý¸¤½Á•¹5•¹Ô ¤ìô°ØÈÀ¤ì(€ô((€™Õ¹Ñ¥½¸¡…¹‘±•A½¥¹Ñ•É5½Ù”¡”¥ì(€€€½¹ÍÐÀõÁ½¥¹Ð¡”¤ìÁ½¥¹Ñ•È¹±…ÍÑ`õÀ¹àìÁ½¥¹Ñ•È¹±…ÍÑdõÀ¹äì(€€€½¹ÍÐ‘àô¡À¹àµ•¹Ñ•È¹à¤°‘äô¡À¹äµ•¹Ñ•È¹ä¤ì(€€€Ñ…É•Ñå•=™™Í•Ð¹àõ5…Ñ ¹µ…à ´ÄÀ±5…Ñ ¹µ¥¸ ÄÀ±‘à½\¨Èà¤¤ì(€€€Ñ…É•Ñå•=™™Í•Ð¹äõ5…Ñ ¹µ…à ´ä±5…Ñ ¹µ¥¸ ä±‘ä½ ¨Èà¤¤ì(€€€¥˜¡Á½¥¹Ñ•È¹‘½Ý¸€˜˜5…Ñ ¹¡åÁ½Ð¡À¹àµÁ½¥¹Ñ•È¹ÍÑ…ÉÑ`±À¹äµÁ½¥¹Ñ•È¹ÍÑ…ÉÑd¤øÄØ€˜˜€…µ•¹Õ=Á•¸¤±•…ÉQ¥µ•½ÕÐ¡¡½±‘Q¥µ•È¤ì(€€€¥˜¡µ•¹Õ=Á•¸¤ÕÁ‘…Ñ•5•¹ÕM•±•Ñ¥½¸¡À¹à±À¹ä¤ì(€ô((€™Õ¹Ñ¥½¸¡…¹‘±•A½¥¹Ñ•ÉUÀ¡”¥ì(€€€½¹ÍÐÀõÁ½¥¹Ð¡”¤ì(€€€±•…ÉQ¥µ•½ÕÐ¡¡½±‘Q¥µ•È¤ì(€€€½¹ÍÐ‘ÐõÁ•É™½Éµ…¹”¹¹½Ü ¤µÁ½¥¹Ñ•È¹ÍÑ…ÉÑPì(€€€½¹ÍÐ‘àõÀ¹àµÁ½¥¹Ñ•È¹ÍÑ…ÉÑ`°‘äõÀ¹äµÁ½¥¹Ñ•È¹ÍÑ…ÉÑdì(€€€½¹ÍÐ‘¥ÍÐõ5…Ñ ¹¡åÁ½Ð¡‘à±‘ä¤ì(€€€Á½¥¹Ñ•È¹‘½Ý¸õ™…±Í”ì(€€€Ñ…É•Ñå•=™™Í•Ð¹àôÀìÑ…É•Ñå•=™™Í•Ð¹äôÀì((€€€¥˜¡µ•¹Õ=Á•¸¥ì±½Í•5•¹Ô¡ÑÉÕ”¤ìÉ•ÑÕÉ¸ìô((€€€¥˜¡‘ÐðÐÈÀ€˜˜‘¥ÍÐðÈÈ¥ì(€€€€€½¹ÍÐ¹½ÜõÁ•É™½Éµ…¹”¹¹½Ü ¤ì(€€€€€ÁÕ±Í•Ð¡À¹à±À¹ä¤ì(€€€€€¡¥‘•!¥¹Ð ¤ì(€€€€€¥˜¡¹½Üµ±…ÍÑQ…ÁQ¥µ”ðÌÈÀ¥ì½Á•¹M•ÑÑ¥¹Ì ¤ì±…ÍÑQ…ÁQ¥µ”ôÀìÉ•ÑÕÉ¸ìô(€€€€€±…ÍÑQ…ÁQ¥µ”õ¹½Üì(€€€€€¥˜¡µ½‘”ôôô¡½µ”œ¤ì(€€€€€€€µ•ÑÉ¥…ÁÑ¥½¸¹Ñ•áÑ½¹Ñ•¹Ðô!=1Q<=A8œì(€€€€€€€Í•ÑQ¥µ•½ÕÐ  ¤ôùì¥˜¡µ½‘”ôôô¡½µ”œ¤µ•ÑÉ¥…ÁÑ¥½¸¹Ñ•áÑ½¹Ñ•¹ÐôQ=U Q<=ULœìô°ÄÐÀÀ¤ì(€€€€€ô(€€€€€É•ÑÕÉ¸ì(€€€ô((€€€¥˜¡5…Ñ ¹…‰Ì¡‘à¤øÜÀ€˜˜5…Ñ ¹…‰Ì¡‘à¤ù5…Ñ ¹…‰Ì¡‘ä¤¨Ä¸È¥ì(€€€€€½¹ÍÐ¤õ=IH¹¥¹‘•á=˜¡µ½‘”¤ì(€€€€€½¹ÍÐ¹•áÐô‘àðÀ€ü=IIl¡¤¬Ä¤•=IH¹±•¹Ñ¡t€è=IIl¡¤´Ä­=IH¹±•¹Ñ ¤•=IH¹±•¹Ñ¡tì(€€€€€Í•Ñ5½‘”¡¹•áÐ¤ì(€€€€€É•ÑÕÉ¸ì(€€€ô(€€€¥˜¡‘äøäÀ€˜˜5…Ñ ¹…‰Ì¡‘ä¤ù5…Ñ ¹…‰Ì¡‘à¤¨Ä¸È¥ì(€€€€€½Á•¹M•ÑÑ¥¹Ì ¤ì(€€€ô(€ô((€™Õ¹Ñ¥½¸Á½¥¹Ð¡”¥ì(€€€¥˜¡”¹Ñ½Õ¡•Ìü¹lÁt¤É•ÑÕÉ¸íàé”¹Ñ½Õ¡•ÍlÁt¹±¥•¹Ñ`±äé”¹Ñ½Õ¡•ÍlÁt¹±¥•¹Ñeôì(€€€¥˜¡”¹¡…¹•‘Q½Õ¡•Ìü¹lÁt¤É•ÑÕÉ¸íàé”¹¡…¹•‘Q½Õ¡•ÍlÁt¹±¥•¹Ñ`±äé”¹¡…¹•‘Q½Õ¡•ÍlÁt¹±¥•¹Ñeôì(€€€É•ÑÕÉ¸íàé”¹±¥•¹Ñ`±äé”¹±¥•¹Ñeôì(€ô((€™Õ¹Ñ¥½¸½Á•¹M•ÑÑ¥¹Ì ¥ì(€€€Í•ÑÑ¥¹ÍA…¹•°¹±…ÍÍ1¥ÍÐ¹…‘ ½Á•¸œ¤ì(€€€Í•ÑÑ¥¹ÍA…¹•°¹Í•ÑÑÑÉ¥‰ÕÑ” …É¥„µ¡¥‘‘•¸œ°™…±Í”œ¤ì(€€€…ÁÀ¹±…ÍÍ1¥ÍÐ¹…‘ Í•ÑÑ¥¹Ìµ½Á•¸œ¤ì(€€€¡¥‘•!¥¹Ð ¤ì(€ô(€™Õ¹Ñ¥½¸±½Í•M•ÑÑ¥¹Ì ¥ì(€€€Í•ÑÑ¥¹ÍA…¹•°¹±…ÍÍ1¥ÍÐ¹É•µ½Ù” ½Á•¸œ¤ì(€€€Í•ÑÑ¥¹ÍA…¹•°¹Í•ÑÑÑÉ¥‰ÕÑ” …É¥„µ¡¥‘‘•¸œ°ÑÉÕ”œ¤ì(€€€…ÁÀ¹±…ÍÍ1¥ÍÐ¹É•µ½Ù” Í•ÑÑ¥¹Ìµ½Á•¸œ¤ì(€ô((€É…‘¥…±%Ñ•µÌ¹™½É… ¡¥Ñ•´ôùì(€€€¥Ñ•´¹…‘‘Ù•¹Ñ1¥ÍÑ•¹•È ±¥¬œ±”ôùì”¹ÍÑ½ÁAÉ½Á……Ñ¥½¸ ¤ìµ•¹ÕM•±•Ñ¥½¸õ¥Ñ•´¹‘…Ñ…Í•Ð¹µ½‘”ì±½Í•5•¹Ô¡ÑÉÕ”¤ìô¤ì(€ô¤ì(€Í•ÑÑ¥¹ÍQÉ¥•È¹…‘‘Ù•¹Ñ1¥ÍÑ•¹•È ±¥¬œ°½Á•¹M•ÑÑ¥¹Ì¤ì(€‘½Õµ•¹Ð¹ÅÕ•ÉåM•±•Ñ½É±° m‘…Ñ„µ±½Í”µÍ•ÑÑ¥¹Ítœ¤¹™½É… ¡•°ôù•°¹…‘‘Ù•¹Ñ1¥ÍÑ•¹•È ±¥¬œ±±½Í•M•ÑÑ¥¹Ì¤¤ì((€ÍÑ…”¹…‘‘Ù•¹Ñ1¥ÍÑ•¹•È Á½¥¹Ñ•É‘½Ý¸œ±¡…¹‘±•A½¥¹Ñ•É½Ý¸±íÁ…ÍÍ¥Ù”éÑÉÕ•ô¤ì(€ÍÑ…”¹…‘‘Ù•¹Ñ1¥ÍÑ•¹•È Á½¥¹Ñ•Éµ½Ù”œ±¡…¹‘±•A½¥¹Ñ•É5½Ù”±íÁ…ÍÍ¥Ù”éÑÉÕ•ô¤ì(€ÍÑ…”¹…‘‘Ù•¹Ñ1¥ÍÑ•¹•È Á½¥¹Ñ•ÉÕÀœ±¡…¹‘±•A½¥¹Ñ•ÉUÀ±íÁ…ÍÍ¥Ù”éÑÉÕ•ô¤ì(€ÍÑ…”¹…‘‘Ù•¹Ñ1¥ÍÑ•¹•È Á½¥¹Ñ•É…¹•°œ° ¤ôùìÁ½¥¹Ñ•È¹‘½Ý¸õ™…±Í”ì±•…ÉQ¥µ•½ÕÐ¡¡½±‘Q¥µ•È¤ì±½Í•5•¹Ô¡™…±Í”¤ìÑ…É•Ñå•=™™Í•Ð¹àõÑ…É•Ñå•=™™Í•Ð¹äôÀìô±íÁ…ÍÍ¥Ù”éÑÉÕ•ô¤ì((€Ý¥¹‘½Ü¹…‘‘Ù•¹Ñ1¥ÍÑ•¹•È É•Í¥é”œ±É•Í¥é”±íÁ…ÍÍ¥Ù”éÑÉÕ•ô¤ì(€‘½Õµ•¹Ð¹…‘‘Ù•¹Ñ1¥ÍÑ•¹•È Ù¥Í¥‰¥±¥Ñå¡…¹”œ° ¤ôùì¥˜¡‘½Õµ•¹Ð¹¡¥‘‘•¸¥ìÁ½¥¹Ñ•È¹‘½Ý¸õ™…±Í”ì±•…ÉQ¥µ•½ÕÐ¡¡½±‘Q¥µ•È¤ì±½Í•5•¹Ô¡™…±Í”¤ìõô¤ì((€É•Í¥é” ¤ì(€Í•Ñ5½‘” ¡½µ”œ°¥¹¥Ðœ¤ì(€É•ÅÕ•ÍÑ¹¥µ…Ñ¥½¹É…µ”¡É•¹‘•È¤ì((€¥˜ Í•ÉÙ¥•]½É­•Èœ¥¸¹…Ù¥…Ñ½È¤ì(€€€Ý¥¹‘½Ü¹…‘‘Ù•¹Ñ1¥ÍÑ•¹•È ±½…œ° ¤ôù¹…Ù¥…Ñ½È¹Í•ÉÙ¥•]½É­•È¹É•¥ÍÑ•È œ¸½ÍÜ¹©Ìœ¤¹…Ñ   ¤ôùíô¤¤ì(€ô)ô¤ ¤ì(
+      ctx.moveTo(Math.cos(a)*r1,Math.sin(a)*r1);
+      ctx.lineTo(Math.cos(a+.025*(rand(i)-.5))*r2,Math.sin(a+.025*(rand(i)-.5))*r2);
+      ctx.strokeStyle=`rgba(0,0,0,${.14+rand(i*7.1)*.18})`;
+      ctx.lineWidth=.7+rand(i*3.2)*1.3;
+      ctx.stroke();
+    }
+
+    ctx.restore();
+
+    const rim=ctx.createRadialGradient(0,0,R*.83,0,0,R*1.05);
+    rim.addColorStop(0,'rgba(0,0,0,0)');
+    rim.addColorStop(.78,rgb(currentAccent,.05));
+    rim.addColorStop(.91,'rgba(2,5,7,.72)');
+    rim.addColorStop(1,'rgba(0,0,0,.98)');
+    ctx.beginPath(); ctx.arc(0,0,R*1.06,0,Math.PI*2); ctx.fillStyle=rim; ctx.fill();
+
+    ctx.beginPath();ctx.arc(0,0,R*.995,0,Math.PI*2);ctx.strokeStyle=rgb(currentAccent,.16);ctx.lineWidth=.8;ctx.stroke();
+
+    const pupilR=R*(.225 + Math.sin(t*.00055)*.008 + pupilBoost*.03);
+    const pg=ctx.createRadialGradient(-pupilR*.16,-pupilR*.18,pupilR*.04,0,0,pupilR*1.18);
+    pg.addColorStop(0,'rgba(6,8,10,1)');
+    pg.addColorStop(.72,'rgba(0,0,0,1)');
+    pg.addColorStop(1,rgb(currentAccent,.035));
+    ctx.beginPath(); ctx.arc(0,0,pupilR,0,Math.PI*2); ctx.fillStyle=pg; ctx.fill();
+    ctx.beginPath(); ctx.arc(0,0,pupilR*1.02,0,Math.PI*2); ctx.strokeStyle=rgb(currentAccent,.18);ctx.lineWidth=.7;ctx.stroke();
+
+    ctx.save(); ctx.globalCompositeOperation='screen';
+    const hx=-R*.24, hy=-R*.30;
+    const hg=ctx.createRadialGradient(hx,hy,0,hx,hy,R*.15);
+    hg.addColorStop(0,'rgba(255,255,255,.35)'); hg.addColorStop(.16,'rgba(255,255,255,.13)'); hg.addColorStop(1,'rgba(255,255,255,0)');
+    ctx.fillStyle=hg;ctx.beginPath();ctx.arc(hx,hy,R*.15,0,Math.PI*2);ctx.fill();
+    ctx.beginPath();ctx.arc(R*.27,-R*.18,R*.018,0,Math.PI*2);ctx.fillStyle='rgba(255,255,255,.45)';ctx.fill();
+    ctx.restore();
+
+    if (focusPulse>0) {
+      ctx.save(); ctx.globalCompositeOperation='screen';
+      for(let i=0;i<3;i++){
+        const pr=focusPulse*R*(.40+i*.15);
+        ctx.beginPath(); ctx.arc(focusPulseX-cx,focusPulseY-cy,pr,0,Math.PI*2);
+        ctx.strokeStyle=rgb(currentAccent,.20*(1-focusPulse));
+        ctx.lineWidth=.8;
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
+
+    if (mode==='sleep') {
+      const close=.38 + Math.sin(t*.00055)*.015;
+      ctx.save();
+      ctx.fillStyle='rgba(0,0,0,.97)';
+      ctx.beginPath();
+      ctx.ellipse(0,-R*(1.05-close),R*1.35,R*.82,0,0,Math.PI*2); ctx.fill();
+      ctx.beginPath();
+      ctx.ellipse(0,R*(1.05-close),R*1.35,R*.82,0,0,Math.PI*2); ctx.fill();
+      ctx.beginPath();
+      ctx.arc(0,R*.02,R*.93,Math.PI*.08,Math.PI*.92);
+      ctx.strokeStyle=rgb(currentAccent,.19); ctx.lineWidth=.8; ctx.stroke();
+      ctx.restore();
+    }
+
+    ctx.restore();
+
+    ctx.save(); ctx.globalCompositeOperation='screen';
+    for(let i=0;i<dust.length;i++){
+      const d=dust[i];
+      const a=d.a+t*.000015*(i%2?1:-1);
+      const rr=d.r*(1+Math.sin(t*.0007+i)*.012);
+      const x=cx+Math.cos(a)*rr, y=cy+Math.sin(a)*rr;
+      ctx.beginPath();ctx.arc(x,y,d.s,0,Math.PI*2);ctx.fillStyle=rgb(currentAccent,d.alpha);ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  function render(t) {
+    updatePalette();
+    eyeOffset.x += (targetEyeOffset.x-eyeOffset.x)*.07;
+    eyeOffset.y += (targetEyeOffset.y-eyeOffset.y)*.07;
+    pupilBoost += (0-pupilBoost)*.035;
+    focusPulse=Math.max(0,focusPulse-.018);
+    drawBackground(t);
+    drawEye(t);
+    requestAnimationFrame(render);
+  }
+
+  function setMode(next, reason='gesture') {
+    if(!MODES[next]) return;
+    mode=next;
+    targetAccent=MODES[next].accent.slice();
+    const cfg=MODES[next];
+    metricLabel.textContent=cfg.label;
+    metricValue.textContent=cfg.value;
+    metricCaption.textContent=cfg.caption;
+    app.dataset.mode=next;
+    pupilBoost=1;
+    try { navigator.vibrate?.(8); } catch(e){}
+    renderDots();
+    if(reason!=='init') hideHint();
+  }
+
+  function renderDots(){
+    modeDots.innerHTML='';
+    ORDER.forEach(m=>{
+      const s=document.createElement('span');
+      if(m===mode)s.className='active';
+      modeDots.appendChild(s);
+    });
+    modeDots.classList.toggle('visible',mode!=='home');
+  }
+
+  function hideHint(){
+    if(firstInteraction)return;
+    firstInteraction=true;
+    motionHint.classList.add('hidden');
+  }
+
+  function pulseAt(x,y){
+    focusPulse=.04; focusPulseX=x; focusPulseY=y;
+    touchRing.style.left=x+'px'; touchRing.style.top=y+'px';
+    touchRing.classList.remove('pulse'); void touchRing.offsetWidth; touchRing.classList.add('pulse');
+    pupilBoost=1;
+  }
+
+  function openMenu(){
+    if(menuOpen)return;
+    menuOpen=true;
+    menuSelection=null;
+    radialMenu.classList.add('open');
+    radialMenu.setAttribute('aria-hidden','false');
+    app.classList.add('menu-open');
+    try{navigator.vibrate?.(12)}catch(e){}
+    hideHint();
+  }
+  function closeMenu(commit=true){
+    if(!menuOpen)return;
+    if(commit && menuSelection) setMode(menuSelection);
+    menuOpen=false;
+    menuSelection=null;
+    radialItems.forEach(i=>i.classList.remove('active'));
+    radialMenu.classList.remove('open');
+    radialMenu.setAttribute('aria-hidden','true');
+    app.classList.remove('menu-open');
+  }
+
+  function updateMenuSelection(x,y){
+    if(!menuOpen)return;
+    const dx=x-center.x, dy=y-center.y;
+    const dist=Math.hypot(dx,dy);
+    if(dist<irisRadius*.32){ menuSelection=null; }
+    else {
+      const angle=Math.atan2(dy,dx);
+      if(angle>-Math.PI*.25 && angle<=Math.PI*.25) menuSelection='food';
+      else if(angle>Math.PI*.25 && angle<=Math.PI*.75) menuSelection='sleep';
+      else if(angle<=-Math.PI*.25 && angle>-Math.PI*.75) menuSelection='sport';
+      else menuSelection='water';
+    }
+    radialItems.forEach(i=>i.classList.toggle('active',i.dataset.mode===menuSelection));
+  }
+
+  function handlePointerDown(e){
+    const p=point(e);
+    pointer.down=true; pointer.startX=p.x; pointer.startY=p.y; pointer.lastX=p.x; pointer.lastY=p.y; pointer.startT=performance.now();
+    targetEyeOffset.x=((p.x-center.x)/Math.max(W,1))*18;
+    targetEyeOffset.y=((p.y-center.y)/Math.max(H,1))*18;
+    clearTimeout(holdTimer);
+    holdTimer=setTimeout(()=>{ if(pointer.down) openMenu(); },620);
+  }
+
+  function handlePointerMove(e){
+    const p=point(e); pointer.lastX=p.x; pointer.lastY=p.y;
+    const dx=(p.x-center.x), dy=(p.y-center.y);
+    targetEyeOffset.x=Math.max(-10,Math.min(10,dx/W*28));
+    targetEyeOffset.y=Math.max(-9,Math.min(9,dy/H*28));
+    if(pointer.down && Math.hypot(p.x-pointer.startX,p.y-pointer.startY)>16 && !menuOpen) clearTimeout(holdTimer);
+    if(menuOpen) updateMenuSelection(p.x,p.y);
+  }
+
+  function handlePointerUp(e){
+    const p=point(e);
+    clearTimeout(holdTimer);
+    const dt=performance.now()-pointer.startT;
+    const dx=p.x-pointer.startX, dy=p.y-pointer.startY;
+    const dist=Math.hypot(dx,dy);
+    pointer.down=false;
+    targetEyeOffset.x=0; targetEyeOffset.y=0;
+
+    if(menuOpen){ closeMenu(true); return; }
+
+    if(dt<420 && dist<22){
+      const now=performance.now();
+      pulseAt(p.x,p.y);
+      hideHint();
+      if(now-lastTapTime<320){ openSettings(); lastTapTime=0; return; }
+      lastTapTime=now;
+      if(mode==='home') {
+        metricCaption.textContent='HOLD TO OPEN';
+        setTimeout(()=>{ if(mode==='home') metricCaption.textContent='TOUCH TO FOCUS'; },1400);
+      }
+      return;
+    }
+
+    if(Math.abs(dx)>70 && Math.abs(dx)>Math.abs(dy)*1.2){
+      const i=ORDER.indexOf(mode);
+      const next= dx<0 ? ORDER[(i+1)%ORDER.length] : ORDER[(i-1+ORDER.length)%ORDER.length];
+      setMode(next);
+      return;
+    }
+    if(dy>90 && Math.abs(dy)>Math.abs(dx)*1.2){
+      openSettings();
+    }
+  }
+
+  function point(e){
+    if(e.touches?.[0]) return {x:e.touches[0].clientX,y:e.touches[0].clientY};
+    if(e.changedTouches?.[0]) return {x:e.changedTouches[0].clientX,y:e.changedTouches[0].clientY};
+    return {x:e.clientX,y:e.clientY};
+  }
+
+  function openSettings(){
+    settingsPanel.classList.add('open');
+    settingsPanel.setAttribute('aria-hidden','false');
+    app.classList.add('settings-open');
+    hideHint();
+  }
+  function closeSettings(){
+    settingsPanel.classList.remove('open');
+    settingsPanel.setAttribute('aria-hidden','true');
+    app.classList.remove('settings-open');
+  }
+
+  radialItems.forEach(item=>{
+    item.addEventListener('click',e=>{ e.stopPropagation(); menuSelection=item.dataset.mode; closeMenu(true); });
+  });
+  settingsTrigger.addEventListener('click', openSettings);
+  document.querySelectorAll('[data-close-settings]').forEach(el=>el.addEventListener('click',closeSettings));
+
+  stage.addEventListener('pointerdown',handlePointerDown,{passive:true});
+  stage.addEventListener('pointermove',handlePointerMove,{passive:true});
+  stage.addEventListener('pointerup',handlePointerUp,{passive:true});
+  stage.addEventListener('pointercancel',()=>{ pointer.down=false; clearTimeout(holdTimer); closeMenu(false); targetEyeOffset.x=targetEyeOffset.y=0; },{passive:true});
+
+  window.addEventListener('resize',resize,{passive:true});
+  document.addEventListener('visibilitychange',()=>{ if(document.hidden){ pointer.down=false; clearTimeout(holdTimer); closeMenu(false); }});
+
+  resize();
+  setMode('home','init');
+  requestAnimationFrame(render);
+
+  if('serviceWorker' in navigator) {
+    window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
+  }
+})();

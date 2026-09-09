@@ -8,58 +8,72 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="IRIS" />
   <meta name="description" content="IRIS — живой интерфейс здоровья." />
-  <link rel="manifest" href="./manifest.webmanifest?v=iris02" />
-  <link rel="icon" type="image/svg+xml" href="./iris-icon.svg?v=iris02" />
+  <link rel="manifest" href="./manifest.webmanifest?v=iris03" />
+  <link rel="icon" type="image/svg+xml" href="./iris-icon.svg?v=iris03" />
   <title>IRIS</title>
-  <link rel="stylesheet" href="./styles.css?v=iris02" />
+  <link rel="stylesheet" href="./styles.css?v=iris03" />
 </head>
 <body>
   <main id="app" class="app" aria-live="polite">
     <div class="ambient" aria-hidden="true"></div>
+
     <header class="topbar">
       <div class="brand" id="brand">I R I S</div>
       <button class="ghost-button settings-trigger" id="settingsTrigger" aria-label="Настройки">••</button>
     </header>
+
+    <div class="mode-whisper" id="modeWhisper">IRIS НАБЛЮДАЕТ</div>
+
     <section class="stage" id="stage" aria-label="Интерактивный глаз IRIS">
       <canvas id="irisCanvas"></canvas>
       <div class="touch-ring" id="touchRing" aria-hidden="true"></div>
+
       <div class="metric" id="metric">
-        <div class="metric-label" id="metricLabel">HOME</div>
+        <div class="metric-label" id="metricLabel">ГЛАВНАЯ</div>
         <div class="metric-value" id="metricValue"></div>
-        <div class="metric-caption" id="metricCaption">TOUCH TO FOCUS</div>
+        <div class="metric-caption" id="metricCaption">КОСНИСЬ ГЛАЗА</div>
       </div>
+
+      <div class="insight-panel" id="insightPanel" aria-hidden="true">
+        <div><strong>92</strong><small>ЭНЕРГИЯ</small></div>
+        <div><strong>7:24</strong><small>СОН</small></div>
+        <div><strong>1 420</strong><small>ПИТАНИЕ</small></div>
+      </div>
+
       <div class="radial-menu" id="radialMenu" aria-hidden="true">
-        <button class="radial-item radial-top" data-mode="sport"><span>SPORT</span></button>
-        <button class="radial-item radial-right" data-mode="food"><span>FOOD</span></button>
-        <button class="radial-item radial-bottom" data-mode="sleep"><span>SLEEP</span></button>
-        <button class="radial-item radial-left" data-mode="water"><span>WATER</span></button>
+        <button class="radial-item radial-top" data-mode="sport"><span>СПОРТ</span></button>
+        <button class="radial-item radial-right" data-mode="food"><span>ПИТАНИЕ</span></button>
+        <button class="radial-item radial-bottom" data-mode="sleep"><span>СОН</span></button>
+        <button class="radial-item radial-left" data-mode="water"><span>ВОДА</span></button>
         <div class="radial-core"></div>
       </div>
     </section>
+
     <footer class="motion-hint" id="motionHint">
-      <span>TAP</span><i></i><span>HOLD</span><i></i><span>SWIPE</span>
+      <span>КАСАНИЕ</span><i></i><span>УДЕРЖАНИЕ</span><i></i><span>СВАЙП</span>
     </footer>
     <div class="mode-dots" id="modeDots" aria-label="Состояния IRIS"></div>
+
     <aside class="settings" id="settingsPanel" aria-hidden="true">
       <div class="settings-backdrop" data-close-settings></div>
       <div class="settings-sheet">
         <div class="settings-head">
-          <span>SETTINGS</span>
+          <span>НАСТРОЙКИ</span>
           <button class="ghost-button" data-close-settings aria-label="Закрыть">×</button>
         </div>
         <nav class="settings-list">
-          <button>Profile <b>›</b></button>
-          <button>Goals <b>›</b></button>
-          <button>Reminders <b>›</b></button>
-          <button>Health <b>›</b></button>
-          <button>Appearance <b>›</b></button>
-          <button>Privacy <b>›</b></button>
-          <button>Data <b>›</b></button>
+          <button>Профиль <b>›</b></button>
+          <button>Цели <b>›</b></button>
+          <button>Напоминания <b>›</b></button>
+          <button>Здоровье <b>›</b></button>
+          <button>Внешний вид <b>›</b></button>
+          <button>Конфиденциальность <b>›</b></button>
+          <button>Данные <b>›</b></button>
         </nav>
-        <div class="settings-signature">I R I S<br><small>A CALMER YOU LIVES WITHIN</small></div>
+        <div class="settings-signature">I R I S<br><small>ТИШЕ. ТОЧНЕЕ. КАЖДЫЙ ДЕНЬ.</small></div>
       </div>
     </aside>
   </main>
-  <script src="./iris-engine.js?v=iris02"></script>
+  <script src="./iris-engine.js?v=iris03"></script>
 </body>
 </html>

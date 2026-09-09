@@ -1,14 +1,12 @@
-const CACHE='iris-v1.5.0';
+const CACHE='iris-v1.9.0';
 const CORE=[
   '/health-/',
   '/health-/index.html',
   '/health-/styles.css?v=iris11',
   '/health-/iris-engine.js?v=iris10',
   '/health-/iris-v11.js?v=iris11',
-  '/health-/manifest.webmanifest?v=iris15',
-  '/health-/apple-touch-icon-v14.png',
-  '/health-/icon-v13-192.png',
-  '/health-/icon-v13-512.png'
+  '/health-/manifest.webmanifest?v=iris19',
+  '/health-/app-icon.png?v=19'
 ];
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>self.skipWaiting()));

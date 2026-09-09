@@ -1,5 +1,5 @@
-const CACHE = 'iris-v0.1.0';
-const CORE = ['./','./index.html','./styles.css','./iris-engine.js','./manifest.webmanifest','./iris-icon.svg'];
+const CACHE = 'iris-v0.1.1';
+const CORE = ['./','./index.html','./styles.css?v=iris02','./iris-engine.js?v=iris02','./manifest.webmanifest?v=iris02','./iris-icon.svg?v=iris02'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(CORE)).then(() => self.skipWaiting()));
 });

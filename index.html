@@ -1,89 +1,65 @@
 <!doctype html>
 <html lang="ru">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#f8fbff">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="Nova+">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="format-detection" content="telephone=no">
-  <title>Nova+</title>
-  <script>try{if(!localStorage.getItem('nova.onboarding.v1')||new URLSearchParams(location.search).get('onboarding')==='1')document.documentElement.classList.add('nova-onboarding-pending');setTimeout(()=>document.documentElement.classList.remove('nova-onboarding-pending'),2500)}catch(_){}</script>
-  <link rel="manifest" href="./manifest.webmanifest?v=2">
-  <link rel="icon" type="image/png" href="./icons/nova-icon-192.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="./icons/nova-icon-180.png">
-  <link rel="stylesheet" href="./app.css?v=4">
-  <link rel="stylesheet" href="./balance.css?v=1">
-  <link rel="stylesheet" href="./nova-features.css?v=2">
-  <link rel="stylesheet" href="./quick-actions.css?v=3">
-  <link rel="stylesheet" href="./nova-intelligence.css?v=2">
-  <link rel="stylesheet" href="./nova-orb-coach.css?v=3">
-  <link rel="stylesheet" href="./depth-v2.css?v=1">
-  <link rel="stylesheet" href="./onboarding.css?v=2">
-  <link rel="stylesheet" href="./home-fixes.css?v=2">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="IRIS" />
+  <meta name="description" content="IRIS — живой интерфейс здоровья." />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="icon" type="image/svg+xml" href="./iris-icon.svg" />
+  <title>IRIS</title>
+  <link rel="stylesheet" href="./styles.css?v=iris01" />
 </head>
 <body>
-  <div class="app-shell" id="appShell">
-    <main class="home-screen" aria-label="Главная Nova+">
-      <header class="brand-row">
-        <div class="brand">
-          <span class="brand-orb" aria-hidden="true"></span>
-          <span class="brand-copy"><strong>Nova+</strong><small>Сегодня</small></span>
+  <main id="app" class="app" aria-live="polite">
+    <div class="ambient" aria-hidden="true"></div>
+    <header class="topbar">
+      <div class="brand" id="brand">I R I S</div>
+      <button class="ghost-button settings-trigger" id="settingsTrigger" aria-label="Настройки">••</button>
+    </header>
+    <section class="stage" id="stage" aria-label="Интерактивный глаз IRIS">
+      <canvas id="irisCanvas"></canvas>
+      <div class="touch-ring" id="touchRing" aria-hidden="true"></div>
+      <div class="metric" id="metric">
+        <div class="metric-label" id="metricLabel">HOME</div>
+        <div class="metric-value" id="metricValue"></div>
+        <div class="metric-caption" id="metricCaption">TOUCH TO FOCUS</div>
+      </div>
+      <div class="radial-menu" id="radialMenu" aria-hidden="true">
+        <button class="radial-item radial-top" data-mode="sport"><span>SPORT</span></button>
+        <button class="radial-item radial-right" data-mode="food"><span>FOOD</span></button>
+        <button class="radial-item radial-bottom" data-mode="sleep"><span>SLEEP</span></button>
+        <button class="radial-item radial-left" data-mode="water"><span>WATER</span></button>
+        <div class="radial-core"></div>
+      </div>
+    </section>
+    <footer class="motion-hint" id="motionHint">
+      <span>TAP</span><i></i><span>HOLD</span><i></i><span>SWIPE</span>
+    </footer>
+    <div class="mode-dots" id="modeDots" aria-label="Состояния IRIS"></div>
+    <aside class="settings" id="settingsPanel" aria-hidden="true">
+      <div class="settings-backdrop" data-close-settings></div>
+      <div class="settings-sheet">
+        <div class="settings-head">
+          <span>SETTINGS</span>
+          <button class="ghost-button" data-close-settings aria-label="Закрыть">×</button>
         </div>
-        <button class="round-icon theme-button" id="themeButton" type="button" aria-label="Переключить тему"><span class="theme-glyph" aria-hidden="true"></span></button>
-      </header>
-
-      <section class="hero-copy">
-        <h1 id="greetingTitle">Доброе утро,<br>Дмитрий</h1>
-        <p id="greetingText">Пора сделать первый шаг.</p>
-      </section>
-
-      <section class="nova-stage" aria-label="Баланс дня">
-        <div class="ring ring-bg"></div>
-        <div class="ring ring-active"></div>
-        <div class="nova-orb" role="button" tabindex="0" aria-label="Nova. Нажми, чтобы получить мотивацию">
-          <span class="orb-ambient"></span><span class="orb-light"></span><span class="orb-caustic"></span>
-          <span class="orb-wave-mask">
-            <svg class="orb-wave" viewBox="0 0 240 138" preserveAspectRatio="none">
-              <path class="wave-back" d="M-12 76 C31 43 70 109 117 77 S191 45 252 76 L252 150 L-12 150 Z"/>
-              <path class="wave-glow" d="M-12 73 C31 40 70 106 117 74 S191 42 252 73"/>
-              <path class="wave-front" d="M-12 84 C38 57 76 113 124 86 S191 60 252 84 L252 150 L-12 150 Z"/>
-            </svg>
-          </span>
-          <span class="orb-rim"></span>
-        </div>
-      </section>
-
-      <section class="metrics" aria-label="Показатели дня">
-        <button class="metric" type="button" data-kind="sport"><span class="metric-icon runner-icon"><svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="21.4" cy="5.6" r="2.7" fill="currentColor"/><path d="M17.6 10.1 13 14.5l-4.1-1.4-1.4 3.2 6.1 2.2 3.1-2.7 2.1 3.2-3 3.2-4.7 4.8 3 2.5 5-5 3.1-2.7 2.3 2.1 1.9 5.2 3.8-1.2-2.1-6-4.6-4.3-2.9-5.5 1.8-2.1 3.2 1.9 1.9-3.2-5.3-3.2a3.6 3.6 0 0 0-4.1.5Z" fill="currentColor"/></svg></span><span class="metric-label">Спорт</span><strong>2 / 3</strong><span class="metric-track"><i style="width:66%"></i></span></button>
-        <button class="metric" type="button" data-kind="food"><span class="metric-icon"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16.6 9.2c-1.2-3.2.7-5.5 3.9-6.5-.1 3.2-1.4 5.2-3.9 6.5Z" fill="currentColor" opacity=".82"/><path d="M15.1 9.7c-3-3.2-7-1.7-8.3 1.9-1.9 5.4 2.8 15.2 7 15.4 1 .1 1.8-.5 2.7-.5s1.6.7 2.7.5c4.4-.5 8.6-10.2 6.8-15.5-1.4-4.1-6-4.9-8.3-1.9-.8.9-1.8.9-2.6.1Z" fill="currentColor"/><path d="M8.3 11.6c2.1-3.5 5.3-2.9 7.1-.8-2.8.2-5.2 1.1-7.1.8Z" fill="#85d7ff" opacity=".9"/></svg></span><span class="metric-label">Питание</span><strong>3 / 8</strong><span class="metric-track"><i style="width:38%"></i></span></button>
-        <button class="metric" type="button" data-kind="water"><span class="metric-icon"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3.1C13.5 7.5 8.2 13.5 8.2 19a7.8 7.8 0 0 0 15.6 0c0-5.5-5.2-11.5-7.8-15.9Z" fill="currentColor"/><path d="M11.2 18.1c.3-2.6 2.2-5.1 4.1-7.8-1.2 5.2-.8 9 2 11.7-3.2.4-6.5-1-6.1-3.9Z" fill="#b7e9ff" opacity=".9"/></svg></span><span class="metric-label">Вода</span><strong>4 / 8</strong><span class="metric-track"><i style="width:50%"></i></span></button>
-        <button class="metric" type="button" data-kind="sleep"><span class="metric-icon"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M23.9 23.7A11 11 0 0 1 10.3 7.1 10.6 10.6 0 1 0 23.9 23.7Z" fill="currentColor"/><path d="M23.5 6.6 24.4 9l2.4.9-2.4.9-.9 2.4-.9-2.4-2.4-.9 2.4-.9.9-2.4Z" fill="currentColor"/></svg></span><span class="metric-label">Сон</span><strong>1 / 8</strong><span class="metric-track"><i style="width:13%"></i></span></button>
-      </section>
-
-      <button class="primary-action" type="button" id="planButton"><span class="plus">＋</span><span>Составить план дня</span></button>
-      <button class="tip-card" type="button" id="tipButton"><span class="tip-icon day-tip-icon" aria-hidden="true"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="9" fill="currentColor"/><g stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M24 4v6M24 38v6M4 24h6M38 24h6M9.9 9.9l4.2 4.2M33.9 33.9l4.2 4.2M38.1 9.9l-4.2 4.2M14.1 33.9l-4.2 4.2"/></g></svg></span><span class="tip-copy"><small id="tipEyebrow">Совет дня</small><strong id="tipTitle">Стакан воды</strong><span id="tipText">После пробуждения<br>помогает начать день.</span></span><span class="tip-arrow">›</span></button>
-      <section class="today-section" aria-label="Сегодня"><div class="today-head"><h2>Сегодня</h2><span>3 из 5</span></div><div class="timeline"><button class="timeline-row done" type="button"><span class="time-dot"><i>✓</i></span><time>08:00</time><strong>Утренняя зарядка</strong></button><button class="timeline-row" type="button"><span class="time-dot"></span><time>13:00</time><strong>Обед</strong></button><button class="timeline-row active" type="button"><span class="time-dot"></span><time>18:30</time><strong>Прогулка</strong></button><button class="timeline-row" type="button"><span class="time-dot"></span><time>22:30</time><strong>Дыхательная практика</strong></button></div></section>
-    </main>
-
-    <nav class="bottom-nav" aria-label="Навигация"><button class="nav-item active" type="button" data-nav="home"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V21h-6v-6H9v6H3V10.5Z" fill="currentColor"/></svg><span>Главная</span></button><button class="nav-item" type="button" data-nav="plan"><svg viewBox="0 0 24 24"><rect x="4" y="5.8" width="16" height="14" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M7 3v5M17 3v5M4 10h16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>План</span></button><button class="nav-plus" type="button" id="addButton" aria-label="Добавить">＋</button><button class="nav-item" type="button" data-nav="analytics"><svg viewBox="0 0 24 24"><path d="M5 19V12M10 19V7M15 19V10M20 19V4" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/></svg><span>Аналитика</span></button><button class="nav-item" type="button" data-nav="profile"><svg viewBox="0 0 24 24"><circle cx="12" cy="7.5" r="3.6" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M5.2 20c.8-4 3.1-6 6.8-6s6 2 6.8 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><span>Я</span></button></nav>
-  </div>
-
-  <div class="sheet-backdrop" id="sheetBackdrop" hidden></div>
-  <section class="action-sheet" id="actionSheet" aria-hidden="true"><div class="sheet-handle"></div><h2>Добавить</h2><div class="sheet-grid"><button type="button">Тренировку</button><button type="button">Еду</button><button type="button">Воду</button><button type="button">Сон</button></div></section>
-  <div class="toast" id="toast" role="status" aria-live="polite"></div>
-
-  <script src="./theme.js?v=4"></script>
-  <script src="./balance.js?v=1"></script>
-  <script src="./nova-features.js?v=2"></script>
-  <script src="./quick-actions.js?v=3"></script>
-  <script src="./nova-intelligence.js?v=1"></script>
-  <script src="./nova-orb-coach.js?v=3"></script>
-  <script src="./depth-v2.js?v=1"></script>
-  <script src="./onboarding.js?v=3"></script>
-  <script src="./app.js?v=6"></script>
-  <script src="./home-fixes.js?v=2"></script>
+        <nav class="settings-list">
+          <button>Profile <b>›</b></button>
+          <button>Goals <b>›</b></button>
+          <button>Reminders <b>›</b></button>
+          <button>Health <b>›</b></button>
+          <button>Appearance <b>›</b></button>
+          <button>Privacy <b>›</b></button>
+          <button>Data <b>›</b></button>
+        </nav>
+        <div class="settings-signature">I R I S<br><small>A CALMER YOU LIVES WITHIN</small></div>
+      </div>
+    </aside>
+  </main>
+  <script src="./iris-engine.js?v=iris01"></script>
 </body>
 </html>

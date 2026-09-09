@@ -1,11 +1,11 @@
-const CACHE = 'iris-v0.4.0';
+const CACHE = 'iris-v0.5.0';
 const CORE = [
   './',
   './index.html',
-  './styles.css?v=iris04',
-  './iris-engine.js?v=iris04',
-  './manifest.webmanifest?v=iris04',
-  './iris-icon.svg?v=iris04'
+  './styles.css?v=iris05',
+  './iris-engine.js?v=iris05',
+  './manifest.webmanifest?v=iris05',
+  './iris-icon.svg?v=iris05'
 ];
 
 self.addEventListener('install', (event) => {

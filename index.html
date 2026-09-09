@@ -8,16 +8,17 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="IRIS">
   <meta name="description" content="IRIS — живой интерфейс здоровья.">
-  <link rel="manifest" href="./manifest.webmanifest?v=iris06">
-  <link rel="icon" type="image/svg+xml" href="./iris-icon.svg?v=iris06">
+  <link rel="manifest" href="./manifest.webmanifest?v=iris07">
+  <link rel="icon" type="image/svg+xml" href="./iris-icon.svg?v=iris07">
   <title>IRIS</title>
-  <link rel="stylesheet" href="./styles.css?v=iris06">
+  <link rel="stylesheet" href="./styles.css?v=iris07">
 </head>
 <body>
 <main id="app" class="app mode-home">
   <div class="ambient" aria-hidden="true"></div>
 
   <header class="topbar">
+    <button id="soundToggle" class="icon-button sound-trigger" type="button" aria-label="Звук" aria-pressed="true"><span class="sound-glyph">◉</span></button>
     <div class="brand">I R I S</div>
     <button id="settingsTrigger" class="icon-button settings-trigger" type="button" aria-label="Настройки">••</button>
   </header>
@@ -73,15 +74,17 @@
         <button type="button">Профиль <b>›</b></button>
         <button type="button">Цели <b>›</b></button>
         <button type="button">Напоминания <b>›</b></button>
+        <button id="soundSettings" class="setting-toggle" type="button"><span>Музыка и эффекты</span><em id="soundState">ВКЛ</em></button>
         <button type="button">Здоровье <b>›</b></button>
         <button type="button">Внешний вид <b>›</b></button>
         <button type="button">Приватность <b>›</b></button>
         <button type="button">Данные <b>›</b></button>
       </nav>
+      <div class="settings-note">Звук запускается после первого касания из-за ограничений iPhone.</div>
       <div class="settings-signature">I R I S<br><small>СПОКОЙНЕЕ ВНУТРИ · ЯСНЕЕ СНАРУЖИ</small></div>
     </div>
   </aside>
 </main>
-<script src="./iris-engine.js?v=iris06"></script>
+<script src="./iris-engine.js?v=iris07"></script>
 </body>
 </html>

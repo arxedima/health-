@@ -3,7 +3,7 @@
   "name": "IRIS",
   "short_name": "IRIS",
   "description": "Живой интерфейс здоровья.",
-  "start_url": "/health-/?v=23",
+  "start_url": "/health-/?v=24",
   "scope": "/health-/",
   "display": "standalone",
   "orientation": "portrait-primary",

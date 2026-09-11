@@ -1,1 +1,23 @@
-(()=>{'use strict';console.log('IRIS v30');})();
+(()=>{'use strict';
+const app=document.getElementById('app'),stage=document.getElementById('stage');
+if(!app||!stage)return;
+const css=document.createElement('style');css.textContent=`
+#irisModeV30{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2;opacity:0;transition:opacity .4s ease;mix-blend-mode:screen}
+.app.mode-sport #irisModeV30,.app.mode-water #irisModeV30{opacity:1}
+.app.mode-sport #irisCanvas,.app.mode-water #irisCanvas{opacity:.05!important;filter:brightness(.52) saturate(.64)!important}
+.app.mode-sport #irisOrbitV23{opacity:.18!important}.app.mode-water #irisOrbitV23{opacity:.30!important}
+.app.mode-sport .mode-whisper{color:rgba(229,190,187,.34)!important}.app.mode-water .mode-whisper{color:rgba(188,216,239,.34)!important}`;document.head.appendChild(css);
+const c=document.createElement('canvas');c.id='irisModeV30';c.setAttribute('aria-hidden','true');
+const data=document.getElementById('irisV24Data'),orbit=document.getElementById('irisOrbitV23');if(data&&data.parentNode===stage)stage.insertBefore(c,data);else if(orbit&&orbit.parentNode===stage)stage.insertBefore(c,orbit);else stage.appendChild(c);
+const x=c.getContext('2d',{alpha:true}),TAU=Math.PI*2;let W=0,H=0,D=1,ox=0,oy=0,tx=0,ty=0;
+const themes={sport:{a:[198,82,74],b:[92,34,37],o:[226,113,102],speed:.00066},water:{a:[78,155,222],b:[28,76,125],o:[118,188,238],speed:.00023}};
+const rnd=i=>{const n=Math.sin(i*12.9898+78.233)*43758.5453;return n-Math.floor(n)},rgba=(c,a)=>`rgba(${c[0]},${c[1]},${c[2]},${a})`;
+function mode(){return app.classList.contains('mode-sport')?'sport':app.classList.contains('mode-water')?'water':null}
+function resize(){D=Math.min(2,devicePixelRatio||1);W=innerWidth;H=innerHeight;c.width=Math.floor(W*D);c.height=Math.floor(H*D);c.style.width=W+'px';c.style.height=H+'px';x.setTransform(D,0,0,D,0,0)}
+function vars(){const s=getComputedStyle(document.documentElement);return{cx:parseFloat(s.getPropertyValue('--eye-x'))||W/2,cy:parseFloat(s.getPropertyValue('--eye-y'))||H*.435,r:parseFloat(s.getPropertyValue('--eye-r'))||Math.min(W*.34,H*.178,174)}}
+function fibers(cx,cy,r,p,col,count,alpha,seed,t){for(let i=0;i<count;i++){const q=rnd(i+seed),q2=rnd(i+seed+311),a=i/count*TAU+(q-.5)*.07,ri=p*(1.1+q2*.32),ro=r*(.70+rnd(i+seed+733)*.27),bend=(q2-.5)*.02+Math.sin(i*.61+t*.00015)*.003,mid=(ri+ro)*.52;x.beginPath();x.moveTo(cx+Math.cos(a)*ri,cy+Math.sin(a)*ri);x.quadraticCurveTo(cx+Math.cos(a+bend)*mid,cy+Math.sin(a+bend)*mid,cx+Math.cos(a+bend*.35)*ro,cy+Math.sin(a+bend*.35)*ro);x.strokeStyle=rgba(col,alpha*(.45+q*.7));x.lineWidth=.28+q2*.42;x.stroke()}}
+function drawEye(v,th,t){const cx=v.cx+ox,cy=v.cy+oy,r=v.r*.955*(1+Math.sin(t*.00052)*.0025),p=r*.205;x.save();x.beginPath();x.arc(cx,cy,r,0,TAU);x.clip();const g=x.createRadialGradient(cx,cy,r*.08,cx,cy,r);g.addColorStop(0,'rgba(0,0,0,1)');g.addColorStop(.2,rgba(th.b,.27));g.addColorStop(.45,rgba(th.a,.23));g.addColorStop(.72,rgba(th.b,.20));g.addColorStop(.94,'rgba(3,6,13,.82)');g.addColorStop(1,'rgba(0,0,0,.98)');x.fillStyle=g;x.fillRect(cx-r,cy-r,r*2,r*2);fibers(cx,cy,r,p,th.a,270,.085,31,t);fibers(cx,cy,r,p,th.b,170,.065,901,t);const sh=x.createRadialGradient(cx,cy,r*.68,cx,cy,r);sh.addColorStop(0,'rgba(0,0,0,0)');sh.addColorStop(1,'rgba(0,0,0,.34)');x.fillStyle=sh;x.beginPath();x.arc(cx,cy,r,0,TAU);x.fill();x.fillStyle='rgba(0,0,0,.995)';x.beginPath();x.arc(cx,cy,p,0,TAU);x.fill();x.beginPath();x.arc(cx,cy,p*1.12,0,TAU);x.strokeStyle=rgba(th.a,.12);x.lineWidth=.7;x.stroke();x.restore();x.beginPath();x.arc(cx,cy,r,0,TAU);x.strokeStyle=rgba(th.o,.10);x.lineWidth=.8;x.stroke();return{cx,cy,r}}
+function drawOrbit(e,th,t){const r=e.r*1.095,a=t*th.speed-Math.PI*.62;x.beginPath();x.arc(e.cx,e.cy,r,0,TAU);x.strokeStyle=rgba(th.o,.055);x.lineWidth=.6;x.stroke();x.beginPath();x.arc(e.cx,e.cy,r,a,a+.85);x.strokeStyle=rgba(th.o,.20);x.lineWidth=1;x.lineCap='round';x.stroke()}
+function draw(t){x.clearRect(0,0,W,H);ox+=(tx-ox)*.055;oy+=(ty-oy)*.055;const m=mode();if(m){const e=drawEye(vars(),themes[m],t);drawOrbit(e,themes[m],t)}requestAnimationFrame(draw)}
+stage.addEventListener('pointermove',e=>{const v=vars();tx=Math.max(-1,Math.min(1,(e.clientX-v.cx)/W*2))*v.r*.03;ty=Math.max(-1,Math.min(1,(e.clientY-v.cy)/H*2))*v.r*.025},{passive:true});addEventListener('resize',resize,{passive:true});const note=document.querySelector('.settings-note');if(note)note.textContent='IRIS v30: Спорт и Вода теперь используют тот же глубокий биологичный язык глаза.';resize();requestAnimationFrame(draw);
+})();

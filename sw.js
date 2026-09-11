@@ -1,11 +1,15 @@
-const CACHE='iris-v3.8.3';
+const CACHE='iris-v3.8.4';
 const CORE=[
   '/health-/?v=38',
   '/health-/index.html?v=38',
   '/health-/styles.css?v=iris38',
   '/health-/iris-engine.js?v=iris38',
   '/health-/music-override.js?v=blackglass1',
-  '/health-/black-glass-breathing.m4a.b64?v=1',
+  '/health-/music-aac/part-01.b64?v=1',
+  '/health-/music-aac/part-02.b64?v=1',
+  '/health-/music-aac/part-03.b64?v=1',
+  '/health-/music-aac/part-04.b64?v=1',
+  '/health-/music-aac/part-05.b64?v=1',
   '/health-/iris-v11.js?v=iris38',
   '/health-/iris-v23.js?v=iris38',
   '/health-/iris-v24.js?v=iris38',

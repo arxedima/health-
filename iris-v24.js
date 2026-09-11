@@ -18,22 +18,6 @@ if(localStorage.getItem(DAY_KEY)!==today){
 if(!localStorage.getItem('irisWaterGoalMl'))localStorage.setItem('irisWaterGoalMl','2000');
 if(!localStorage.getItem('irisSportGoalMinV24'))localStorage.setItem('irisSportGoalMinV24','30');
 
-const style=document.createElement('style');
-style.textContent=`
-#irisV24Data{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:3;mix-blend-mode:screen}
-.mode-sport #irisOrbitV23{opacity:.38!important}
-.v24-sport{position:absolute;z-index:9;left:50%;top:calc(var(--eye-y) + var(--eye-r) + 88px);transform:translate(-50%,10px);display:flex;gap:9px;opacity:0;pointer-events:none;transition:.28s cubic-bezier(.16,1,.3,1)}
-.app.mode-sport .v24-sport{opacity:1;pointer-events:auto;transform:translate(-50%,0)}
-.v24-sport button{height:36px;padding:0 17px;border-radius:18px;border:1px solid rgba(255,255,255,.075);background:rgba(255,255,255,.02);color:rgba(255,255,255,.62);font:500 7px/1 -apple-system,BlinkMacSystemFont,"SF Pro Text",sans-serif;letter-spacing:.2em;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
-.v24-sport .main{min-width:108px;border-color:rgba(var(--accent),.15)}
-.v24-sport .main.running{border-color:rgba(var(--accent),.42);box-shadow:0 0 22px rgba(var(--accent),.08);color:rgba(255,255,255,.86)}
-.v24-sport .reset{min-width:74px;color:rgba(255,255,255,.28)}
-.app.mode-sport #motionHint{opacity:.18!important}
-.app.mode-home .metric-value{font-weight:200;letter-spacing:.035em}
-@media(max-height:720px){.v24-sport{top:calc(var(--eye-y) + var(--eye-r) + 72px)}}
-`;
-document.head.appendChild(style);
-
 const dataCanvas=document.createElement('canvas');
 dataCanvas.id='irisV24Data';
 dataCanvas.setAttribute('aria-hidden','true');
@@ -42,7 +26,7 @@ if(orbit&&orbit.parentNode===stage)stage.insertBefore(dataCanvas,orbit);else sta
 const ctx=dataCanvas.getContext('2d',{alpha:true});
 let W=0,H=0,D=1;
 function resize(){
-  D=Math.min(2,window.devicePixelRatio||1);W=innerWidth;H=innerHeight;
+  D=Math.min(2,window.devicePixelRatio||1);W=stage.clientWidth;H=stage.clientHeight;
   dataCanvas.width=Math.max(1,Math.floor(W*D));dataCanvas.height=Math.max(1,Math.floor(H*D));
   dataCanvas.style.width=W+'px';dataCanvas.style.height=H+'px';ctx.setTransform(D,0,0,D,0,0);
 }
@@ -90,7 +74,7 @@ function fmtMin(ms){const m=Math.floor(ms/60000);return `${m} МИН`}
 const controls=document.createElement('div');
 controls.className='v24-sport';
 controls.innerHTML='<button class="main" type="button">СТАРТ</button><button class="reset" type="button">СБРОС</button>';
-stage.appendChild(controls);
+document.getElementById('metric').appendChild(controls);
 const startBtn=controls.querySelector('.main');
 const resetBtn=controls.querySelector('.reset');
 function legacyButton(sel){return document.querySelector(sel)}
@@ -110,17 +94,12 @@ function syncMetrics(){
     metricLabel.textContent='IRIS';
     metricValue.textContent=String(sc.value);
     metricCaption.textContent=`ВОДА ${w}% · СПОРТ ${sm}/${sc.goalMin} МИН`;
-  }else if(m==='water'){
-    const w=waterState();
-    metricLabel.textContent='ВОДА';
-    metricValue.textContent=(w.ml/1000).toFixed(2).replace('.',',').replace(/,00$/,',0')+' Л';
-    metricCaption.textContent=`ИЗ ${(w.goal/1000).toFixed(1).replace('.',',')} Л · ${Math.round(w.p*100)}%`;
   }else if(m==='sport'){
     const s=sportNow();
     metricLabel.textContent='СПОРТ';
     const sec=Math.floor(s.ms/1000),min=Math.floor(sec/60),ss=sec%60,h=Math.floor(min/60),mm=min%60;
     metricValue.textContent=h?`${String(h).padStart(2,'0')}:${String(mm).padStart(2,'0')}:${String(ss).padStart(2,'0')}`:`${String(mm).padStart(2,'0')}:${String(ss).padStart(2,'0')}`;
-    metricCaption.textContent=s.running?'ТРЕНИРОВКА ИДЁТ · КОСНИСЬ — ПАУЗА':s.ms>0?'ПАУЗА · КОСНИСЬ — ПРОДОЛЖИТЬ':'КОСНИСЬ — СТАРТ';
+    metricCaption.textContent=s.running?'ТРЕНИРОВКА ИДЁТ · ЗРАЧОК — ПАУЗА':s.ms>0?'ПАУЗА · ЗРАЧОК — ПРОДОЛЖИТЬ':'ЗРАЧОК — СТАРТ';
   }else if(m==='insights'){
     const stats=[...document.querySelectorAll('.insight-stats > div')];
     const sc=score(),w=waterState();
@@ -131,7 +110,9 @@ function syncMetrics(){
   syncSportControls();
 }
 
+const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)');
 function draw(t){
+ if(reducedMotion.matches)t=0;
   ctx.clearRect(0,0,W,H);
   const m=mode(),v=vars();
   ctx.save();ctx.globalCompositeOperation='screen';
@@ -147,21 +128,6 @@ function draw(t){
       ctx.beginPath();ctx.arc(dx,dy,2.05*pulse,0,Math.PI*2);ctx.fillStyle='rgba(255,255,255,.92)';ctx.fill();
       const g=ctx.createRadialGradient(dx,dy,0,dx,dy,13);g.addColorStop(0,rgba(v.c,.22));g.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(dx,dy,13,0,Math.PI*2);ctx.fill();
     }
-  }else if(m==='water'){
-    const w=waterState();
-    const r=v.r*.985;
-    const level=v.y+r-(2*r*w.p);
-    ctx.save();ctx.beginPath();ctx.arc(v.x,v.y,r,0,Math.PI*2);ctx.clip();
-    const grad=ctx.createLinearGradient(0,level,0,v.y+r);
-    grad.addColorStop(0,rgba(v.c,.018));grad.addColorStop(.55,rgba(v.c,.045));grad.addColorStop(1,rgba(v.c,.085));
-    ctx.fillStyle=grad;ctx.fillRect(v.x-r,level,v.r*2,v.y+r-level);
-    ctx.beginPath();
-    for(let i=0;i<=72;i++){
-      const xx=v.x-r+(2*r)*(i/72);
-      const yy=level+Math.sin(i*.31+t*.002)*Math.max(1.2,v.r*.009)*(1-w.p*.35);
-      if(!i)ctx.moveTo(xx,yy);else ctx.lineTo(xx,yy);
-    }
-    ctx.strokeStyle=rgba(v.c,.27);ctx.lineWidth=.75;ctx.stroke();ctx.restore();
   }
   ctx.restore();requestAnimationFrame(draw);
 }

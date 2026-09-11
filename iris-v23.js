@@ -12,7 +12,7 @@ style.textContent=`
 .sound-trigger::after{opacity:.42}
 .mode-whisper{opacity:.62}
 .motion-hint{opacity:.72}
-.app.mode-sleep #irisOrbitV23{opacity:.34}
+
 `;
 document.head.appendChild(style);
 
@@ -31,15 +31,17 @@ const dust=Array.from({length:74},(_,i)=>({
  p:i*1.417
 }));
 const rgba=(a,c)=>`rgba(${c[0]|0},${c[1]|0},${c[2]|0},${a})`;
-function resize(){D=Math.min(2,devicePixelRatio||1);W=innerWidth;H=innerHeight;c.width=Math.max(1,Math.floor(W*D));c.height=Math.max(1,Math.floor(H*D));c.style.width=W+'px';c.style.height=H+'px';x.setTransform(D,0,0,D,0,0)}
+function resize(){D=Math.min(2,devicePixelRatio||1);W=stage.clientWidth;H=stage.clientHeight;c.width=Math.max(1,Math.floor(W*D));c.height=Math.max(1,Math.floor(H*D));c.style.width=W+'px';c.style.height=H+'px';x.setTransform(D,0,0,D,0,0)}
 function vars(){const s=getComputedStyle(document.documentElement),raw=(s.getPropertyValue('--accent')||'198 220 237').trim().split(/\s+/).map(Number);return{cx:parseFloat(s.getPropertyValue('--eye-x'))||W/2,cy:parseFloat(s.getPropertyValue('--eye-y'))||H*.435,r:parseFloat(s.getPropertyValue('--eye-r'))||Math.min(W*.34,H*.178,174),col:[raw[0]||198,raw[1]||220,raw[2]||237]}}
 function mode(){for(const m of ['sport','water','food','sleep','insights','home'])if(app.classList.contains('mode-'+m))return m;return'home'}
 function ring(cx,cy,r,col,a,w=.5){x.beginPath();x.arc(cx,cy,r,0,Math.PI*2);x.strokeStyle=rgba(a,col);x.lineWidth=w;x.stroke()}
 function arc(cx,cy,r,a0,len,col,a,w=1){x.beginPath();x.arc(cx,cy,r,a0,a0+len);x.strokeStyle=rgba(a,col);x.lineWidth=w;x.lineCap='round';x.stroke()}
+const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)');
 function draw(t){
+ if(reducedMotion.matches)t=0;
  x.clearRect(0,0,W,H);
  const v=vars(),m=mode(),menu=app.classList.contains('menu-open');
- const fade=m==='sleep'?.30:m==='insights'?.55:1;
+ const fade=m==='insights'?.55:1;
  const breath=1+Math.sin(t*.00062)*.0036;
  const speed=m==='sport'?.00105:m==='water'?.00023:m==='food'?.00016:m==='sleep'?.000045:.00012;
  x.save();x.globalCompositeOperation='screen';
@@ -63,14 +65,7 @@ function draw(t){
  });
  const lineR=v.r*1.025*breath;
  const a0=t*speed-Math.PI*.64;
- if(m==='sport'){
-   const progress=.77;
-   arc(v.cx,v.cy,lineR,-Math.PI*.76,Math.PI*2*progress,v.col,.53,1.55);
-   const pa=-Math.PI*.76+Math.PI*2*progress+t*.00022;
-   const dx=v.cx+Math.cos(pa)*lineR,dy=v.cy+Math.sin(pa)*lineR;
-   x.beginPath();x.arc(dx,dy,2.2,0,Math.PI*2);x.fillStyle='rgba(255,255,255,.92)';x.fill();
-   const g=x.createRadialGradient(dx,dy,0,dx,dy,11);g.addColorStop(0,rgba(.22,v.col));g.addColorStop(1,'rgba(0,0,0,0)');x.fillStyle=g;x.beginPath();x.arc(dx,dy,11,0,Math.PI*2);x.fill();
- }else if(m!=='sleep'){
+ if(m!=='sport'){
    const len=m==='water'?1.05:m==='food'?.78:.92;
    const alpha=m==='home'?.20:m==='water'?.24:m==='food'?.17:.14;
    arc(v.cx,v.cy,lineR,a0,len,v.col,alpha*(menu?1.7:1),1.05);
@@ -78,19 +73,9 @@ function draw(t){
    const sa=a0+len,dx=v.cx+Math.cos(sa)*lineR,dy=v.cy+Math.sin(sa)*lineR;
    x.beginPath();x.arc(dx,dy,1.15+touchEnergy*.8,0,Math.PI*2);x.fillStyle=rgba((alpha+.12+touchEnergy*.16),v.col);x.fill();
  }
- if(m==='water'){
-   const yy=v.cy+v.r*.66,amp=v.r*.010;
-   x.beginPath();
-   for(let i=0;i<=64;i++){
-     const xx=v.cx-v.r*1.02+(v.r*2.04)*(i/64);
-     const y=yy+Math.sin(i*.29+t*.0022)*amp;
-     if(!i)x.moveTo(xx,y);else x.lineTo(xx,y);
-   }
-   x.strokeStyle=rgba(.18*fade,v.col);x.lineWidth=.6;x.stroke();
- }
  x.restore();touchEnergy*=.93;requestAnimationFrame(draw);
 }
-stage.addEventListener('pointerdown',e=>{px=e.clientX;py=e.clientY;touchEnergy=1},{passive:true});
-stage.addEventListener('pointermove',e=>{px=e.clientX;py=e.clientY;if(e.buttons||e.pressure)touchEnergy=Math.min(1,touchEnergy+.07)},{passive:true});
+stage.addEventListener('pointerdown',e=>{const b=stage.getBoundingClientRect();px=e.clientX-b.left;py=e.clientY-b.top;touchEnergy=1},{passive:true});
+stage.addEventListener('pointermove',e=>{const b=stage.getBoundingClientRect();px=e.clientX-b.left;py=e.clientY-b.top;if(e.buttons||e.pressure)touchEnergy=Math.min(1,touchEnergy+.07)},{passive:true});
 addEventListener('resize',resize,{passive:true});resize();requestAnimationFrame(draw);
 })();

@@ -6,9 +6,9 @@ if(!app||!stage)return;
 const style=document.createElement('style');
 style.textContent=`
 .v11-panel{position:absolute;z-index:8;left:50%;top:calc(var(--eye-y) + var(--eye-r) + 94px);transform:translate(-50%,10px);opacity:0;pointer-events:none;display:flex;align-items:center;justify-content:center;gap:10px;transition:.35s cubic-bezier(.16,1,.3,1)}
-.v11-panel.visible{opacity:1;transform:translate(-50%,0);pointer-events:auto}.v11-btn{height:38px;border-radius:20px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.026);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);padding:0 18px;color:rgba(255,255,255,.78);font-size:8px;letter-spacing:.22em}.v11-btn.main{min-width:118px}.v11-btn.main.running{border-color:rgba(var(--accent),.36);box-shadow:0 0 26px rgba(var(--accent),.09)}.v11-btn.ghost{min-width:76px;color:rgba(255,255,255,.38)}
+.v11-panel.visible{opacity:1;transform:translate(-50%,0);pointer-events:auto}.v11-btn{height:38px;border-radius:20px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.026);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);padding:0 18px;color:rgba(255,255,255,.78);font-size:8px;letter-spacing:.22em}.v11-btn.main{min-width:118px}.v11-btn.main.running{border-color:rgba(var(--accent) / .36);box-shadow:0 0 26px rgba(var(--accent) / .09)}.v11-btn.ghost{min-width:76px;color:rgba(255,255,255,.38)}
 .v11-today{position:absolute;top:51px;left:50%;transform:translateX(-50%);font-size:7px;letter-spacing:.18em;color:rgba(255,255,255,.27);white-space:nowrap}.v11-beat{position:absolute;z-index:4;left:var(--eye-x);top:var(--eye-y);width:calc(var(--eye-r)*2.18);height:calc(var(--eye-r)*2.18);transform:translate(-50%,-50%) scale(.98);border-radius:50%;border:1px solid rgba(220,80,66,0);pointer-events:none;opacity:0}.mode-sport .v11-beat.running{opacity:1;animation:v11beat .78s linear infinite}@keyframes v11beat{0%,100%{transform:translate(-50%,-50%) scale(.98);border-color:rgba(220,80,66,.12);box-shadow:0 0 0 rgba(220,80,66,0)}12%{transform:translate(-50%,-50%) scale(1.025);border-color:rgba(240,105,82,.56);box-shadow:0 0 28px rgba(220,80,66,.12)}30%{transform:translate(-50%,-50%) scale(.995);border-color:rgba(220,80,66,.18)}48%{transform:translate(-50%,-50%) scale(1.012);border-color:rgba(220,80,66,.32)}70%{transform:translate(-50%,-50%) scale(1);border-color:rgba(220,80,66,.08)}}
-.sound-trigger.v11-playing .sound-dot{background:rgba(235,245,255,.92);box-shadow:0 0 18px rgba(var(--accent),.5)}.sound-trigger.v11-playing::after{content:'ИГРАЕТ';position:absolute;left:34px;font-size:6px;letter-spacing:.15em;color:rgba(255,255,255,.34)}
+.sound-trigger.v11-playing .sound-dot{background:rgba(235,245,255,.92);box-shadow:0 0 18px rgba(var(--accent) / .5)}.sound-trigger.v11-playing::after{content:'ИГРАЕТ';position:absolute;left:34px;font-size:6px;letter-spacing:.15em;color:rgba(255,255,255,.34)}
 @media(max-height:720px){.v11-panel{top:calc(var(--eye-y) + var(--eye-r) + 80px)}.v11-today{display:none}}
 `;
 document.head.appendChild(style);
@@ -23,7 +23,7 @@ const nowMs=()=>elapsed+(running&&started?Math.max(0,Date.now()-started):0),fmt=
 function save(){localStorage.setItem('irisSportElapsedV11',String(elapsed));localStorage.setItem('irisSportRunningV11',running?'1':'0');localStorage.setItem('irisSportStartedV11',String(started||0))}
 function todayMs(){let d=new Date();d.setHours(0,0,0,0);return history.filter(x=>x?.t>=d.getTime()).reduce((a,x)=>a+(x.ms||0),0)+nowMs()}
 function sportMode(){return app.classList.contains('mode-sport')}
-function renderSport(){panel.classList.toggle('visible',sportMode());beat.classList.toggle('running',sportMode()&&running);mainBtn.textContent=running?'ПАУЗА':nowMs()>0?'ПРОДОЛЖИТЬ':'СТАРТ';mainBtn.classList.toggle('running',running);today.textContent='СЕГОДНЯ · '+Math.round(todayMs()/60000)+' МИН';if(sportMode()){metric.textContent=fmt(nowMs());caption.textContent=running?'ТРЕНИРОВКА ИДЁТ · КОСНИСЬ — ПАУЗА':nowMs()>0?'ПАУЗА · КОСНИСЬ — ПРОДОЛЖИТЬ':'КОСНИСЬ — СТАРТ'}}
+function renderSport(){panel.classList.toggle('visible',sportMode());beat.classList.toggle('running',sportMode()&&running);mainBtn.textContent=running?'ПАУЗА':nowMs()>0?'ПРОДОЛЖИТЬ':'СТАРТ';mainBtn.classList.toggle('running',running);today.textContent='СЕГОДНЯ · '+Math.round(todayMs()/60000)+' МИН';if(sportMode()){metric.textContent=fmt(nowMs());caption.textContent=running?'ТРЕНИРОВКА ИДЁТ · ЗРАЧОК — ПАУЗА':nowMs()>0?'ПАУЗА · ЗРАЧОК — ПРОДОЛЖИТЬ':'ЗРАЧОК — СТАРТ'}}
 function toggleSport(){if(running){elapsed=nowMs();running=false;started=0}else{started=Date.now();running=true}save();renderSport();playHit(running);try{navigator.vibrate?.(running?[14,28,10]:8)}catch{}}
 function resetSport(){let ms=nowMs();if(ms>30000){history.unshift({t:Date.now(),ms});history=history.slice(0,30);localStorage.setItem('irisSportHistoryV11',JSON.stringify(history))}elapsed=0;running=false;started=0;save();renderSport();playClick()}
 mainBtn.addEventListener('click',e=>{e.stopPropagation();unlockAudio();toggleSport()});resetBtn.addEventListener('click',e=>{e.stopPropagation();unlockAudio();resetSport()});
@@ -47,8 +47,8 @@ replaceSoundControl();
 document.addEventListener('pointerdown',unlockAudio,{capture:true,passive:true});document.addEventListener('touchstart',unlockAudio,{capture:true,passive:true});
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&enabled){try{media?.play().then(()=>{playing=true;syncSound()}).catch(()=>{playing=false;syncSound()})}catch{};try{ctx?.resume()}catch{}}});
 
-/* Tap the eye in Sport = start/pause. Long hold still belongs to the main IRIS engine. */
-let tap=null;stage.addEventListener('pointerdown',e=>{if(!sportMode()||e.target.closest('button'))return;tap={x:e.clientX,y:e.clientY,t:performance.now()}},{capture:false});stage.addEventListener('pointerup',e=>{if(!tap||!sportMode())return;let d=Math.hypot(e.clientX-tap.x,e.clientY-tap.y),dt=performance.now()-tap.t;tap=null;if(dt<330&&d<20)toggleSport()},{capture:false});
+/* The eye engine recognizes one pupil tap, independently of fiber gestures. */
+stage.addEventListener('iris:pupil-tap',()=>{if(sportMode())toggleSport()});
 
 new MutationObserver(renderSport).observe(app,{attributes:true,attributeFilter:['class']});setInterval(renderSport,250);renderSport();
 })();

@@ -1,15 +1,15 @@
-const CACHE='iris-v3.3.0';
+const CACHE='iris-v3.0.0';
 const CORE=[
-  '/health-/?v=33',
-  '/health-/index.html?v=33',
-  '/health-/styles.css?v=iris33',
-  '/health-/iris-engine.js?v=iris33',
-  '/health-/iris-v11.js?v=iris33',
-  '/health-/iris-v23.js?v=iris33',
-  '/health-/iris-v24.js?v=iris33',
-  '/health-/iris-v29.js?v=iris33',
-  '/health-/iris-v33.js?v=iris33',
-  '/health-/manifest.webmanifest?v=iris33',
+  '/health-/?v=30',
+  '/health-/index.html?v=30',
+  '/health-/styles.css?v=iris30',
+  '/health-/iris-engine.js?v=iris30',
+  '/health-/iris-v11.js?v=iris30',
+  '/health-/iris-v23.js?v=iris30',
+  '/health-/iris-v24.js?v=iris30',
+  '/health-/iris-v29.js?v=iris30',
+  '/health-/iris-v30.js?v=iris30',
+  '/health-/manifest.webmanifest?v=iris30',
   '/health-/app-icon.png?v=20'
 ];
 self.addEventListener('install',event=>{
@@ -23,5 +23,5 @@ self.addEventListener('fetch',event=>{
   event.respondWith(fetch(event.request,{cache:'no-store'}).then(response=>{
     if(response&&response.ok){const copy=response.clone();caches.open(CACHE).then(cache=>cache.put(event.request,copy));}
     return response;
-  }).catch(()=>caches.match(event.request).then(response=>response||caches.match('/health-/?v=33'))));
+  }).catch(()=>caches.match(event.request).then(response=>response||caches.match('/health-/?v=30'))));
 });

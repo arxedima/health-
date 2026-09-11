@@ -11,12 +11,12 @@
   <meta name="application-name" content="IRIS">
   <meta name="description" content="IRIS — живой интерфейс здоровья.">
   <link rel="canonical" href="https://arxedima.github.io/health-/">
-  <link rel="manifest" href="/health-/manifest.webmanifest?v=iris28">
+  <link rel="manifest" href="/health-/manifest.webmanifest?v=iris29">
   <link rel="icon" type="image/png" href="/health-/app-icon.png?v=20">
   <link rel="apple-touch-icon" href="/health-/app-icon.png?v=20">
   <link rel="apple-touch-icon-precomposed" href="/health-/app-icon.png?v=20">
   <title>IRIS</title>
-  <link rel="stylesheet" href="./styles.css?v=iris28">
+  <link rel="stylesheet" href="./styles.css?v=iris29">
 </head>
 <body>
 <main id="app" class="app mode-home">
@@ -88,7 +88,7 @@
         <button type="button">Приватность <b>›</b></button>
         <button type="button">Данные <b>›</b></button>
       </nav>
-      <div class="settings-note">IRIS v28: исправлены Сон, компоновка Спорта и нижняя safe-area в браузере.</div>
+      <div class="settings-note">IRIS v29: Сон — нормальный круглый глаз; Спорт и нижний интерфейс адаптированы под safe-area iPhone.</div>
       <div class="settings-signature">I R I S<br><small>СПОКОЙНЕЕ ВНУТРИ · ЯСНЕЕ СНАРУЖИ</small></div>
     </div>
   </aside>
@@ -96,12 +96,12 @@
 <script>
 (()=>{const d=new Date(),day=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;if(localStorage.getItem('irisWaterDateV24')!==day){localStorage.setItem('irisWaterDateV24',day);localStorage.setItem('irisWaterMl','0')}})();
 </script>
-<script src="./iris-engine.js?v=iris28"></script>
+<script src="./iris-engine.js?v=iris29"></script>
 <script>if(localStorage.getItem('irisSound')!=='off'){const b=document.getElementById('soundToggle');try{b&&b.click()}catch(e){}localStorage.setItem('irisSound','on')}</script>
-<script src="./iris-v11.js?v=iris28"></script>
-<script src="./iris-v23.js?v=iris28"></script>
-<script src="./iris-v24.js?v=iris28"></script>
-<script src="./iris-v28.js?v=iris28"></script>
+<script src="./iris-v11.js?v=iris29"></script>
+<script src="./iris-v23.js?v=iris29"></script>
+<script src="./iris-v24.js?v=iris29"></script>
+<script src="./iris-v29.js?v=iris29"></script>
 <script>
 if('serviceWorker' in navigator){
   addEventListener('load',async()=>{
@@ -109,7 +109,7 @@ if('serviceWorker' in navigator){
       const regs=await navigator.serviceWorker.getRegistrations();
       await Promise.all(regs.map(r=>r.unregister()));
       if('caches' in window){const keys=await caches.keys();await Promise.all(keys.filter(k=>k.startsWith('iris-')).map(k=>caches.delete(k)));}
-      await navigator.serviceWorker.register('./sw.js?v=iris28');
+      await navigator.serviceWorker.register('./sw.js?v=iris29');
     }catch(e){}
   },{once:true});
 }

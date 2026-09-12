@@ -11,12 +11,13 @@
   <meta name="application-name" content="IRIS">
   <meta name="description" content="IRIS — живой интерфейс здоровья.">
   <link rel="canonical" href="https://arxedima.github.io/health-/">
-  <link rel="manifest" href="/health-/manifest.webmanifest?v=iris38-icon22">
+  <link rel="manifest" href="/health-/manifest.webmanifest?v=iris39-icon22">
   <link rel="icon" type="image/png" href="/health-/app-icon.png?v=22">
   <link rel="apple-touch-icon" href="/health-/apple-touch-icon.png?v=22">
   <link rel="apple-touch-icon-precomposed" href="/health-/apple-touch-icon.png?v=22">
   <title>IRIS</title>
-  <link rel="stylesheet" href="./styles.css?v=iris38">
+  <link rel="stylesheet" href="./styles.css?v=iris39">
+  <link rel="stylesheet" href="./journal.css?v=iris39">
 </head>
 <body>
 <main id="app" class="app mode-home">
@@ -92,19 +93,18 @@
     </div>
   </aside>
 </main>
-<script>
-(()=>{const d=new Date(),day=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;if(localStorage.getItem('irisWaterDateV24')!==day){localStorage.setItem('irisWaterDateV24',day);localStorage.setItem('irisWaterMl','0')}})();
-</script>
-<script src="./iris-engine.js?v=iris38"></script>
+<script src="./iris-data.js?v=iris39"></script>
+<script src="./iris-engine.js?v=iris39"></script>
 <script src="./music-override.js?v=blackglass4"></script>
-<script src="./iris-v11.js?v=iris38"></script>
-<script src="./iris-v23.js?v=iris38"></script>
-<script src="./iris-v24.js?v=iris38"></script>
+<script src="./iris-v11.js?v=iris39"></script>
+<script src="./iris-v23.js?v=iris39"></script>
+<script src="./iris-v24.js?v=iris39"></script>
+<script src="./iris-journal.js?v=iris39"></script>
 <script>
 if('serviceWorker' in navigator){
   addEventListener('load',async()=>{
     try{
-      const registration=await navigator.serviceWorker.register('./sw.js?v=iris38-music4',{updateViaCache:'none'});
+      const registration=await navigator.serviceWorker.register('./sw.js?v=iris39-music4',{updateViaCache:'none'});
       await registration.update();
     }catch(e){}
   },{once:true});

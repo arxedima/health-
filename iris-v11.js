@@ -21,11 +21,12 @@ let elapsed=Math.max(0,+localStorage.getItem('irisSportElapsedV11')||0),running=
 try{history=JSON.parse(localStorage.getItem('irisSportHistoryV11')||'[]');if(!Array.isArray(history))history=[]}catch{history=[]}
 const nowMs=()=>elapsed+(running&&started?Math.max(0,Date.now()-started):0),fmt=ms=>{let s=Math.floor(ms/1000),m=Math.floor(s/60),h=Math.floor(m/60);s%=60;m%=60;return h?`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`:`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`};
 function save(){localStorage.setItem('irisSportElapsedV11',String(elapsed));localStorage.setItem('irisSportRunningV11',running?'1':'0');localStorage.setItem('irisSportStartedV11',String(started||0))}
-function todayMs(){let d=new Date();d.setHours(0,0,0,0);return history.filter(x=>x?.t>=d.getTime()).reduce((a,x)=>a+(x.ms||0),0)+nowMs()}
+function todayMs(){if(window.IRISData)return IRISData.summary().sport*60000;let d=new Date();d.setHours(0,0,0,0);return history.filter(x=>x?.t>=d.getTime()).reduce((a,x)=>a+(x.ms||0),0)+nowMs()}
 function sportMode(){return app.classList.contains('mode-sport')}
 function renderSport(){panel.classList.toggle('visible',sportMode());beat.classList.toggle('running',sportMode()&&running);mainBtn.textContent=running?'ПАУЗА':nowMs()>0?'ПРОДОЛЖИТЬ':'СТАРТ';mainBtn.classList.toggle('running',running);today.textContent='СЕГОДНЯ · '+Math.round(todayMs()/60000)+' МИН';if(sportMode()){metric.textContent=fmt(nowMs());caption.textContent=running?'ТРЕНИРОВКА ИДЁТ · ЗРАЧОК — ПАУЗА':nowMs()>0?'ПАУЗА · ЗРАЧОК — ПРОДОЛЖИТЬ':'ЗРАЧОК — СТАРТ'}}
-function toggleSport(){if(running){elapsed=nowMs();running=false;started=0}else{started=Date.now();running=true}save();renderSport();playHit(running);try{navigator.vibrate?.(running?[14,28,10]:8)}catch{}}
-function resetSport(){let ms=nowMs();if(ms>30000){history.unshift({t:Date.now(),ms});history=history.slice(0,30);localStorage.setItem('irisSportHistoryV11',JSON.stringify(history))}elapsed=0;running=false;started=0;save();renderSport();playClick()}
+function toggleSport(){let segment=running&&started?{start:started,end:Date.now()}:null;if(running){elapsed=nowMs();running=false;started=0}else{started=Date.now();running=true}save();if(segment)recordSegment(segment);renderSport();dispatchEvent(new CustomEvent('iris:sport'));playHit(running);try{navigator.vibrate?.(running?[14,28,10]:8)}catch{}}
+function recordSegment(s){try{window.IRISData?.addSport(s.start,s.end)}catch(error){dispatchEvent(new CustomEvent('iris:error',{detail:error.message}))}}
+function resetSport(){if(running&&started)recordSegment({start:started,end:Date.now()});let ms=nowMs();if(ms>30000){history.unshift({t:Date.now(),ms});history=history.slice(0,30);localStorage.setItem('irisSportHistoryV11',JSON.stringify(history))}elapsed=0;running=false;started=0;save();renderSport();dispatchEvent(new CustomEvent('iris:sport'));playClick()}
 mainBtn.addEventListener('click',e=>{e.stopPropagation();unlockAudio();toggleSport()});resetBtn.addEventListener('click',e=>{e.stopPropagation();unlockAudio();resetSport()});
 
 /* ---------- iPhone-proof dark background music ---------- */

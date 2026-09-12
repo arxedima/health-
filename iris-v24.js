@@ -55,6 +55,7 @@ function sportNow(){
   return{ms:elapsed,running};
 }
 function sportTodayMs(){
+  if(window.IRISData)return IRISData.summary().sport*60000;
   let total=sportNow().ms;
   try{
     const h=JSON.parse(localStorage.getItem('irisSportHistoryV11')||'[]');

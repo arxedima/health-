@@ -84,9 +84,9 @@ resetBtn.addEventListener('click',e=>{e.stopPropagation();legacyButton('.v11-pan
 
 function syncSportControls(){
   const s=sportNow();
-  startBtn.textContent=s.running?'ПАУЗА':s.ms>0?'ПРОДОЛЖИТЬ':'СТАРТ';
+  startBtn.textContent=s.running?'Пауза':s.ms>0?'Продолжить':'Начать тренировку';
   startBtn.classList.toggle('running',s.running);
-  resetBtn.style.opacity=s.ms>0?'1':'.45';
+  resetBtn.style.opacity=s.ms>0?'1':'.35';resetBtn.disabled=s.ms===0;
 }
 function syncMetrics(){
   const m=mode();
@@ -100,7 +100,7 @@ function syncMetrics(){
     metricLabel.textContent='СПОРТ';
     const sec=Math.floor(s.ms/1000),min=Math.floor(sec/60),ss=sec%60,h=Math.floor(min/60),mm=min%60;
     metricValue.textContent=h?`${String(h).padStart(2,'0')}:${String(mm).padStart(2,'0')}:${String(ss).padStart(2,'0')}`:`${String(mm).padStart(2,'0')}:${String(ss).padStart(2,'0')}`;
-    metricCaption.textContent=s.running?'ТРЕНИРОВКА ИДЁТ · ЗРАЧОК — ПАУЗА':s.ms>0?'ПАУЗА · ЗРАЧОК — ПРОДОЛЖИТЬ':'ЗРАЧОК — СТАРТ';
+    metricCaption.textContent=s.running?'Тренировка идёт':s.ms>0?'На паузе':'Твой темп. Твоё время.';
   }else if(m==='insights'){
     const stats=[...document.querySelectorAll('.insight-stats > div')];
     const sc=score(),w=waterState();

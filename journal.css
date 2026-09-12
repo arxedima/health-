@@ -87,3 +87,78 @@
 button:focus-visible{outline:1px solid #9bc6e6;outline-offset:4px}
 @media(max-height:640px){html,body{overflow-y:auto}.app{height:680px;min-height:100dvh}.stats-heading{margin-top:24px}.statistics-view{padding-bottom:100px}}
 @media(prefers-reduced-motion:reduce){#stage canvas{transition:none}}
+
+/* IRIS v40 — a single focal point, with generous black space. */
+#app .ambient{display:none}
+#app .noise{opacity:.014}
+#app .topbar{height:64px;top:calc(var(--safe-top) + 4px)}
+#app .brand{font-size:20px;font-weight:250;letter-spacing:.62em}
+#app .sound-trigger{width:44px;height:44px;transform:none;opacity:.7;background:none;border-color:rgba(220,235,245,.08)}
+#app .sound-trigger::after{display:none}
+#app .settings-trigger{width:44px;height:44px;right:16px;color:#8a929a}
+#app .mode-whisper{display:none}
+#app .metric{width:min(84%,360px)}
+#app .metric-label{font-size:11px;letter-spacing:.28em;color:#adb9c4;font-weight:400}
+#app .metric-value{font-size:clamp(40px,11.5vw,54px);font-weight:230;letter-spacing:-.025em;line-height:1.1;min-height:52px;margin-top:14px;text-shadow:none}
+#app.mode-home .metric-value{font-size:58px}
+#app.mode-sleep .metric-value{font-size:clamp(32px,9vw,46px)}
+#app .metric-caption{font-size:13px;line-height:1.55;letter-spacing:0;color:#858e98;max-width:285px;margin-top:10px}
+#app .mode-dots{display:none}
+#app .motion-hint{display:none}
+#app[data-gesture-hint="true"].mode-home .motion-hint{display:block;font-size:11px;letter-spacing:0;color:#818a94;opacity:1;margin-top:12px}
+#app .motion-hint i{display:none}
+#app .home-actions{display:none;order:3;width:min(100%,284px);margin-top:24px;pointer-events:auto}
+#app.mode-home .home-actions{display:block}
+#app .journal-actions,#app .water-panel,#app .v24-sport{width:min(100%,284px);margin-top:24px}
+#app .primary-action,#app .water-actions [data-water="250"],#app .v24-sport .main{min-height:50px;line-height:1.4;font-size:15px;letter-spacing:0;border:1px solid rgba(var(--accent) / .23);background:linear-gradient(165deg,rgba(var(--accent) / .075),rgba(var(--accent) / .015));border-radius:28px;box-shadow:inset 0 1px 0 rgba(var(--accent) / .045);color:#e4eaf0;padding:12px 18px}
+#app .primary-action:active,#app .water-actions [data-water="250"]:active,#app .v24-sport .main:active{background:rgba(var(--accent) / .13);transform:scale(.985)}
+#app .home-actions .primary-action{background:transparent;border-color:rgba(220,235,245,.13)}
+#app .home-actions svg{width:19px;height:19px;opacity:.7}
+#app .water-actions,#app.mode-sport .v24-sport{display:flex;flex-direction:column;gap:4px}
+#app .water-actions [data-water="250"]{order:0}
+#app .water-actions [data-water="-250"],#app .v24-sport .reset{order:1;min-height:44px;flex:none;background:transparent;border:0;color:#858e98;font-size:13px;letter-spacing:0;padding:10px}
+#app .water-hint{display:none}
+#app .quiet-action{color:#949da6;font-size:13px;min-height:44px}
+#app .last-meal{display:none}
+#app .journal-actions{gap:4px}
+#app .goal-action{color:#9dabb8;margin:0 0 10px;font-size:13px;min-height:44px;text-align:left}
+#app.menu-open .home-actions,#app.menu-open .journal-actions{pointer-events:none}
+#app.menu-open .metric{opacity:0}
+#app .bottom-nav{width:min(88%,360px);padding:6px 28px 0;bottom:max(18px,env(safe-area-inset-bottom));border:0;border-radius:0;backdrop-filter:none;-webkit-backdrop-filter:none;background:none;justify-content:space-between}
+#app .bottom-nav button{flex-direction:column;justify-content:center;min-width:72px;min-height:54px;gap:6px;color:#727b84;font-size:10px;padding:5px 12px;position:relative}
+#app .bottom-nav svg{width:21px;height:21px}
+#app .bottom-nav button[aria-current="page"]{color:#cbdce9}
+#app .bottom-nav button[aria-current="page"]::before{content:'';position:absolute;top:0;left:calc(50% - 8px);width:16px;height:1px;background:#bdcddd;box-shadow:0 0 8px #95bcdd55}
+#app .v11-beat{display:none}
+#app #irisV24Data{transition:opacity .2s}
+#app.menu-open #irisV24Data{opacity:0}
+#app .radial-menu{width:min(calc(var(--eye-r)*2.28),calc(100% - 36px));height:calc(var(--eye-r)*2.28);max-height:calc(100vw - 36px)}
+#app .menu-orbit{inset:0;background:radial-gradient(circle,#000d 5%,#0008 64%,#0000 72%);border:0;box-shadow:none}
+#app .radial-item{width:70px;min-width:0;height:60px;min-height:48px;padding:4px;flex-direction:column;gap:7px;border:0;border-radius:18px;background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none;font-size:10px;letter-spacing:.06em;color:#abb6c0}
+#app .radial-item svg{width:22px;height:22px;color:var(--item-color);opacity:.82}
+#app .radial-item.active{color:#fff;background:rgba(0,0,0,.4);box-shadow:0 0 20px rgba(var(--accent) / .06)}
+#app .radial-item.active svg{opacity:1;filter:drop-shadow(0 0 5px var(--item-color))}
+#app .radial-top{left:50%;top:5%;transform:translateX(-50%)}
+#app .radial-bottom{left:50%;bottom:5%;transform:translateX(-50%)}
+#app .radial-left{left:0;top:50%;transform:translateY(-50%)}
+#app .radial-right{right:0;top:50%;transform:translateY(-50%)}
+#app .radial-core{width:40px;height:40px;aspect-ratio:1;display:grid;place-items:center;padding:11px;background:#000;border:1px solid #202832;color:#8c9ca9;cursor:pointer;box-shadow:none}
+#app .radial-core svg{width:16px;height:16px}
+#app .statistics-view{padding-top:calc(env(safe-area-inset-top) + 20px);background:radial-gradient(ellipse at 50% 38%,#080d13 0%,#000 58%)}
+#app .stats-heading{margin:32px 0 30px}
+#app .stats-heading h1{font-size:30px;font-weight:280}
+#app .stats-heading p{font-size:13px;color:#939ca7}
+#app .stats-summary strong{font-weight:300}
+#app .day-graph figcaption{color:#929da8}
+#app .period-tabs{background:#06090c;border-color:#1d242a}
+#app .period-tabs button[aria-pressed="true"]{background:#18222b;border-color:#35434e;box-shadow:none}
+#app .event-row{border-color:#1b2026}
+#app .event-row:hover,#app .day-row:hover{background:#0a1017}
+#app .welcome-title p{color:#8695a2}
+#app .enter-iris{background:transparent;border-color:#8aa4b9}
+@media(max-height:700px){
+ #app .metric-value{font-size:40px;min-height:44px;margin-top:10px}
+ #app.mode-home .metric-value{font-size:50px}
+ #app .journal-actions,#app .water-panel,#app .v24-sport,#app .home-actions{margin-top:18px}
+ #app .metric-caption{margin-top:8px;font-size:12px}
+}

@@ -33,6 +33,17 @@ app.insertAdjacentHTML('beforeend',`
  <dialog aria-labelledby="detailTitle" id="detailDialog" class="iris-dialog"><header class="sheet-header"><h2 id="detailTitle"></h2><button class="round-button" type="button" data-close="detailDialog" aria-label="Закрыть">${icon('close')}</button></header><div id="detailBody"></div></dialog>
  <div id="journalToast" class="journal-toast" role="status" hidden></div>
 `);
+// Shared drawn symbols keep navigation tied to the eye.
+metric.insertAdjacentHTML('beforeend',`<div class="home-actions"><button id="openSections" class="primary-action" type="button">${icon('eye')}Разделы</button></div>`);
+$('#openSections').addEventListener('click',()=>dispatchEvent(new CustomEvent('iris:menu')));
+document.querySelectorAll('.radial-item').forEach(b=>{b.style.setProperty('--item-color',kinds[b.dataset.mode].color);b.insertAdjacentHTML('afterbegin',icon(b.dataset.mode))});
+$('.radial-core').outerHTML=`<button class="radial-core" id="closeSections" type="button" aria-label="Закрыть разделы">${icon('close')}</button>`;
+$('#closeSections').addEventListener('click',()=>{dispatchEvent(new CustomEvent('iris:close-menu'));$('#openSections').focus({preventScroll:true})});
+$('#motionHint').textContent='Удерживай глаз для меню · листай разделы';
+const showHint=()=>{app.dataset.gestureHint=localStorage.getItem('irisGestureLearnedV40')!=='1'?'true':'false'};
+showHint();
+addEventListener('iris:gesture',()=>{try{localStorage.setItem('irisGestureLearnedV40','1')}catch{}showHint()});
+$('#historyTotal').after($('#foodGoal'));
 let historyKind='food',toastTimer;
 function toast(text){$('#journalToast').textContent=text;$('#journalToast').hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('#journalToast').hidden=true,3200)}
 function openDialog(id){const el=$('#'+id);lastFocus=document.activeElement;if(!el.open)el.showModal()}
@@ -43,6 +54,7 @@ document.querySelectorAll('.iris-dialog').forEach(el=>{
 });
 function mode(){return app.className.match(/mode-(\w+)/)?.[1]||'home'}
 function view(name,push=true){
+ dispatchEvent(new CustomEvent('iris:close-menu'));
  app.dataset.view=name;$('#statistics').hidden=name!=='stats';$('#stage').inert=name==='stats';
  $('#eyeTab').setAttribute('aria-current',name==='eye'?'page':'false');$('#statsTab').setAttribute('aria-current',name==='stats'?'page':'false');
  if(name==='stats')renderStats();
@@ -71,7 +83,7 @@ function renderReadout(){
   if(latest){$('#latestFood').dataset.id=latest.id;$('#latestFood').innerHTML=`${icon('food')}<span>${esc(latest.meal)} · ${number(latest.kcal)} ккал</span><time>${time(latest.at)}</time>`}
  }else if(m==='sleep'){
   $('#metricLabel').textContent='СОН';$('#metricValue').textContent=sum.present.sleep?duration(sum.sleep):'—';
-  $('#metricCaption').textContent=sum.present.sleep?'По записям с пробуждением сегодня':'Запиши время сна и пробуждения';
+  $('#metricCaption').textContent=sum.present.sleep?'С пробуждением сегодня':'Время для восстановления';
  }
  $('#foodGoal').textContent=`Цель: ${number(D.foodGoal)} ккал · изменить`;
 }
@@ -95,7 +107,7 @@ $('#entryForm').addEventListener('submit',e=>{
   if(editKind==='food')D.saveFood({id:editId,name:f.get('name'),kcal:f.get('kcal'),meal:f.get('meal'),at:new Date(f.get('at')).getTime()});
   else if(editKind==='sleep')D.saveSleep({id:editId,start:new Date(f.get('start')).getTime(),end:new Date(f.get('end')).getTime()});
   else D.goal(f.get('goal'));
-  $('#entryDialog').close();toast('Сохранено');
+  $('#entryDialog').close();dispatchEvent(new CustomEvent('iris:record',{detail:editKind}));toast('Сохранено');
  }catch(error){$('#entryError').textContent=error.message}
 });
 $('#deleteEntry').addEventListener('click',e=>{
@@ -113,7 +125,7 @@ function eventText(e){
 }
 function eventRow(e){const t=eventText(e);return `<button class="event-row" data-entry="${esc(e.id)}" data-kind="${e.kind}" type="button" style="--event-color:${kinds[e.kind].color}"><span class="event-icon">${icon(e.kind)}</span><span class="event-copy"><strong>${esc(t.title)}</strong><small>${esc(t.sub)}</small></span><time>${e.legacy?'Без времени':time(e.at)}</time></button>`}
 function renderHistory(){
- $('#historyTitle').textContent=historyKind==='food'?'История питания':'История сна';
+ $('#historyTitle').textContent=historyKind==='food'?'История питания':'История сна';$('#foodGoal').hidden=historyKind!=='food';
  $('#historyDate').value=historyDate;$('#historyDate').max=D.day();$('#historyNext').disabled=historyDate>=D.day();
  const entries=D.events(historyDate).filter(e=>e.kind===historyKind),s=D.summary(historyDate);
  $('#historyTotal').textContent=entries.length?historyKind==='food'?`${number(s.food)} ккал за день`:duration(s.sleep):'Нет записей за этот день';

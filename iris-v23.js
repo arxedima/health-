@@ -41,25 +41,25 @@ function draw(t){
  if(reducedMotion.matches)t=0;
  x.clearRect(0,0,W,H);
  const v=vars(),m=mode(),menu=app.classList.contains('menu-open');
- const fade=m==='insights'?.55:1;
+ const fade=menu?.12:m==='insights'?.55:1;
  const breath=1+Math.sin(t*.00062)*.0036;
  const speed=m==='sport'?.00105:m==='water'?.00023:m==='food'?.00016:m==='sleep'?.000045:.00012;
  x.save();x.globalCompositeOperation='screen';
- [1.035,1.072,1.11,1.155,1.205,1.27,1.335].forEach((k,i)=>ring(v.cx,v.cy,v.r*k*breath,v.col,(i<3?.050:.024)*fade*(menu?1.45:1),i===0?.72:.42));
+ [1.04,1.12].forEach((k,i)=>ring(v.cx,v.cy,v.r*k*breath,v.col,(i===0?.042:.018)*fade*(menu?1.45:1),i===0?.72:.42));
  const rot=t*.000042;
  const segs=[
   [1.08,.15,.42,.060],[1.08,2.15,.62,.050],[1.08,4.48,.34,.055],
   [1.17,.88,.28,.038],[1.17,3.06,.46,.043],[1.17,5.20,.30,.036],
   [1.28,.36,.22,.028],[1.28,2.02,.38,.032],[1.28,4.76,.31,.030]
  ];
- segs.forEach((q,i)=>arc(v.cx,v.cy,v.r*q[0],q[1]+rot*(i%2?-1:1),q[2],v.col,q[3]*fade*(menu?1.6:1),.55));
+ segs.slice(0,3).forEach((q,i)=>arc(v.cx,v.cy,v.r*q[0],q[1]+rot*(i%2?-1:1),q[2],v.col,q[3]*fade*(menu?1.6:1),.55));
  dust.forEach((d,i)=>{
   const a=d.a+t*d.s+Math.sin(t*.00034+d.p)*.012;
   const rr=v.r*d.k*(1+Math.sin(t*.00046+d.p)*.004);
   const xx=v.cx+Math.cos(a)*rr,yy=v.cy+Math.sin(a)*rr;
   const tw=.55+.45*Math.sin(t*.0014+d.p);
   const near=Math.hypot(xx-px,yy-py),boost=touchEnergy*Math.max(0,1-near/(v.r*.75));
-  const al=(d.o*tw+boost*.055)*fade;
+  const al=(d.o*tw*.42+boost*.055)*fade;
   x.beginPath();x.arc(xx,yy,d.z+boost*.9,0,Math.PI*2);x.fillStyle=rgba(al,v.col);x.fill();
   if(i%13===0){x.beginPath();x.arc(xx,yy,(d.z+1)*3.1,0,Math.PI*2);x.fillStyle=rgba(al*.09,v.col);x.fill();}
  });

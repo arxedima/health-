@@ -11,13 +11,13 @@
   <meta name="application-name" content="IRIS">
   <meta name="description" content="IRIS — живой интерфейс здоровья.">
   <link rel="canonical" href="https://arxedima.github.io/health-/">
-  <link rel="manifest" href="/health-/manifest.webmanifest?v=iris39-icon23">
+  <link rel="manifest" href="/health-/manifest.webmanifest?v=iris40-icon23">
   <link rel="icon" type="image/png" href="/health-/app-icon-large.png?v=23">
   <link rel="apple-touch-icon" href="/health-/apple-touch-icon-large.png?v=23">
   <link rel="apple-touch-icon-precomposed" href="/health-/apple-touch-icon-large.png?v=23">
   <title>IRIS</title>
-  <link rel="stylesheet" href="./styles.css?v=iris39">
-  <link rel="stylesheet" href="./journal.css?v=iris39">
+  <link rel="stylesheet" href="./styles.css?v=iris40">
+  <link rel="stylesheet" href="./journal.css?v=iris40">
 </head>
 <body>
 <main id="app" class="app mode-home">
@@ -48,7 +48,7 @@
       <div id="modeDots" class="mode-dots" aria-hidden="true"></div>
     </div>
 
-    <div id="radialMenu" class="radial-menu" aria-hidden="true">
+    <div id="radialMenu" class="radial-menu" role="group" aria-label="Разделы" aria-hidden="true">
       <div class="menu-orbit" aria-hidden="true"></div>
       <button class="radial-item radial-top" data-mode="sport" type="button"><span>СПОРТ</span></button>
       <button class="radial-item radial-right" data-mode="food" type="button"><span>ПИТАНИЕ</span></button>
@@ -93,18 +93,18 @@
     </div>
   </aside>
 </main>
-<script src="./iris-data.js?v=iris39"></script>
-<script src="./iris-engine.js?v=iris39"></script>
+<script src="./iris-data.js?v=iris40"></script>
+<script src="./iris-engine.js?v=iris40"></script>
 <script src="./music-override.js?v=blackglass4"></script>
-<script src="./iris-v11.js?v=iris39"></script>
-<script src="./iris-v23.js?v=iris39"></script>
-<script src="./iris-v24.js?v=iris39"></script>
-<script src="./iris-journal.js?v=iris39"></script>
+<script src="./iris-v11.js?v=iris40"></script>
+<script src="./iris-v23.js?v=iris40"></script>
+<script src="./iris-v24.js?v=iris40"></script>
+<script src="./iris-journal.js?v=iris40"></script>
 <script>
 if('serviceWorker' in navigator){
   addEventListener('load',async()=>{
     try{
-      const registration=await navigator.serviceWorker.register('./sw.js?v=iris39-music4-icon23',{updateViaCache:'none'});
+      const registration=await navigator.serviceWorker.register('./sw.js?v=iris40-music4-icon23',{updateViaCache:'none'});
       await registration.update();
     }catch(e){}
   },{once:true});

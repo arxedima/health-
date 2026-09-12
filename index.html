@@ -96,7 +96,7 @@
 (()=>{const d=new Date(),day=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;if(localStorage.getItem('irisWaterDateV24')!==day){localStorage.setItem('irisWaterDateV24',day);localStorage.setItem('irisWaterMl','0')}})();
 </script>
 <script src="./iris-engine.js?v=iris38"></script>
-<script src="./music-override.js?v=blackglass3"></script>
+<script src="./music-override.js?v=blackglass4"></script>
 <script src="./iris-v11.js?v=iris38"></script>
 <script src="./iris-v23.js?v=iris38"></script>
 <script src="./iris-v24.js?v=iris38"></script>
@@ -104,7 +104,7 @@
 if('serviceWorker' in navigator){
   addEventListener('load',async()=>{
     try{
-      const registration=await navigator.serviceWorker.register('./sw.js?v=iris38-music3',{updateViaCache:'none'});
+      const registration=await navigator.serviceWorker.register('./sw.js?v=iris38-music4',{updateViaCache:'none'});
       await registration.update();
     }catch(e){}
   },{once:true});

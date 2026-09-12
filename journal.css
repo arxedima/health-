@@ -103,7 +103,7 @@ button:focus-visible{outline:1px solid #9bc6e6;outline-offset:4px}
 #app.mode-home .metric-value{font-size:58px}
 #app.mode-sleep .metric-value{font-size:clamp(32px,9vw,46px)}
 #app .metric-caption{font-size:13px;line-height:1.55;letter-spacing:0;color:#858e98;max-width:285px;margin-top:10px}
-#app .mode-dots{display:none}
+#app .mode-dots,#app .mode-dots.visible{display:none}
 #app .motion-hint{display:none}
 #app[data-gesture-hint="true"].mode-home .motion-hint{display:block;font-size:11px;letter-spacing:0;color:#818a94;opacity:1;margin-top:12px}
 #app .motion-hint i{display:none}

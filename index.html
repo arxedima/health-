@@ -17,7 +17,7 @@
   <link rel="apple-touch-icon-precomposed" href="/health-/apple-touch-icon-large.png?v=23">
   <title>IRIS</title>
   <link rel="stylesheet" href="./styles.css?v=iris40">
-  <link rel="stylesheet" href="./journal.css?v=iris40">
+  <link rel="stylesheet" href="./journal.css?v=iris40a">
 </head>
 <body>
 <main id="app" class="app mode-home">
@@ -104,7 +104,7 @@
 if('serviceWorker' in navigator){
   addEventListener('load',async()=>{
     try{
-      const registration=await navigator.serviceWorker.register('./sw.js?v=iris40-music4-icon23',{updateViaCache:'none'});
+      const registration=await navigator.serviceWorker.register('./sw.js?v=iris40a-music4-icon23',{updateViaCache:'none'});
       await registration.update();
     }catch(e){}
   },{once:true});

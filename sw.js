@@ -1,9 +1,9 @@
-const CACHE='iris-v4.0.0-depth-icon23';
+const CACHE='iris-v4.0.1-depth-icon23';
 const CORE=[
   '/health-/?v=40&music=4',
   '/health-/index.html?v=40&music=4',
   '/health-/styles.css?v=iris40',
-  '/health-/journal.css?v=iris40',
+  '/health-/journal.css?v=iris40a',
   '/health-/iris-data.js?v=iris40',
   '/health-/iris-journal.js?v=iris40',
   '/health-/iris-engine.js?v=iris40',

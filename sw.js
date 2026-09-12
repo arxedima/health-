@@ -1,24 +1,11 @@
-const CACHE='iris-v3.8.5-blackglass';
+const CACHE='iris-v3.8.6-blackglass-direct';
 const CORE=[
-  '/health-/?v=38',
-  '/health-/index.html?v=38',
+  '/health-/?v=38&music=3',
+  '/health-/index.html?v=38&music=3',
   '/health-/styles.css?v=iris38',
   '/health-/iris-engine.js?v=iris38',
-  '/health-/music-override.js?v=blackglass2',
-  '/health-/black-glass-loop-v1/p001.b64?v=2',
-  '/health-/black-glass-loop-v1/p002.b64?v=2',
-  '/health-/black-glass-loop-v1/p003.b64?v=2',
-  '/health-/black-glass-loop-v1/p004.b64?v=2',
-  '/health-/black-glass-loop-v1/p005.b64?v=2',
-  '/health-/black-glass-loop-v1/p006.b64?v=2',
-  '/health-/black-glass-loop-v1/p007.b64?v=2',
-  '/health-/black-glass-loop-v1/p008.b64?v=2',
-  '/health-/black-glass-loop-v1/p009.b64?v=2',
-  '/health-/black-glass-loop-v1/p010.b64?v=2',
-  '/health-/black-glass-loop-v1/p011.b64?v=2',
-  '/health-/black-glass-loop-v1/p012.b64?v=2',
-  '/health-/black-glass-loop-v1/p013.b64?v=2',
-  '/health-/black-glass-loop-v1/p014.b64?v=2',
+  '/health-/music-override.js?v=blackglass3',
+  '/health-/black-glass-breathing.m4a.b64?v=3',
   '/health-/iris-v11.js?v=iris38',
   '/health-/iris-v23.js?v=iris38',
   '/health-/iris-v24.js?v=iris38',
@@ -38,5 +25,5 @@ self.addEventListener('fetch',event=>{
   event.respondWith(fetch(event.request,{cache:'no-store'}).then(response=>{
     if(response&&response.ok){const copy=response.clone();caches.open(CACHE).then(cache=>cache.put(event.request,copy));}
     return response;
-  }).catch(()=>caches.match(event.request).then(response=>response||caches.match('/health-/?v=38'))));
+  }).catch(()=>caches.match(event.request).then(response=>response||caches.match('/health-/?v=38&music=3'))));
 });

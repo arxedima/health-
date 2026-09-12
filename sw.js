@@ -1,11 +1,17 @@
-const CACHE='iris-v3.8.6-blackglass-direct';
+const CACHE='iris-v3.8.7-blackglass30';
 const CORE=[
-  '/health-/?v=38&music=3',
-  '/health-/index.html?v=38&music=3',
+  '/health-/?v=38&music=4',
+  '/health-/index.html?v=38&music=4',
   '/health-/styles.css?v=iris38',
   '/health-/iris-engine.js?v=iris38',
-  '/health-/music-override.js?v=blackglass3',
-  '/health-/black-glass-breathing.m4a.b64?v=3',
+  '/health-/music-override.js?v=blackglass4',
+  '/health-/black-glass-30s-v1/p00.b64?v=4',
+  '/health-/black-glass-30s-v1/p01.b64?v=4',
+  '/health-/black-glass-30s-v1/p02.b64?v=4',
+  '/health-/black-glass-30s-v1/p03.b64?v=4',
+  '/health-/black-glass-30s-v1/p04.b64?v=4',
+  '/health-/black-glass-30s-v1/p05.b64?v=4',
+  '/health-/black-glass-30s-v1/p06.b64?v=4',
   '/health-/iris-v11.js?v=iris38',
   '/health-/iris-v23.js?v=iris38',
   '/health-/iris-v24.js?v=iris38',
@@ -25,5 +31,5 @@ self.addEventListener('fetch',event=>{
   event.respondWith(fetch(event.request,{cache:'no-store'}).then(response=>{
     if(response&&response.ok){const copy=response.clone();caches.open(CACHE).then(cache=>cache.put(event.request,copy));}
     return response;
-  }).catch(()=>caches.match(event.request).then(response=>response||caches.match('/health-/?v=38&music=3'))));
+  }).catch(()=>caches.match(event.request).then(response=>response||caches.match('/health-/?v=38&music=4'))));
 });

@@ -1,11 +1,12 @@
 (()=>{'use strict';
 try{
   let b64='';
-  for(let i=1;i<=5;i++){
+  for(let i=1;i<=14;i++){
     const req=new XMLHttpRequest();
-    req.open('GET',`./music-aac/part-0${i}.b64?v=1`,false);
+    const part=String(i).padStart(3,'0');
+    req.open('GET',`./black-glass-loop-v1/p${part}.b64?v=2`,false);
     req.send(null);
-    if(req.status<200||req.status>=300)throw new Error('music');
+    if(req.status<200||req.status>=300)throw new Error('black-glass-music');
     b64+=req.responseText.replace(/\s+/g,'');
   }
   const raw=atob(b64);

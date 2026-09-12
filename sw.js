@@ -1,4 +1,4 @@
-const CACHE='iris-v3.9.0-journal';
+const CACHE='iris-v3.9.1-icon23';
 const CORE=[
   '/health-/?v=39&music=4',
   '/health-/index.html?v=39&music=4',
@@ -18,10 +18,10 @@ const CORE=[
   '/health-/iris-v11.js?v=iris39',
   '/health-/iris-v23.js?v=iris39',
   '/health-/iris-v24.js?v=iris39',
-  '/health-/manifest.webmanifest?v=iris39-icon22',
-  '/health-/app-icon.png?v=22',
-  '/health-/app-icon-192.png?v=22',
-  '/health-/apple-touch-icon.png?v=22'
+  '/health-/manifest.webmanifest?v=iris39-icon23',
+  '/health-/app-icon-large.png?v=23',
+  '/health-/app-icon-large-192.png?v=23',
+  '/health-/apple-touch-icon-large.png?v=23'
 ];
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>self.skipWaiting()));

@@ -31,6 +31,7 @@ app.insertAdjacentHTML('beforeend',`
  <dialog aria-labelledby="entryTitle" id="entryDialog" class="iris-dialog"><div class="sheet-handle"></div><header class="sheet-header"><h2 id="entryTitle"></h2><button type="button" class="round-button" data-close="entryDialog" aria-label="Закрыть">${icon('close')}</button></header><form id="entryForm"><div id="entryFields"></div><p id="entryError" class="form-error" role="alert"></p><button class="primary-action" type="submit">Сохранить</button><button id="deleteEntry" class="delete-action" type="button" hidden>Удалить запись</button></form></dialog>
  <dialog aria-labelledby="historyTitle" id="historyDialog" class="iris-dialog history-dialog"><div class="sheet-handle"></div><header class="sheet-header"><h2 id="historyTitle">История питания</h2><button class="round-button" type="button" data-close="historyDialog" aria-label="Закрыть">${icon('close')}</button></header><div class="history-date"><button id="historyPrev" class="round-button" type="button" aria-label="Предыдущий день">${icon('back')}</button><input id="historyDate" type="date" aria-label="Дата истории"><button id="historyNext" class="round-button forward" type="button" aria-label="Следующий день">${icon('back')}</button></div><p id="historyTotal" class="history-total"></p><div id="historyEntries" class="event-list"></div><button id="historyAdd" class="primary-action" type="button"></button></dialog>
  <dialog aria-labelledby="detailTitle" id="detailDialog" class="iris-dialog"><header class="sheet-header"><h2 id="detailTitle"></h2><button class="round-button" type="button" data-close="detailDialog" aria-label="Закрыть">${icon('close')}</button></header><div id="detailBody"></div></dialog>
+ <dialog aria-labelledby="appearanceTitle" id="appearanceDialog" class="iris-dialog appearance-dialog"><div class="sheet-handle"></div><header class="sheet-header"><h2 id="appearanceTitle">Движение глаза</h2><button class="round-button" type="button" data-close="appearanceDialog" aria-label="Закрыть">${icon('close')}</button></header><p class="field-note">Выбери темп, который тебе комфортен.</p><fieldset class="motion-options"><legend class="sr-only">Интенсивность анимации</legend><label><input type="radio" name="motion" value="full"><span><strong>Живая</strong><small>Переливы света и отзывчивые волокна</small></span></label><label><input type="radio" name="motion" value="soft"><span><strong>Спокойная</strong><small>Те же эффекты, мягче и сдержаннее</small></span></label><label><input type="radio" name="motion" value="still"><span><strong>Без движения</strong><small>Неподвижный глаз и цвет каждого раздела</small></span></label></fieldset><p id="systemMotionNote" class="field-note" hidden>Движение уменьшено в настройках устройства.</p><button class="primary-action" type="button" data-close="appearanceDialog">Готово</button></dialog>
  <div id="journalToast" class="journal-toast" role="status" hidden></div>
 `);
 // Shared drawn symbols keep navigation tied to the eye.
@@ -46,17 +47,27 @@ addEventListener('iris:gesture',()=>{try{localStorage.setItem('irisGestureLearne
 $('#historyTotal').after($('#foodGoal'));
 let historyKind='food',toastTimer;
 function toast(text){$('#journalToast').textContent=text;$('#journalToast').hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('#journalToast').hidden=true,3200)}
-function openDialog(id){const el=$('#'+id);lastFocus=document.activeElement;if(!el.open)el.showModal()}
+function openDialog(id){const el=$('#'+id);lastFocus=document.activeElement;if(!el.open)el.showModal();dispatchEvent(new CustomEvent('iris:visibility'))}
 document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>$('#'+b.dataset.close).close()));
 document.querySelectorAll('.iris-dialog').forEach(el=>{
  el.addEventListener('click',e=>{if(e.target===el){const r=el.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)el.close()}});
- el.addEventListener('close',()=>{if(lastFocus?.isConnected)lastFocus.focus({preventScroll:true})});
+ el.addEventListener('close',()=>{if(lastFocus?.isConnected)lastFocus.focus({preventScroll:true});dispatchEvent(new CustomEvent('iris:visibility'))});
 });
+function syncAppearance(){
+ document.querySelectorAll('[name="motion"]').forEach(input=>input.checked=input.value===IRISMotion.preference);
+ $('#systemMotionNote').hidden=!IRISMotion.reduced;
+}
+$('#appearanceSettings').addEventListener('click',()=>{
+ $('#settingsPanel [data-close-settings]').click();syncAppearance();openDialog('appearanceDialog');lastFocus=$('#settingsTrigger');
+});
+document.querySelectorAll('[name="motion"]').forEach(input=>input.addEventListener('change',()=>{if(input.checked)IRISMotion.setPreference(input.value)}));
+addEventListener('iris:motion',syncAppearance);
 function mode(){return app.className.match(/mode-(\w+)/)?.[1]||'home'}
 function view(name,push=true){
  dispatchEvent(new CustomEvent('iris:close-menu'));
  app.dataset.view=name;$('#statistics').hidden=name!=='stats';$('#stage').inert=name==='stats';
  $('#eyeTab').setAttribute('aria-current',name==='eye'?'page':'false');$('#statsTab').setAttribute('aria-current',name==='stats'?'page':'false');
+ dispatchEvent(new CustomEvent('iris:visibility'));
  if(name==='stats')renderStats();
  if(push)history.pushState(null,'',name==='stats'?'#statistics':location.pathname+location.search);
 }

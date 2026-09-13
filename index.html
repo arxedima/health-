@@ -11,13 +11,13 @@
   <meta name="application-name" content="IRIS">
   <meta name="description" content="IRIS — живой интерфейс здоровья.">
   <link rel="canonical" href="https://arxedima.github.io/health-/">
-  <link rel="manifest" href="/health-/manifest.webmanifest?v=iris41-icon23">
+  <link rel="manifest" href="/health-/manifest.webmanifest?v=iris42-icon23">
   <link rel="icon" type="image/png" href="/health-/app-icon-large.png?v=23">
   <link rel="apple-touch-icon" href="/health-/apple-touch-icon-large.png?v=23">
   <link rel="apple-touch-icon-precomposed" href="/health-/apple-touch-icon-large.png?v=23">
   <title>IRIS</title>
-  <link rel="stylesheet" href="./styles.css?v=iris41">
-  <link rel="stylesheet" href="./journal.css?v=iris41">
+  <link rel="stylesheet" href="./styles.css?v=iris42">
+  <link rel="stylesheet" href="./journal.css?v=iris42">
 </head>
 <body>
 <main id="app" class="app mode-home">
@@ -78,34 +78,33 @@
         <span>НАСТРОЙКИ</span>
         <button class="icon-button close-settings" type="button" data-close-settings aria-label="Закрыть">×</button>
       </div>
-      <nav class="settings-list">
-        <button type="button">Профиль <b>›</b></button>
-        <button type="button">Цели <b>›</b></button>
-        <button type="button">Напоминания <b>›</b></button>
-        <button id="soundSettings" class="setting-toggle" type="button"><span>Мрачная музыка и эффекты</span><em id="soundState">КОСНИСЬ</em></button>
-        <button type="button">Здоровье <b>›</b></button>
+      <nav class="settings-list" aria-label="Настройки и дневники">
         <button id="appearanceSettings" type="button">Внешний вид <b>›</b></button>
-        <button type="button">Приватность <b>›</b></button>
-        <button type="button">Данные <b>›</b></button>
+        <button id="soundSettings" class="setting-toggle" type="button"><span>Музыка и эффекты</span><em id="soundState">КОСНИСЬ</em></button>
+        <button id="settingsStats" type="button">Общая статистика <b>›</b></button>
+        <button id="settingsFoodHistory" type="button">История питания <b>›</b></button>
+        <button id="settingsSleepHistory" type="button">История сна <b>›</b></button>
+        <button id="settingsFoodGoal" type="button">Цель питания <b>›</b></button>
       </nav>
       <div class="settings-note">Коснись радужки и проведи по волокнам. Удерживай глаз для меню; листай в стороны для смены раздела.</div>
       <div class="settings-signature">I R I S<br><small>СПОКОЙНЕЕ ВНУТРИ · ЯСНЕЕ СНАРУЖИ</small></div>
     </div>
   </aside>
 </main>
-<script src="./iris-data.js?v=iris41"></script>
-<script src="./iris-motion.js?v=iris41"></script>
-<script src="./iris-engine.js?v=iris41"></script>
+<script src="./iris-data.js?v=iris42"></script>
+<script src="./iris-motion.js?v=iris42"></script>
+<script src="./iris-engine.js?v=iris42"></script>
 <script src="./music-override.js?v=blackglass4"></script>
-<script src="./iris-v11.js?v=iris41"></script>
-<script src="./iris-v23.js?v=iris41"></script>
-<script src="./iris-v24.js?v=iris41"></script>
-<script src="./iris-journal.js?v=iris41"></script>
+<script src="./iris-v11.js?v=iris42"></script>
+<script src="./iris-v23.js?v=iris42"></script>
+<script src="./iris-v24.js?v=iris42"></script>
+<script src="./iris-journal.js?v=iris42"></script>
+<script src="./iris-extras.js?v=iris42"></script>
 <script>
 if('serviceWorker' in navigator){
   addEventListener('load',async()=>{
     try{
-      const registration=await navigator.serviceWorker.register('./sw.js?v=iris41-music4-icon23',{updateViaCache:'none'});
+      const registration=await navigator.serviceWorker.register('./sw.js?v=iris42-music4-icon23',{updateViaCache:'none'});
       await registration.update();
     }catch(e){}
   },{once:true});

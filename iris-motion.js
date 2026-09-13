@@ -12,16 +12,20 @@ const profiles={
 const media=matchMedia('(prefers-reduced-motion: reduce)');
 let preference='full';try{preference=localStorage.getItem('irisMotionV41')||'full'}catch{}
 if(!['full','soft','still'].includes(preference))preference='full';
+let background=60;try{const raw=localStorage.getItem('irisBackgroundV42');if(raw!==null&&Number.isFinite(Number(raw)))background=clamp(Number(raw),0,100)}catch{}
 const listeners=new Set(),weights={home:1,water:0,sport:0,food:0,sleep:0};
-let energy=0,waterWave=0,sport=0,touchEcho=0,touchAngle=0;
+const energyByKind={food:0,sleep:0};
+let waterWave=0,sport=0,touchEcho=0,touchAngle=0;
 const rgba=(c,a)=>`rgba(${c[0]|0},${c[1]|0},${c[2]|0},${clamp(a,0,1)})`;
 const intensity=()=>media.matches||preference==='still'?0:preference==='soft'?.35:1;
 const invalidate=()=>dispatchEvent(new CustomEvent('iris:motion'));
 function publishPreference(){document.documentElement.dataset.motion=intensity()===0?'still':preference;invalidate()}
 function setPreference(value){if(!['full','soft','still'].includes(value))return;try{localStorage.setItem('irisMotionV41',value)}catch{}preference=value;publishPreference()}
+function setBackground(value){if(!Number.isFinite(Number(value)))return;background=clamp(Number(value),0,100);try{localStorage.setItem('irisBackgroundV42',String(background))}catch{}invalidate()}
 media.addEventListener?.('change',publishPreference);
 addEventListener('storage',e=>{if(e.key==='irisMotionV41'){preference=['full','soft','still'].includes(e.newValue)?e.newValue:'full';publishPreference()}});
-function record(kind){if(!intensity())return;if(kind==='food'||kind==='sleep')energy=1;if(kind==='water')waterWave=1;invalidate()}
+addEventListener('storage',e=>{if(e.key==='irisBackgroundV42'){background=e.newValue===null?60:clamp(Number(e.newValue)||0,0,100);invalidate()}});
+function record(kind){if(!intensity())return;if(kind in energyByKind)energyByKind[kind]=1;if(kind==='water')waterWave=1;invalidate()}
 function touch(angle){touchAngle=angle;touchEcho=1;invalidate()}
 function update(mode,t,dt,running){
  const amount=intensity(),step=clamp(dt/16.667,.25,3),mix=amount?1-Math.exp(-dt/330):1;
@@ -29,7 +33,8 @@ function update(mode,t,dt,running){
  const p={pace:0,breath:0,pupil:0,wander:0,flow:0,halo:0};
  for(const [name,w] of Object.entries(weights))for(const k of Object.keys(p))p[k]+=profiles[name][k]*w;
  sport+=(Number(running&&mode==='sport')-sport)*(amount?1-Math.exp(-dt/360):1);
- if(amount){energy*=Math.pow(.987,step);waterWave*=Math.pow(.987,step);touchEcho*=Math.pow(.964,step)}else{energy=waterWave=touchEcho=0}
+ if(amount){for(const kind of Object.keys(energyByKind))energyByKind[kind]*=Math.pow(.987,step);waterWave*=Math.pow(.987,step);touchEcho*=Math.pow(.964,step)}else{energyByKind.food=energyByKind.sleep=waterWave=touchEcho=0}
+ const energy=energyByKind[mode]||0;
  const phase=t*.0041%TAU;
  // A soft paired training rhythm: deliberately unrelated to measured heart rate.
  const beat=(Math.exp(-Math.pow((phase-.8)/.44,2))+.45*Math.exp(-Math.pow((phase-1.75)/.48,2)))*sport*amount;
@@ -42,8 +47,14 @@ function cloud(ctx,x,y,rx,ry,rotation,color,alpha){
  ctx.fillStyle=g;ctx.beginPath();ctx.arc(0,0,1,0,TAU);ctx.fill();ctx.restore();
 }
 function backdrop(ctx,f){
- const {x,y,r,t,motion:q,col}=f,w=q.weights,a=q.amount,quiet=1-f.menu*.8;
+ const {x,y,r,t,motion:q}=f,w=q.weights,a=q.amount,quiet=(1-f.menu*.28)*background/60;
  ctx.save();ctx.globalCompositeOperation='screen';
+ // A full-screen colour field remains visible beyond the eye and below the readout.
+ const fields={home:[69,94,116,.33],water:[20,103,163,.53],sport:[152,39,40,.48],food:[65,109,48,.53],sleep:[89,46,149,.49]};
+ const color=[0,0,0];let opacity=0;
+ for(const [name,values] of Object.entries(fields)){for(let i=0;i<3;i++)color[i]+=values[i]*w[name];opacity+=values[3]*w[name]}
+ ctx.save();ctx.translate(f.width*.5,y+r*.22);ctx.scale(Math.max(r*2.45,f.width*.88),Math.max(r*3.7,f.height*.74));
+ const field=ctx.createRadialGradient(0,0,0,0,0,1);field.addColorStop(0,rgba(color,opacity*quiet));field.addColorStop(.32,rgba(color,opacity*.86*quiet));field.addColorStop(.68,rgba(color,opacity*.38*quiet));field.addColorStop(1,rgba(color,0));ctx.fillStyle=field;ctx.beginPath();ctx.arc(0,0,1,0,TAU);ctx.fill();ctx.restore();
  // Home: an off-axis, cold halo which slowly follows the gaze.
  if(w.home>.003){
   const k=w.home*quiet,drift=Math.sin(t*.00012)*a;
@@ -55,10 +66,6 @@ function backdrop(ctx,f){
   const k=w.water*quiet,drift=Math.sin(t*.00036)*a;
   cloud(ctx,x-r*.52,y+r*.18,r*.92,r*1.7,-.45+drift*.14,[35,119,200],.15*k);
   cloud(ctx,x+r*.49,y-r*.17,r*.73,r*1.52,.55-drift*.1,[88,184,224],.105*k);
-  for(let j=0;j<3;j++){
-   ctx.beginPath();for(let i=0;i<=56;i++){const angle=i/56*TAU,rr=r*(1.09+j*.105+Math.sin(angle*3-t*.0007+j*1.8)*.026*a);const xx=x+Math.cos(angle)*rr,yy=y+Math.sin(angle)*rr*.97;i?ctx.lineTo(xx,yy):ctx.moveTo(xx,yy)}
-   ctx.strokeStyle=rgba([87,178,225],(.033+q.waterWave*.045)*k*(1-j*.22));ctx.lineWidth=.7;ctx.stroke();
-  }
  }
  // Sport: a warm corona responds to the timer. It settles when paused.
  if(w.sport>.003){
@@ -80,7 +87,8 @@ function backdrop(ctx,f){
  }
  ctx.restore();
  // Keep the outer edge of the viewport black in every theme.
- const edge=ctx.createLinearGradient(0,0,f.width,0);edge.addColorStop(0,'#000');edge.addColorStop(.12,'rgba(0,0,0,.38)');edge.addColorStop(.30,'rgba(0,0,0,0)');edge.addColorStop(.70,'rgba(0,0,0,0)');edge.addColorStop(.88,'rgba(0,0,0,.38)');edge.addColorStop(1,'#000');ctx.fillStyle=edge;ctx.fillRect(0,0,f.width,f.height);
+ const edge=ctx.createLinearGradient(0,0,f.width,0);edge.addColorStop(0,'#000');edge.addColorStop(.10,'rgba(0,0,0,.14)');edge.addColorStop(.25,'rgba(0,0,0,0)');edge.addColorStop(.75,'rgba(0,0,0,0)');edge.addColorStop(.90,'rgba(0,0,0,.14)');edge.addColorStop(1,'#000');ctx.fillStyle=edge;ctx.fillRect(0,0,f.width,f.height);
+ const ends=ctx.createLinearGradient(0,0,0,f.height);ends.addColorStop(0,'rgba(0,0,0,.66)');ends.addColorStop(.22,'rgba(0,0,0,0)');ends.addColorStop(.72,'rgba(0,0,0,0)');ends.addColorStop(1,'rgba(0,0,0,.8)');ctx.fillStyle=ends;ctx.fillRect(0,0,f.width,f.height);
 }
 function fiber(f,t,q){
  const a=f.a,w=q.weights,amount=q.amount;
@@ -106,6 +114,6 @@ function inner(ctx,f){
  }
  ctx.restore();
 }
-window.IRISMotion={update,backdrop,fiber,inner,touch,record,intensity,invalidate,setPreference,get preference(){return preference},get reduced(){return media.matches},subscribe(fn){listeners.add(fn);return()=>listeners.delete(fn)},frame(f){for(const fn of listeners)fn(f)}};
+window.IRISMotion={update,backdrop,fiber,inner,touch,record,intensity,invalidate,setPreference,setBackground,get background(){return background},get preference(){return preference},get reduced(){return media.matches},subscribe(fn){listeners.add(fn);return()=>listeners.delete(fn)},frame(f){for(const fn of listeners)fn(f)}};
 publishPreference();
 })();

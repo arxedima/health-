@@ -81,8 +81,8 @@
 .enter-iris{position:absolute;bottom:15%;left:50%;transform:translateX(-50%);width:58px;height:58px;border-radius:50%;border:1px solid #a9c8df;background:#04070a;color:#d0e3f1;box-shadow:0 0 24px #759dc41a;display:grid;place-items:center;cursor:pointer;pointer-events:auto}
 .app[data-welcome="true"] .topbar,.app[data-welcome="true"] .metric,.app[data-welcome="true"] .mode-whisper,.app[data-welcome="true"] .bottom-nav,.app[data-welcome="true"] .statistics-view{visibility:hidden}
 .app[data-welcome="true"] #stage{pointer-events:none;visibility:visible}
-.app[data-welcome="true"] #stage canvas{transform:translateY(13vh) scale(.8)}
-#stage canvas{transform-origin:var(--eye-x) var(--eye-y);transition:transform .85s cubic-bezier(.16,1,.3,1)}
+.app[data-welcome="true"] #stage canvas{transform:none}
+#stage canvas{transform:none}
 .app[data-welcome="true"] #irisV24Data{visibility:hidden}
 button:focus-visible{outline:1px solid #9bc6e6;outline-offset:4px}
 @media(max-height:640px){html,body{overflow-y:auto}.app{height:680px;min-height:100dvh}.stats-heading{margin-top:24px}.statistics-view{padding-bottom:100px}}
@@ -175,3 +175,68 @@ button:focus-visible{outline:1px solid #9bc6e6;outline-offset:4px}
 #systemMotionNote{margin:0 0 20px}
 [data-motion="still"] #stage canvas,[data-motion="still"] .radial-menu,[data-motion="still"] .radial-item,[data-motion="still"] .metric{transition:none!important}
 [data-motion="still"] .touch-ring,[data-motion="still"] .sound-dot{animation:none!important}
+
+/* Keep the eye and the full-screen field in the same canvas coordinate system. */
+#stage:focus{outline:none}
+#stage:focus-visible::after{content:'';position:absolute;left:var(--eye-x);top:var(--eye-y);width:calc(var(--eye-r)*2.16);height:calc(var(--eye-r)*2.16);transform:translate(-50%,-50%);border:1px solid rgba(var(--accent) / .32);border-radius:50%;pointer-events:none}
+#app .metric-caption{margin-left:0}
+#app .settings-sheet{background:linear-gradient(170deg,rgba(var(--accent) / .045),transparent 55%),#050709}
+#app .settings-list button{min-height:58px;font-size:14px}
+#app .settings-note{color:#89959f}
+
+/* v42: one palette follows the eye through controls, sheets and navigation. */
+#app .bottom-nav button[aria-current="page"]{color:rgb(var(--accent))}
+#app .bottom-nav button[aria-current="page"]::before{background:rgb(var(--accent));box-shadow:0 0 9px rgba(var(--accent) / .24)}
+#app[data-view="stats"] .bottom-nav{--accent:188 211 229}
+#app .iris-dialog{background:linear-gradient(155deg,rgba(var(--accent) / .035),transparent 48%),#090c10;border-color:rgba(var(--accent) / .16)}
+#app .iris-dialog input:not([type="range"]):not([type="checkbox"]):not([type="radio"]):not([type="file"]),#app .iris-dialog select{background:#10151b;border-color:#2a323b}
+#app .iris-dialog input:focus-visible,#app .iris-dialog select:focus-visible{outline:1px solid rgba(var(--accent) / .7);outline-offset:2px}
+#app .iris-dialog .primary-action{border-color:rgba(var(--accent) / .25)}
+#app .motion-options label:has(input:checked){border-color:rgba(var(--accent) / .45);background:rgba(var(--accent) / .07)}
+#app .motion-options{margin:12px 0 20px;gap:8px}
+#app .motion-options label{min-height:68px;padding:12px 14px}
+#app .appearance-section,.backup-import h3{font-size:14px;font-weight:400;margin:22px 0 12px;color:#ccd5de}
+.background-setting{margin:24px 0}
+#app .background-setting label{display:flex;flex-direction:row;justify-content:space-between;align-items:center;margin-bottom:12px}
+#app .background-setting input[type="range"]{padding:0;height:44px;min-height:44px;border:0;background:transparent;accent-color:rgb(var(--accent))}
+#app .background-setting output{font-variant-numeric:tabular-nums;color:#dce5ee}
+#app .readout-enter .metric-label,#app .readout-enter .metric-value,#app .readout-enter .metric-caption{animation:readout-in .42s ease-out both}
+@keyframes readout-in{from{opacity:.15;translate:0 5px}to{opacity:1;translate:0 0}}
+[data-motion="still"] #app .readout-enter>*{animation:none!important}
+@media(prefers-reduced-motion:reduce){#app .readout-enter>*{animation:none!important}}
+
+#dayTrail{position:absolute;width:0;height:0;z-index:6;pointer-events:none}
+.day-mark{position:absolute;display:grid;place-items:center;width:44px;height:44px;padding:0;transform:translate(-50%,-50%);border:0;background:transparent;border-radius:50%;pointer-events:auto;cursor:pointer;touch-action:manipulation;color:var(--mark-color)}
+.day-mark span{width:5px;height:5px;background:var(--mark-color);border-radius:50%;box-shadow:0 0 10px var(--mark-color);opacity:.85}
+.day-mark i{position:absolute;width:2px;height:2px;top:13px;right:14px;background:var(--mark-color);border-radius:50%;opacity:.7}
+.day-mark:focus-visible,.day-mark:hover{outline:1px solid currentColor;outline-offset:-6px;background:#0006}
+#app:not(.mode-home) #dayTrail,#app.menu-open #dayTrail,#app[data-welcome="true"] #dayTrail,#app[data-view="stats"] #dayTrail{display:none}
+#app .home-actions{margin-top:18px}
+#app .trail-link{display:block;width:100%;margin:0;font-size:12px}
+#app[data-gesture-hint="true"].mode-home .motion-hint{display:none}
+#app .journal-toast{display:flex;align-items:center;justify-content:space-between;gap:18px;background:#11171e;border-color:#35404b;padding:6px 10px 6px 18px;min-height:48px}
+.journal-toast button{min-height:44px;padding:8px 10px;border:0;border-radius:9px;background:transparent;color:#c5e0f4;font:inherit;cursor:pointer}
+.journal-toast button:active{background:#243440}
+#app .favorite-shortcut{display:flex;justify-content:space-between;align-items:center;gap:12px;width:100%;min-height:48px;margin:0 0 22px;padding:10px 14px;text-align:left;border-radius:14px;border:1px solid rgba(var(--accent) / .18);background:rgba(var(--accent) / .045);color:#c2d1ba;font:inherit;font-size:14px;cursor:pointer}
+#app .check-field{display:flex;flex-direction:row;align-items:center;gap:12px;min-height:44px;margin:20px 0 4px;line-height:1.5;color:#b8c3cd;cursor:pointer}
+#app .check-field input{min-height:0;width:19px;height:19px;flex:none;margin:0;padding:0;accent-color:rgb(var(--accent))}
+.favorite-row{display:flex;align-items:center;border-bottom:1px solid #232a31;gap:10px}
+.favorite-use{flex:1;min-width:0;display:grid;gap:7px;padding:18px 0;text-align:left;background:none;border:0;color:#dbe5dd;cursor:pointer}
+.favorite-use strong{font-size:15px;font-weight:400;overflow-wrap:anywhere}
+.favorite-use small{color:#939e98;font-size:12px}
+.favorite-remove{flex:none;color:#98a39d}
+.backup-import{border-top:1px solid #262e36;margin-top:26px;padding-top:4px}
+#app .file-picker{position:relative;display:grid;place-items:center;min-height:50px;padding:12px;border:1px dashed #50606e;border-radius:14px;color:#c1d3e1;overflow:hidden;cursor:pointer}
+#app .file-picker input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}
+#app .file-picker:focus-within{outline:1px solid #a3c4df;outline-offset:3px}
+.backup-counts{margin:20px 0;display:grid;gap:13px}
+.backup-counts div{display:flex;justify-content:space-between;color:#afbdc8;font-size:14px}
+.backup-counts dd{margin:0;font-variant-numeric:tabular-nums;color:#e0ebf3}
+#backupPreview .primary-action{margin-top:22px}
+#backupFileName{overflow-wrap:anywhere;margin-top:22px}
+#app[data-contemplation="true"] .topbar,#app[data-contemplation="true"] .metric,#app[data-contemplation="true"] .bottom-nav,#app[data-contemplation="true"] #dayTrail{visibility:hidden}
+.leave-contemplation{position:absolute;inset:0;z-index:40;width:100%;height:100%;border:0;padding:0;background:transparent;color:#8c9ba7;cursor:pointer;touch-action:manipulation}
+.leave-contemplation span{position:absolute;bottom:max(35px,env(safe-area-inset-bottom));left:0;width:100%;font-size:12px;font-weight:300;letter-spacing:.03em}
+.leave-contemplation:focus-visible{outline:1px solid #698094;outline-offset:-8px}
+.leave-contemplation:focus:not(:focus-visible){outline:none}
+@media(max-width:360px){.iris-dialog{padding-right:20px;padding-left:20px}#app .journal-toast{gap:8px;font-size:13px}}

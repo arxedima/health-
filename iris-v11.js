@@ -27,6 +27,12 @@ function renderSport(){panel.classList.toggle('visible',sportMode());beat.classL
 function toggleSport(){let segment=running&&started?{start:started,end:Date.now()}:null;if(running){elapsed=nowMs();running=false;started=0}else{started=Date.now();running=true}save();if(segment)recordSegment(segment);renderSport();dispatchEvent(new CustomEvent('iris:sport'));playHit(running);try{navigator.vibrate?.(running?[14,28,10]:8)}catch{}}
 function recordSegment(s){try{window.IRISData?.addSport(s.start,s.end)}catch(error){dispatchEvent(new CustomEvent('iris:error',{detail:error.message}))}}
 function resetSport(){if(running&&started)recordSegment({start:started,end:Date.now()});let ms=nowMs();if(ms>30000){history.unshift({t:Date.now(),ms});history=history.slice(0,30);localStorage.setItem('irisSportHistoryV11',JSON.stringify(history))}elapsed=0;running=false;started=0;save();renderSport();dispatchEvent(new CustomEvent('iris:sport'));playClick()}
+// Other open copies of the app must control the same timer state.
+addEventListener('storage',e=>{
+ if(e.key!==null&&!['irisSportElapsedV11','irisSportRunningV11','irisSportStartedV11'].includes(e.key))return;
+ elapsed=Math.max(0,+localStorage.getItem('irisSportElapsedV11')||0);started=+localStorage.getItem('irisSportStartedV11')||0;
+ running=localStorage.getItem('irisSportRunningV11')==='1'&&started>0;renderSport();dispatchEvent(new CustomEvent('iris:sport'));
+});
 mainBtn.addEventListener('click',e=>{e.stopPropagation();unlockAudio();toggleSport()});resetBtn.addEventListener('click',e=>{e.stopPropagation();unlockAudio();resetSport()});
 
 /* ---------- iPhone-proof dark background music ---------- */

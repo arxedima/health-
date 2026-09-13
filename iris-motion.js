@@ -47,48 +47,13 @@ function cloud(ctx,x,y,rx,ry,rotation,color,alpha){
  ctx.fillStyle=g;ctx.beginPath();ctx.arc(0,0,1,0,TAU);ctx.fill();ctx.restore();
 }
 function backdrop(ctx,f){
- const {x,y,r,t,motion:q}=f,w=q.weights,a=q.amount,quiet=(1-f.menu*.28)*background/60;
- ctx.save();ctx.globalCompositeOperation='screen';
- // A full-screen colour field remains visible beyond the eye and below the readout.
- const fields={home:[69,94,116,.33],water:[20,103,163,.53],sport:[152,39,40,.48],food:[65,109,48,.53],sleep:[89,46,149,.49]};
- const color=[0,0,0];let opacity=0;
- for(const [name,values] of Object.entries(fields)){for(let i=0;i<3;i++)color[i]+=values[i]*w[name];opacity+=values[3]*w[name]}
- ctx.save();ctx.translate(f.width*.5,y+r*.22);ctx.scale(Math.max(r*2.45,f.width*.88),Math.max(r*3.7,f.height*.74));
- const field=ctx.createRadialGradient(0,0,0,0,0,1);field.addColorStop(0,rgba(color,opacity*quiet));field.addColorStop(.32,rgba(color,opacity*.86*quiet));field.addColorStop(.68,rgba(color,opacity*.38*quiet));field.addColorStop(1,rgba(color,0));ctx.fillStyle=field;ctx.beginPath();ctx.arc(0,0,1,0,TAU);ctx.fill();ctx.restore();
- // Home: an off-axis, cold halo which slowly follows the gaze.
- if(w.home>.003){
-  const k=w.home*quiet,drift=Math.sin(t*.00012)*a;
-  cloud(ctx,x-r*.13+drift*r*.1,y-r*.08,r*1.64,r*1.48,-.4,[167,203,230],.071*k);
-  cloud(ctx,x+r*.55,y-r*.4,r*.75,r*1.24,.5+drift*.09,[187,213,230],.045*k);
- }
- // Water: crossing blue caustics, constrained to the space just around the iris.
- if(w.water>.003){
-  const k=w.water*quiet,drift=Math.sin(t*.00036)*a;
-  cloud(ctx,x-r*.52,y+r*.18,r*.92,r*1.7,-.45+drift*.14,[35,119,200],.15*k);
-  cloud(ctx,x+r*.49,y-r*.17,r*.73,r*1.52,.55-drift*.1,[88,184,224],.105*k);
- }
- // Sport: a warm corona responds to the timer. It settles when paused.
- if(w.sport>.003){
-  const k=w.sport*quiet;
-  cloud(ctx,x,y,r*(1.58+q.beat*.1),r*(1.36+q.beat*.06),0,[188,53,39],(.11+q.beat*.038)*k);
-  cloud(ctx,x-r*.68,y+r*.08,r*.68,r*1.1,-.45,[238,101,64],(.06+q.beat*.04)*k);
- }
- // Food: diffuse green light with a restrained golden inner warmth.
- if(w.food>.003){
-  const k=w.food*quiet,drift=Math.sin(t*.00022)*a;
-  cloud(ctx,x-r*.4,y+r*.2,r*1.15,r*1.38,-.35+drift*.1,[94,135,58],(.095+q.energy*.045)*k);
-  cloud(ctx,x+r*.47,y-r*.22,r*.9,r*1.27,.7,[158,160,80],.065*k);
- }
- // Sleep: two low-contrast violet veils breathe in opposite directions.
- if(w.sleep>.003){
-  const k=w.sleep*quiet,breath=q.breathing;
-  cloud(ctx,x-r*.4,y-r*.02,r*(.94+breath*.025),r*1.6,-.53+breath*.025,[106,66,170],(.11+breath*.014)*k);
-  cloud(ctx,x+r*.49,y+r*.17,r*.87,r*1.39,.5-breath*.025,[58,74,149],.09*k);
- }
- ctx.restore();
- // Keep the outer edge of the viewport black in every theme.
- const edge=ctx.createLinearGradient(0,0,f.width,0);edge.addColorStop(0,'#000');edge.addColorStop(.10,'rgba(0,0,0,.14)');edge.addColorStop(.25,'rgba(0,0,0,0)');edge.addColorStop(.75,'rgba(0,0,0,0)');edge.addColorStop(.90,'rgba(0,0,0,.14)');edge.addColorStop(1,'#000');ctx.fillStyle=edge;ctx.fillRect(0,0,f.width,f.height);
- const ends=ctx.createLinearGradient(0,0,0,f.height);ends.addColorStop(0,'rgba(0,0,0,.66)');ends.addColorStop(.22,'rgba(0,0,0,0)');ends.addColorStop(.72,'rgba(0,0,0,0)');ends.addColorStop(1,'rgba(0,0,0,.8)');ctx.fillStyle=ends;ctx.fillRect(0,0,f.width,f.height);
+ // The canvas outside this small halo stays completely black in every mode.
+ const {x,y,r,col,motion:q}=f;
+ if(!background)return;
+ const alpha=(.11+q.breathing*.006+q.beat*.012)*background/100*(1-f.menu*.25);
+ const edge=r*1.24,g=ctx.createRadialGradient(x,y,r*.78,x,y,edge);
+ g.addColorStop(0,rgba(col,0));g.addColorStop(.30,rgba(col,alpha));g.addColorStop(.57,rgba(col,alpha*.34));g.addColorStop(.8,rgba(col,alpha*.07));g.addColorStop(1,rgba(col,0));
+ ctx.save();ctx.fillStyle=g;ctx.fillRect(x-edge,y-edge,edge*2,edge*2);ctx.restore();
 }
 function fiber(f,t,q){
  const a=f.a,w=q.weights,amount=q.amount;
@@ -114,6 +79,6 @@ function inner(ctx,f){
  }
  ctx.restore();
 }
-window.IRISMotion={update,backdrop,fiber,inner,touch,record,intensity,invalidate,setPreference,setBackground,get background(){return background},get preference(){return preference},get reduced(){return media.matches},subscribe(fn){listeners.add(fn);return()=>listeners.delete(fn)},frame(f){for(const fn of listeners)fn(f)}};
+window.IRISMotion={update,backdrop,fiber,inner,touch,record,intensity,invalidate,setPreference,setBackground,get background(){return background},get preference(){return preference},get reduced(){return media.matches},subscribe(fn){listeners.add(fn);return()=>listeners.delete(fn)},frame(f,ctx){for(const fn of listeners)fn(f,ctx)}};
 publishPreference();
 })();

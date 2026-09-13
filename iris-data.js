@@ -13,12 +13,12 @@ function load(){
  if(s.version!==1||!['food','sleep','water','sport'].every(k=>Array.isArray(s[k])))throw Error('Не удалось прочитать дневник. Записи сохранены на устройстве.');
  return s;
 }
-let state,loadError=null;
+let state,loadError=null;const summaryCache=new Map();
 try{state=load()}catch(e){loadError=e;state=empty()}
 function commit(next){
  if(loadError)throw loadError;
  try{localStorage.setItem(KEY,JSON.stringify(next))}catch{throw Error('Не удалось сохранить запись. Освободи немного места на устройстве и попробуй ещё раз.')}
- state=next;mirrorWater();window.dispatchEvent(new CustomEvent('iris:data'));
+ state=next;summaryCache.clear();mirrorWater();window.dispatchEvent(new CustomEvent('iris:data'));
 }
 function fresh(){if(loadError)throw loadError;const s=load();if(s)state=s;return structuredClone(state)}
 function waterTotal(date=day()){return Math.max(0,state.water.filter(e=>e.date===date).reduce((n,e)=>n+e.ml,0))}
@@ -77,18 +77,25 @@ function addSport(start,end){
  const s=fresh();if(s.sport.some(e=>e.start===start&&e.end===end))return;
  s.sport.push({id:uid(),date:day(end),start,end,ms:end-start,at:end});commit(s);
 }
-function allSport(){
+function allSport(includeRunning=true){
  const list=[...state.sport],start=Number(localStorage.getItem('irisSportStartedV11'));
- if(localStorage.getItem('irisSportRunningV11')==='1'&&start>0)list.push({id:'running',start,end:Date.now(),ms:Date.now()-start,at:Date.now(),running:true});
+ if(includeRunning&&localStorage.getItem('irisSportRunningV11')==='1'&&start>0)list.push({id:'running',start,end:Date.now(),ms:Date.now()-start,at:Date.now(),running:true});
  return list;
 }
-function sportFor(date){
+function sportFor(date,includeRunning=true){
  const from=dateAt(date).getTime(),to=dateAt(shift(date,1)).getTime();
- return allSport().map(e=>e.legacy?e.date===date?e:null:{...e,ms:Math.max(0,Math.min(e.end,to)-Math.max(e.start,from)),at:Math.min(e.end,to-1),date}).filter(e=>e&&e.ms>0);
+ return allSport(includeRunning).map(e=>e.legacy?e.date===date?e:null:{...e,ms:Math.max(0,Math.min(e.end,to)-Math.max(e.start,from)),at:Math.min(e.end,to-1),date}).filter(e=>e&&e.ms>0);
 }
 function summary(date=day()){
- const food=state.food.filter(e=>e.date===date),sleep=state.sleep.filter(e=>e.date===date),water=state.water.filter(e=>e.date===date),sport=sportFor(date);
- return{date,food:food.reduce((n,e)=>n+e.kcal,0),sleep:sleep.reduce((n,e)=>n+e.ms,0)/3600000,water:Math.max(0,water.reduce((n,e)=>n+e.ml,0))/1000,sport:sport.reduce((n,e)=>n+e.ms,0)/60000,present:{food:!!food.length,sleep:!!sleep.length,water:!!water.length,sport:!!sport.length}};
+ let saved=summaryCache.get(date);
+ if(!saved){
+  const food=state.food.filter(e=>e.date===date),sleep=state.sleep.filter(e=>e.date===date),water=state.water.filter(e=>e.date===date),sport=sportFor(date,false);
+  saved={date,food:food.reduce((n,e)=>n+e.kcal,0),sleep:sleep.reduce((n,e)=>n+e.ms,0)/3600000,water:Math.max(0,water.reduce((n,e)=>n+e.ml,0))/1000,sport:sport.reduce((n,e)=>n+e.ms,0)/60000,present:{food:!!food.length,sleep:!!sleep.length,water:!!water.length,sport:!!sport.length}};
+  if(summaryCache.size>=128)summaryCache.delete(summaryCache.keys().next().value);summaryCache.set(date,saved);
+ }
+ const start=Number(localStorage.getItem('irisSportStartedV11'));
+ const active=localStorage.getItem('irisSportRunningV11')==='1'&&start>0?Math.max(0,Math.min(Date.now(),dateAt(shift(date,1)).getTime())-Math.max(start,dateAt(date).getTime()))/60000:0;
+ return {...saved,sport:saved.sport+active,present:{...saved.present,sport:saved.present.sport||active>0}};
 }
 function events(date){return [
  ...state.food.filter(e=>e.date===date).map(e=>({...e,kind:'food'})),
@@ -173,7 +180,7 @@ function restoreBackup(text,{revision,restoreGoal=false}={}){
  commit(plan.next);return plan.counts;
 }
 window.IRISData={day,shift,validDate,summary,events,changeWater,undoWater,saveFood,saveSleep,remove,removeFavorite,addSport,goal,exportBackup,previewBackup,restoreBackup,get foodGoal(){return state.foodGoal},get error(){return loadError?.message},get entries(){return structuredClone(state)}};
-addEventListener('storage',e=>{if(e.key===KEY){try{state=load()||empty();loadError=null;mirrorWater();dispatchEvent(new CustomEvent('iris:data'))}catch(error){loadError=error}}});
+addEventListener('storage',e=>{if(e.key===KEY){try{state=load()||empty();summaryCache.clear();loadError=null;mirrorWater();dispatchEvent(new CustomEvent('iris:data'))}catch(error){loadError=error}}});
 let currentDay=day();
 setInterval(()=>{if(currentDay!==day()){currentDay=day();mirrorWater();dispatchEvent(new CustomEvent('iris:data'))}},15000);
 })();

@@ -90,7 +90,7 @@ button:focus-visible{outline:1px solid #9bc6e6;outline-offset:4px}
 
 /* IRIS v40 — a single focal point, with generous black space. */
 #app .ambient{display:none}
-#app .noise{opacity:.014}
+#app .noise{display:none}
 #app .topbar{height:64px;top:calc(var(--safe-top) + 4px)}
 #app .brand{font-size:20px;font-weight:250;letter-spacing:.62em}
 #app .sound-trigger{width:44px;height:44px;transform:none;opacity:.7;background:none;border-color:rgba(220,235,245,.08)}
@@ -144,7 +144,7 @@ button:focus-visible{outline:1px solid #9bc6e6;outline-offset:4px}
 #app .radial-right{right:0;top:50%;transform:translateY(-50%)}
 #app .radial-core{width:40px;height:40px;aspect-ratio:1;display:grid;place-items:center;padding:11px;background:#000;border:1px solid #202832;color:#8c9ca9;cursor:pointer;box-shadow:none}
 #app .radial-core svg{width:16px;height:16px}
-#app .statistics-view{padding-top:calc(env(safe-area-inset-top) + 20px);background:radial-gradient(ellipse at 50% 38%,#080d13 0%,#000 58%)}
+#app .statistics-view{padding-top:calc(env(safe-area-inset-top) + 20px);background:#000}
 #app .stats-heading{margin:32px 0 30px}
 #app .stats-heading h1{font-size:30px;font-weight:280}
 #app .stats-heading p{font-size:13px;color:#939ca7}
@@ -205,7 +205,7 @@ button:focus-visible{outline:1px solid #9bc6e6;outline-offset:4px}
 [data-motion="still"] #app .readout-enter>*{animation:none!important}
 @media(prefers-reduced-motion:reduce){#app .readout-enter>*{animation:none!important}}
 
-#dayTrail{position:absolute;width:0;height:0;z-index:6;pointer-events:none}
+#dayTrail{position:absolute;left:0;top:0;width:0;height:0;z-index:6;pointer-events:none}
 .day-mark{position:absolute;display:grid;place-items:center;width:44px;height:44px;padding:0;transform:translate(-50%,-50%);border:0;background:transparent;border-radius:50%;pointer-events:auto;cursor:pointer;touch-action:manipulation;color:var(--mark-color)}
 .day-mark span{width:5px;height:5px;background:var(--mark-color);border-radius:50%;box-shadow:0 0 10px var(--mark-color);opacity:.85}
 .day-mark i{position:absolute;width:2px;height:2px;top:13px;right:14px;background:var(--mark-color);border-radius:50%;opacity:.7}

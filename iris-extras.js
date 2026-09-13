@@ -25,7 +25,7 @@ addEventListener('iris:water-change',e=>{
 // Each mark groups actual events in a time slot; there are no invented points.
 const trail=document.createElement('div');trail.id='dayTrail';trail.setAttribute('role','group');trail.setAttribute('aria-label','След дня: записи вокруг глаза');stage.append(trail);
 $('#openSections').after(Object.assign(document.createElement('button'),{id:'openDayTrail',className:'quiet-action trail-link',type:'button',textContent:'След дня'}));
-let slots=12,groups=[],lastFrame=null,trailSlot=null;
+let slots=12,groups=[],lastFrame=null,trailSlot=null,lastTrailRadius=-1,lastTrailPosition='';
 function rebuildTrail(){
  const all=D.events(D.day()).filter(e=>!e.legacy&&!e.running&&e.at);
  const grouped=new Map();
@@ -36,18 +36,21 @@ function rebuildTrail(){
   const times=entries.map(e=>new Date(e.at).toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'}));
   return `<button type="button" class="day-mark" data-slot="${bin}" style="--mark-color:${color}" aria-label="${esc(types.map(k=>labels[k]).join(', '))}, ${esc(times.at(-1))}${times.length>1?' — '+esc(times[0]):''}. Записей: ${entries.length}"><span></span>${entries.length>1?'<i></i>':''}</button>`;
  }).join('');
+ lastTrailRadius=-1;
  const count=D.events(D.day()).length;$('#openDayTrail').textContent=count?`След дня · ${count}`:'След дня';
  if(lastFrame)placeTrail(lastFrame);
  if($('#trailDialog').open)renderTrail();
 }
 function placeTrail(f){
  const show=app.classList.contains('mode-home')&&app.dataset.welcome!=='true'&&app.dataset.view!=='stats'&&app.dataset.contemplation!=='true'&&!app.classList.contains('menu-open');
- trail.hidden=!show;if(!show)return;
- trail.style.left=f.x+'px';trail.style.top=f.y+'px';
+ if(trail.hidden===show)trail.hidden=!show;if(!show||!trail.children.length)return;
+ const position=`translate(${Math.round(f.x*2)/2}px,${Math.round(f.y*2)/2}px)`;
+ if(position!==lastTrailPosition){trail.style.transform=position;lastTrailPosition=position}
+ if(Math.abs(f.r-lastTrailRadius)<.5)return;lastTrailRadius=f.r;
  for(const b of trail.children){const angle=(Number(b.dataset.slot)+.5)/slots*Math.PI*2-Math.PI/2;b.style.left=Math.cos(angle)*f.r*1.055+'px';b.style.top=Math.sin(angle)*f.r*1.055+'px'}
 }
 M.subscribe(f=>{
- lastFrame=f;const count=Math.min(12,Math.max(5,Math.floor(Math.PI*2*f.r*1.055/48)));
+ lastFrame=f;const count=Math.min(12,Math.max(5,Math.floor(Math.PI*2*f.baseRadius*1.055/48)));
  if(count!==slots){slots=count;rebuildTrail()}else placeTrail(f);
 });
 function renderTrail(){
@@ -78,7 +81,7 @@ $('#favoriteEntries').addEventListener('click',e=>{
 // Background light is independent of both the iris and its motion setting.
 $('#appearanceTitle').textContent='Внешний вид';
 $('#appearanceDialog .motion-options').before(Object.assign(document.createElement('h3'),{className:'appearance-section',textContent:'Движение глаза'}));
-$('#appearanceDialog .primary-action').insertAdjacentHTML('beforebegin','<div class="background-setting"><label for="backgroundBrightness">Яркость фона <output id="backgroundValue" for="backgroundBrightness"></output></label><input id="backgroundBrightness" type="range" min="0" max="100" step="5"><p class="field-note">Меняет свечение вокруг глаза. При нуле фон чёрный.</p></div>');
+$('#appearanceDialog .primary-action').insertAdjacentHTML('beforebegin','<div class="background-setting"><label for="backgroundBrightness">Свечение вокруг глаза <output id="backgroundValue" for="backgroundBrightness"></output></label><input id="backgroundBrightness" type="range" min="0" max="100" step="5"><p class="field-note">Только мягкий свет у края радужки. Фон всегда чёрный.</p></div>');
 function syncBackground(){$('#backgroundBrightness').value=M.background;$('#backgroundValue').textContent=M.background+'%'}
 $('#backgroundBrightness').addEventListener('input',e=>M.setBackground(Number(e.target.value)));
 addEventListener('iris:motion',syncBackground);syncBackground();

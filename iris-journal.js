@@ -75,7 +75,7 @@ function view(name,push=true){
  $('#eyeTab').setAttribute('aria-current',name==='eye'?'page':'false');$('#statsTab').setAttribute('aria-current',name==='stats'?'page':'false');
  dispatchEvent(new CustomEvent('iris:visibility'));
  if(name==='stats')renderStats();
- if(push)history.pushState(null,'',name==='stats'?'#statistics':location.pathname+location.search);
+ if(push&&((name==='stats')!==(location.hash==='#statistics')))history.pushState(null,'',name==='stats'?'#statistics':location.pathname+location.search);
 }
 $('#eyeTab').addEventListener('click',()=>{view('eye');dispatchEvent(new CustomEvent('iris:navigate',{detail:'home'}))});
 $('#statsBack').addEventListener('click',()=>view('eye'));
@@ -89,13 +89,15 @@ $('#enterIris').addEventListener('click',()=>{
  try{localStorage.setItem('irisWelcomedV39','1')}catch{}
  app.dataset.welcome='false';$('#welcome').hidden=true;$('#stage').inert=false;view('eye',false);
 });
-function renderReadout(){
- const m=mode(),sum=D.summary(),all=D.entries;
+let readoutMode=null;
+function renderReadout(force=false){
+ const m=mode();if(!force&&readoutMode===m)return;readoutMode=m;
+ const sum=(m==='food'||m==='sleep')?D.summary():null;
  if(m==='food'){
   $('#metricLabel').textContent='ПИТАНИЕ';$('#metricValue').textContent=sum.present.food?number(sum.food):'—';
   const remaining=D.foodGoal-sum.food;
   $('#metricCaption').textContent=sum.present.food?`из ${number(D.foodGoal)} ккал · ${remaining>=0?'Осталось '+number(remaining):'Сверх цели '+number(-remaining)} ккал`:'Сегодня пока нет записей';
-  const latest=all.food.filter(e=>e.date===D.day()).sort((a,b)=>b.at-a.at)[0];
+  const latest=D.entries.food.filter(e=>e.date===D.day()).sort((a,b)=>b.at-a.at)[0];
   $('#latestFood').hidden=!latest;
   if(latest){$('#latestFood').dataset.id=latest.id;$('#latestFood').innerHTML=`${icon('food')}<span>${esc(latest.meal)} · ${number(latest.kcal)} ккал</span><time>${time(latest.at)}</time>`}
  }else if(m==='sleep'){
@@ -200,8 +202,8 @@ function renderStats(){
 $('#statsDate').addEventListener('change',e=>{if(D.validDate(e.target.value)&&e.target.value<=D.day()){selected=e.target.value;renderStats()}});
 $('#statsSummary').addEventListener('click',e=>{const b=e.target.closest('[data-metric]');if(b){kind=b.dataset.metric;renderStats()}});
 document.querySelectorAll('[data-period]').forEach(b=>b.addEventListener('click',()=>{period=b.dataset.period;renderStats()}));
-function refresh(){renderReadout();if(app.dataset.view==='stats')renderStats();if($('#historyDialog').open)renderHistory()}
-new MutationObserver(renderReadout).observe(app,{attributes:true,attributeFilter:['class']});
+function refresh(){renderReadout(true);if(app.dataset.view==='stats')renderStats();if($('#historyDialog').open)renderHistory()}
+new MutationObserver(()=>renderReadout()).observe(app,{attributes:true,attributeFilter:['class']});
 addEventListener('iris:data',refresh);addEventListener('iris:error',e=>toast(e.detail));
 addEventListener('iris:sport',()=>{if(app.dataset.view==='stats')renderStats()});
 setInterval(()=>{if(app.dataset.view==='stats'&&localStorage.getItem('irisSportRunningV11')==='1')renderStats()},10000);

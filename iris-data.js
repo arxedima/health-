@@ -181,6 +181,12 @@ function restoreBackup(text,{revision,restoreGoal=false}={}){
 }
 window.IRISData={day,shift,validDate,summary,events,changeWater,undoWater,saveFood,saveSleep,remove,removeFavorite,addSport,goal,exportBackup,previewBackup,restoreBackup,get foodGoal(){return state.foodGoal},get error(){return loadError?.message},get entries(){return structuredClone(state)}};
 addEventListener('storage',e=>{if(e.key===KEY){try{state=load()||empty();summaryCache.clear();loadError=null;mirrorWater();dispatchEvent(new CustomEvent('iris:data'))}catch(error){loadError=error}}});
-let currentDay=day();
-setInterval(()=>{if(currentDay!==day()){currentDay=day();mirrorWater();dispatchEvent(new CustomEvent('iris:data'))}},15000);
+let currentDay=day(),dayTimer=0;
+function checkDay(){
+ clearTimeout(dayTimer);dayTimer=0;if(document.hidden)return;
+ const today=day();if(currentDay!==today){currentDay=today;mirrorWater();dispatchEvent(new CustomEvent('iris:data'))}
+ const next=new Date();next.setHours(24,0,0,0);
+ dayTimer=setTimeout(checkDay,Math.max(1000,next.getTime()-Date.now()+50));
+}
+document.addEventListener('visibilitychange',checkDay);addEventListener('pageshow',checkDay);checkDay();
 })();

@@ -6,12 +6,13 @@ const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const paths={eye:'M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0',stats:'M5 20V12 M12 20V4 M19 20V8',water:'M12 3C10 7 5 11 5 15a7 7 0 0 0 14 0c0-4-5-8-7-12Z',sleep:'M20 15.5A9 9 0 0 1 8.5 4 9 9 0 1 0 20 15.5Z',food:'M6 3v7m-3-7v4a3 3 0 0 0 6 0V3 M6 10v11 M17 3v18 M17 3c-4 3-4 8 0 8',sport:'m13 7-4 5 5 3-2 6 M9 12l-4 1 M13 7l3 4 4 1 M14 3h.01',arrow:'M5 12h14m-6-6 6 6-6 6',back:'m15 5-7 7 7 7',close:'m6 6 12 12M6 18 18 6',plus:'M12 5v14M5 12h14',calendar:'M5 4h14v17H5Z M8 2v4m8-4v4M5 9h14'};
 const icon=k=>`<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"><path d="${paths[k]||paths.eye}"/></svg>`;
 const kinds={water:{label:'Вода',unit:'л',color:'#6db8ec'},sport:{label:'Спорт',unit:'мин',color:'#e8887c'},food:{label:'Питание',unit:'ккал',color:'#a8bb7b'},sleep:{label:'Сон',unit:'ч',color:'#b39be7'}};
-const number=n=>new Intl.NumberFormat('ru-RU',{maximumFractionDigits:1}).format(n);
-const dateLabel=(date,options={day:'numeric',month:'long'})=>new Date(date+'T12:00:00').toLocaleDateString('ru-RU',options);
-const time=ms=>new Date(ms).toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'});
+const numberFormat=new Intl.NumberFormat('ru-RU',{maximumFractionDigits:1}),timeFormat=new Intl.DateTimeFormat('ru-RU',{hour:'2-digit',minute:'2-digit'}),dateFormats=new Map();
+const number=n=>numberFormat.format(n);
+const dateLabel=(date,options={day:'numeric',month:'long'})=>{const key=JSON.stringify(options);if(!dateFormats.has(key))dateFormats.set(key,new Intl.DateTimeFormat('ru-RU',options));return dateFormats.get(key).format(new Date(date+'T12:00:00'))};
+const time=ms=>timeFormat.format(new Date(ms));
 const localInput=ms=>`${D.day(ms)}T${time(ms)}`;
 const duration=hours=>{const total=Math.round(hours*60);return `${Math.floor(total/60)} ч ${String(total%60).padStart(2,'0')} м`};
-let selected=D.day(),period='day',kind='water',historyDate=D.day(),editId=null,editKind=null;
+let selected=D.day(),period='day',kind='water',historyDate=D.day(),editId=null,editKind=null,statsTimer=0;
 const returnFocus=new WeakMap();
 const metric=$('#metric');
 metric.insertAdjacentHTML('beforeend',`<div class="journal-actions food-actions"><button id="latestFood" class="last-meal" type="button"></button><button id="addFood" class="primary-action" type="button">${icon('plus')}Добавить еду</button><button id="foodHistory" class="quiet-action" type="button">История питания</button><button id="foodGoal" class="goal-action" type="button"></button></div><div class="journal-actions sleep-actions"><button id="addSleep" class="primary-action" type="button">${icon('plus')}Записать сон</button><button id="sleepHistory" class="quiet-action" type="button">История сна</button></div>`);
@@ -74,7 +75,6 @@ function view(name,push=true){
  app.dataset.view=name;$('#statistics').hidden=name!=='stats';$('#stage').inert=name==='stats';
  $('#eyeTab').setAttribute('aria-current',name==='eye'?'page':'false');$('#statsTab').setAttribute('aria-current',name==='stats'?'page':'false');
  dispatchEvent(new CustomEvent('iris:visibility'));
- if(name==='stats')renderStats();
  if(push&&((name==='stats')!==(location.hash==='#statistics')))history.pushState(null,'',name==='stats'?'#statistics':location.pathname+location.search);
 }
 $('#eyeTab').addEventListener('click',()=>{view('eye');dispatchEvent(new CustomEvent('iris:navigate',{detail:'home'}))});
@@ -182,6 +182,7 @@ function bars(list){
  return `<svg viewBox="0 0 360 174" role="img" aria-label="${kinds[kind].label}: ${kinds[kind].unit} по дням"><text x="5" y="19" fill="#8e949f" font-size="10">${number(max)} ${kinds[kind].unit}</text><line x1="35" x2="343" y1="139" y2="139" stroke="#20242a"/>${list.map((s,i)=>{const h=s[kind]/max*108,x=39+i*step;return `<rect x="${x}" y="${139-h}" width="${bw}" height="${Math.max(s.present[kind]?2:0,h)}" rx="${Math.min(3,bw/2)}" fill="${kinds[kind].color}" opacity=".78"><title>${dateLabel(s.date)}: ${s.present[kind]?number(s[kind])+' '+kinds[kind].unit:'Нет данных'}</title></rect>${i===0||i===list.length-1||list.length<=7||i%7===0?`<text x="${x+bw/2}" y="165" text-anchor="middle" fill="#717782" font-size="10">${Number(s.date.slice(-2))}</text>`:''}`}).join('')}</svg>`;
 }
 function renderStats(){
+ if(!statsVisible()){scheduleStats();return}
  const dd=dates(),list=dd.map(d=>D.summary(d)),sums={};
  for(const k of Object.keys(kinds)){const present=list.filter(s=>s.present[k]);sums[k]={present:present.length>0,value:present.reduce((n,s)=>n+s[k],0)/(k==='sleep'&&period!=='day'?Math.max(1,present.length):1)}}
  $('#statsDate').value=selected;$('#statsDate').max=D.day();
@@ -198,15 +199,19 @@ function renderStats(){
  $('#eventsHeading').textContent=period==='day'?'События дня':`${kinds[kind].label} по дням`;
  $('#eventsCount').textContent=period==='day'?String(events.length):`${list.filter(s=>s.present[kind]).length} из ${list.length} дней`;
  $('#statsEvents').innerHTML=period==='day'?(events.length?events.map(eventRow).join(''):'<p class="empty-note">Вода, тренировки, питание и сон появятся здесь после записи.</p>'):list.slice().reverse().map(s=>`<button class="day-row" data-day="${s.date}" type="button"><span>${dateLabel(s.date,{weekday:'short',day:'numeric',month:'short'})}</span><strong>${s.present[kind]?number(s[kind])+' '+kinds[kind].unit:'Нет данных'}</strong></button>`).join('');
+ scheduleStats();
 }
 $('#statsDate').addEventListener('change',e=>{if(D.validDate(e.target.value)&&e.target.value<=D.day()){selected=e.target.value;renderStats()}});
-$('#statsSummary').addEventListener('click',e=>{const b=e.target.closest('[data-metric]');if(b){kind=b.dataset.metric;renderStats()}});
-document.querySelectorAll('[data-period]').forEach(b=>b.addEventListener('click',()=>{period=b.dataset.period;renderStats()}));
+$('#statsSummary').addEventListener('click',e=>{const b=e.target.closest('[data-metric]');if(b&&kind!==b.dataset.metric){kind=b.dataset.metric;renderStats()}});
+document.querySelectorAll('[data-period]').forEach(b=>b.addEventListener('click',()=>{if(period!==b.dataset.period){period=b.dataset.period;renderStats()}}));
 function refresh(){renderReadout(true);if(app.dataset.view==='stats')renderStats();if($('#historyDialog').open)renderHistory()}
 new MutationObserver(()=>renderReadout()).observe(app,{attributes:true,attributeFilter:['class']});
 addEventListener('iris:data',refresh);addEventListener('iris:error',e=>toast(e.detail));
-addEventListener('iris:sport',()=>{if(app.dataset.view==='stats')renderStats()});
-setInterval(()=>{if(app.dataset.view==='stats'&&localStorage.getItem('irisSportRunningV11')==='1')renderStats()},10000);
+function statsVisible(){return !document.hidden&&app.dataset.view==='stats'&&app.dataset.welcome!=='true'&&!document.querySelector('dialog[open]')}
+function scheduleStats(){clearTimeout(statsTimer);statsTimer=0;if(statsVisible()&&window.IRISSport?.snapshot().running)statsTimer=setTimeout(renderStats,10000)}
+addEventListener('iris:sport',()=>{if(statsVisible())renderStats();else scheduleStats()});
+addEventListener('iris:visibility',()=>{if(statsVisible())renderStats();else scheduleStats()});
+document.addEventListener('visibilitychange',()=>{if(statsVisible())renderStats();else scheduleStats()});
 view(location.hash==='#statistics'?'stats':'eye',false);if(!welcomed)$('#stage').inert=true;renderReadout();
 if(D.error)toast(D.error);
 window.IRISJournal={openDialog,registerDialog,toast,inspectEntry,eventRow,esc,icon};

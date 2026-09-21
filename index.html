@@ -11,13 +11,14 @@
   <meta name="application-name" content="IRIS">
   <meta name="description" content="IRIS — живой интерфейс здоровья.">
   <link rel="canonical" href="https://arxedima.github.io/health-/">
-  <link rel="manifest" href="/health-/manifest.webmanifest?v=iris44-icon23">
+  <link rel="manifest" href="/health-/manifest.webmanifest?v=iris46-icon23">
   <link rel="icon" type="image/png" href="/health-/app-icon-large.png?v=23">
   <link rel="apple-touch-icon" href="/health-/apple-touch-icon-large.png?v=23">
   <link rel="apple-touch-icon-precomposed" href="/health-/apple-touch-icon-large.png?v=23">
   <title>IRIS</title>
-  <link rel="stylesheet" href="./styles.css?v=iris44">
-  <link rel="stylesheet" href="./journal.css?v=iris44">
+  <link rel="stylesheet" href="./styles.css?v=iris46">
+  <link rel="stylesheet" href="./journal.css?v=iris46">
+  <link rel="stylesheet" href="./next.css?v=iris46">
 </head>
 <body>
 <main id="app" class="app mode-home">
@@ -91,18 +92,19 @@
     </div>
   </aside>
 </main>
-<script src="./iris-data.js?v=iris44"></script>
-<script src="./iris-motion.js?v=iris44"></script>
-<script src="./iris-engine.js?v=iris44"></script>
-<script src="./iris-v11.js?v=iris44"></script>
-<script src="./iris-v24.js?v=iris44"></script>
-<script src="./iris-journal.js?v=iris44"></script>
-<script src="./iris-extras.js?v=iris44"></script>
+<script src="./iris-data.js?v=iris46"></script>
+<script src="./iris-motion.js?v=iris46"></script>
+<script src="./iris-engine.js?v=iris46"></script>
+<script src="./iris-v11.js?v=iris46"></script>
+<script src="./iris-v24.js?v=iris46"></script>
+<script src="./iris-journal.js?v=iris46"></script>
+<script src="./iris-extras.js?v=iris46"></script>
+<script src="./iris-next.js?v=iris46"></script>
 <script>
 if('serviceWorker' in navigator){
   addEventListener('load',async()=>{
     try{
-      const registration=await navigator.serviceWorker.register('./sw.js?v=iris44-music4-icon23',{updateViaCache:'none'});
+      const registration=await navigator.serviceWorker.register('./sw.js?v=iris46-music4-icon23',{updateViaCache:'none'});
       await registration.update();
     }catch(e){}
   },{once:true});

@@ -2,14 +2,14 @@
 'use strict';
 const D=window.IRISData,J=window.IRISJournal,M=window.IRISMotion,$=s=>document.querySelector(s),app=$('#app'),stage=$('#stage');
 const {esc,icon}=J;
-const labels={water:'Вода',sport:'Спорт',food:'Питание',sleep:'Сон',favorites:'Избранные блюда'};
+const labels={water:'Вода',sport:'Спорт',food:'Питание',sleep:'Сон',favorites:'Избранные блюда',checkins:'Самочувствие'};
 const colors={water:'#6db8ec',sport:'#e8887c',food:'#a8bb7b',sleep:'#b39be7'};
 const close=id=>`<button class="round-button" type="button" data-close="${id}" aria-label="Закрыть">${icon('close')}</button>`;
 const dialog=(id,title,body)=>`<dialog id="${id}" class="iris-dialog" aria-labelledby="${id}Title"><div class="sheet-handle"></div><header class="sheet-header"><h2 id="${id}Title">${title}</h2>${close(id)}</header>${body}</dialog>`;
 app.insertAdjacentHTML('beforeend',
  dialog('trailDialog','След дня','<p id="trailCaption" class="field-note"></p><div id="trailEntries" class="event-list"></div>')+
  dialog('favoritesDialog','Избранные блюда','<p class="field-note">Выбери блюдо, проверь порцию и сохрани новый приём пищи.</p><div id="favoriteEntries"></div><p id="favoriteError" class="form-error" role="alert"></p>')+
- dialog('backupDialog','Копия дневника',`<p class="field-note">Сохрани записи, цель питания и избранные блюда в файл, чтобы перенести их на другое устройство.</p><button id="exportBackup" class="primary-action" type="button">Скачать копию</button><p id="backupSportNote" class="field-note" hidden>Текущая тренировка попадёт в копию после паузы.</p><div class="backup-import"><h3>Восстановить из файла</h3><p class="field-note">Новые записи добавятся к твоей истории. Уже сохранённые останутся на месте.</p><label class="file-picker">Выбрать копию<input id="backupFile" type="file" accept=".json,application/json"></label></div><div id="backupPreview" hidden><p id="backupFileName" class="field-note"></p><dl id="backupCounts" class="backup-counts"></dl><p id="backupSkipped" class="field-note"></p><label class="check-field"><input id="backupGoal" type="checkbox"><span id="backupGoalLabel"></span></label><button id="restoreBackup" class="primary-action" type="button">Добавить записи</button></div><p id="backupError" class="form-error" role="alert"></p>`) +
+ dialog('backupDialog','Копия дневника',`<p class="field-note">Сохрани записи, самочувствие, цели и личный режим в файл. Данные хранятся в этом браузере: копия помогает перенести их на другое устройство.</p><button id="exportBackup" class="primary-action" type="button">Скачать копию</button><p id="backupSportNote" class="field-note" hidden>Текущая тренировка попадёт в копию после паузы.</p><div class="backup-import"><h3>Восстановить из файла</h3><p class="field-note">Новые записи добавятся к твоей истории. Уже сохранённые останутся на месте.</p><label class="file-picker">Выбрать копию<input id="backupFile" type="file" accept=".json,application/json"></label></div><div id="backupPreview" hidden><p id="backupFileName" class="field-note"></p><dl id="backupCounts" class="backup-counts"></dl><p id="backupSkipped" class="field-note"></p><label class="check-field"><input id="backupGoal" type="checkbox"><span id="backupGoalLabel"></span></label><button id="restoreBackup" class="primary-action" type="button">Добавить записи</button></div><p id="backupError" class="form-error" role="alert"></p>`) +
  '<button id="leaveContemplation" class="leave-contemplation" type="button" aria-label="Вернуться к управлению" hidden><span>Коснись, чтобы вернуться</span></button>'
 );
 ['trailDialog','favoritesDialog','backupDialog'].forEach(id=>J.registerDialog($('#'+id)));
@@ -42,7 +42,7 @@ function rebuildTrail(){
  if($('#trailDialog').open)renderTrail();
 }
 function placeTrail(f){
- const show=app.classList.contains('mode-home')&&app.dataset.welcome!=='true'&&app.dataset.view!=='stats'&&app.dataset.contemplation!=='true'&&!app.classList.contains('menu-open');
+ const show=app.classList.contains('mode-home')&&app.dataset.welcome!=='true'&&app.dataset.view==='eye'&&app.dataset.contemplation!=='true'&&!app.classList.contains('menu-open');
  if(trail.hidden===show)trail.hidden=!show;if(!show||!trail.children.length)return;
  const position=`translate(${Math.round(f.x*2)/2}px,${Math.round(f.y*2)/2}px)`;
  if(position!==lastTrailPosition){trail.style.transform=position;lastTrailPosition=position}
@@ -101,10 +101,10 @@ leave.addEventListener('click',e=>{e.stopPropagation();contemplate(false)});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&app.dataset.contemplation==='true'){e.preventDefault();contemplate(false)}});
 addEventListener('iris:navigate',()=>{if(app.dataset.contemplation==='true')contemplate(false)});
 addEventListener('iris:statistics',()=>{if(app.dataset.contemplation==='true')contemplate(false)});
-addEventListener('iris:visibility',()=>{if(app.dataset.view==='stats'&&app.dataset.contemplation==='true')contemplate(false)});
+addEventListener('iris:visibility',()=>{if(app.dataset.view!=='eye'&&app.dataset.contemplation==='true')contemplate(false)});
 
 let pendingBackup=null,fileRead=0;
-function backupNote(){$('#backupSportNote').hidden=localStorage.getItem('irisSportRunningV11')!=='1'}
+function backupNote(){$('#backupSportNote').hidden=!D.workout.running}
 $('#settingsBackup').addEventListener('click',fromSettings(()=>{backupNote();J.openDialog('backupDialog')}));
 addEventListener('iris:sport',backupNote);
 $('#exportBackup').addEventListener('click',()=>{
@@ -123,7 +123,7 @@ $('#backupFile').addEventListener('change',async e=>{
   $('#backupFileName').textContent=file.name;
   $('#backupCounts').innerHTML=Object.entries(plan.added).map(([k,n])=>`<div><dt>${labels[k]}</dt><dd>+${n}</dd></div>`).join('');
   $('#backupSkipped').textContent=`Уже есть: ${plan.counts.duplicates}. Пропустим пересечения и несовместимые итоги: ${plan.counts.conflicts}.`;
-  $('#backupGoal').checked=plan.empty;$('#backupGoalLabel').textContent=`Восстановить цель питания: ${plan.foodGoal} ккал`;
+  $('#backupGoal').checked=plan.empty;$('#backupGoalLabel').textContent='Восстановить цели и личный режим из копии';
   $('#restoreBackup').textContent=plan.counts.added?`Добавить записи · ${plan.counts.added}`:'Применить копию';$('#backupPreview').hidden=false;
  }catch(error){if(token===fileRead)$('#backupError').textContent=error.message}
 });

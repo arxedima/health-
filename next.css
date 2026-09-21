@@ -1,0 +1,86 @@
+/* v46: black canvas, shared geometry, independent scrolling below the navigation. */
+:root{--nav-height:64px;--nav-bottom:max(18px,env(safe-area-inset-bottom));--view-bottom:calc(var(--nav-height) + var(--nav-bottom) + 8px)}
+html,body{height:100%;overflow:hidden}
+#app{height:100dvh;min-height:0;max-height:none}
+#app .bottom-nav{height:var(--nav-height);bottom:var(--nav-bottom);width:min(94%,420px);padding:3px 10px 0;gap:8px;background:#000;align-items:stretch}
+#app .bottom-nav button{flex:1;min-width:0;min-height:54px;padding:7px 4px}
+#app[data-view="journal"]>.topbar,#app[data-view="journal"]>#stage,#app[data-view="journal"]>.ambient{visibility:hidden}
+#app[data-view="journal"] #dayTrail,#app[data-welcome="true"] .journal-view{display:none}
+#app[data-view="journal"] .bottom-nav{--accent:188 211 229}
+#app .statistics-view,#app .journal-view{position:absolute;inset:0 0 var(--view-bottom);z-index:18;overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y;scrollbar-width:none;padding:calc(env(safe-area-inset-top) + 20px) 26px 28px;background:#000;user-select:text;-webkit-user-select:text}
+#app .journal-view{--accent:188 211 229}
+#app .journal-toast{position:absolute;top:calc(var(--safe-top) + 72px);bottom:auto;max-width:calc(100% - 32px);width:max-content;font-size:13px;z-index:28}
+#app .metric-caption{white-space:pre-line;max-width:310px}
+#app .v24-sport .sport-tools{display:flex;gap:4px;align-items:center;justify-content:space-between;width:100%}
+#app .sport-tools button{flex:1;min-height:44px;padding:8px 3px;background:none;border:0;color:#9aa5ae;font-size:12px;letter-spacing:0}
+#app .sport-tools .reset{padding:8px 3px}
+#app button:disabled{opacity:.35;cursor:default}
+#app .home-actions{width:min(100%,310px);margin-top:18px}
+#app .home-quick{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+#app .home-quick button{min-height:62px;display:flex;flex-direction:column;gap:8px;align-items:center;justify-content:center;border:1px solid #1b242b;border-radius:18px;background:#05080a;color:#afbac4;font:inherit;font-size:11px;cursor:pointer}
+#app .home-quick svg{color:var(--quick-color);width:21px;height:21px;opacity:1}
+#app .home-quick button:active{background:#111b23}
+#app .home-links{display:flex;align-items:center;justify-content:space-between;gap:0}
+#app .home-links .quiet-action{min-width:0;flex:1;white-space:nowrap;min-height:44px;width:auto;padding:8px 2px;font-size:11px}
+#app .home-links .trail-link{order:2}
+#app .water-panel{position:relative}
+#app #waterPortion{position:absolute;bottom:0;right:0;width:55%;font-size:12px}
+#app .water-actions [data-water="-250"]{width:45%;align-self:flex-start;font-size:12px}
+.journal-heading{margin:28px 0 22px}
+.eyebrow{font-size:10px;letter-spacing:.25em;color:#8b9aa6}
+.journal-heading h1{font-weight:280;font-size:29px;letter-spacing:-.035em;line-height:1.25;margin:13px 0}
+.journal-heading>p:last-child{font-size:13px;color:#8d99a4;line-height:1.5}
+.journal-date{display:flex;align-items:center;gap:3px;margin:0 -7px}
+.journal-date label{min-width:0;flex:1}
+.journal-date input{min-width:0;width:100%;min-height:44px;padding:8px 6px;border:0;border-radius:10px;background:#0a0e12;color:#c7d5df;color-scheme:dark;font:400 15px -apple-system,BlinkMacSystemFont,sans-serif;text-align:center}
+.journal-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;padding:24px 0}
+.journal-summary>span{display:flex;flex-direction:column;align-items:center;gap:10px;color:var(--quick-color)}
+.journal-summary svg{width:20px;height:20px}
+.journal-summary strong{font-size:12px;font-weight:400;color:#cbd5dc;white-space:nowrap}
+.journal-filters{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:4px 0;touch-action:pan-x}
+.journal-filters button{flex:none;min-height:44px;border:1px solid #222a31;border-radius:23px;padding:8px 13px;background:#000;color:#8e9aa5;font-size:12px;cursor:pointer}
+.journal-filters button[aria-pressed="true"]{border-color:#526775;background:#121d25;color:#dce9f2}
+#journalAddBottom{margin-top:24px}
+.quick-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px}
+.quick-grid button{display:flex;align-items:center;gap:12px;min-height:70px;padding:15px;border:1px solid #29343d;border-radius:17px;background:#0b1117;color:#d4e0ea;font:inherit;font-size:14px;cursor:pointer}
+.quick-grid svg{width:22px;height:22px;color:var(--quick-color)}
+.quick-grid button:last-child{grid-column:1/-1}
+.entry-fields{display:grid;gap:20px}
+#app .iris-dialog textarea{width:100%;box-sizing:border-box;resize:vertical;min-height:82px;border:1px solid #2a323b;border-radius:12px;padding:12px;background:#10151b;color:#e3ebf4;font:400 16px/1.5 -apple-system,BlinkMacSystemFont,sans-serif;user-select:text;-webkit-user-select:text}
+#app .plain-fieldset,.rating-field{margin:0;padding:0;border:0;min-width:0}
+.plain-fieldset legend,.rating-field legend{font-size:14px;color:#cad6df;margin-bottom:12px}
+#app .enabled-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+#app .enabled-grid .check-field{min-height:44px}
+.weekday-options{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:12px}
+.weekday-options label,.rating-options label{position:relative;cursor:pointer}
+#app .weekday-options input,#app .rating-options input{position:absolute;inset:0;margin:0;opacity:0;width:100%;height:100%;cursor:pointer}
+.weekday-options span,.rating-options span{min-height:44px;display:grid;place-items:center;border:1px solid #29353f;border-radius:13px;color:#8799a7;background:#0a1117;font-size:13px}
+.weekday-options input:checked+span,.rating-options input:checked+span{background:#233543;border-color:#8aa5b9;color:#edf6fb}
+.weekday-options input:focus-visible+span,.rating-options input:focus-visible+span{outline:2px solid #b5d5ed;outline-offset:3px}
+.rating-options{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.rating-options span{min-height:48px;font-size:16px}
+.rating-field p{font-size:11px;color:#8d9daa;margin:9px 0 0}
+#goalsForm{margin-top:22px}
+.stats-perspective{margin:28px 0}
+.perspective-heading{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin:22px 0 12px}
+.perspective-heading h2{font-size:16px;font-weight:400;color:#ccd9e2;margin:0}
+.perspective-heading>span{font-size:12px;color:#91a1ad}
+.comparison-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:18px 0 25px}
+.comparison-card{border:1px solid #202a32;border-radius:18px;background:#05080b;padding:15px 12px;min-width:0}
+.comparison-card>div{display:flex;align-items:center;gap:7px}
+.comparison-card svg{width:17px;height:17px;flex:none;color:var(--quick-color)}
+.comparison-card h3{font-size:11px;font-weight:400;color:#a2b2be;margin:0;line-height:1.4}
+.comparison-card>strong{display:block;font-size:22px;font-weight:300;color:#dfe9f0;margin:16px 0 12px}
+.comparison-card p{font-size:11px;line-height:1.5;color:#8c9eac;margin:8px 0 0}
+.wellbeing-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:18px 0}
+.wellbeing-summary>div{display:flex;flex-direction:column;gap:10px}
+.wellbeing-summary span{font-size:11px;color:#9aabb8}
+.wellbeing-summary strong{font-size:22px;font-weight:300;color:#dae5ee}
+.wellbeing-summary small{font-size:12px;color:#7f929f}
+.pause-clock{font-size:76px;font-weight:200;text-align:center;font-variant-numeric:tabular-nums;color:#c7dfed;padding:32px 0}
+#pauseStatus{text-align:center;margin-bottom:25px}
+#app .iris-dialog::backdrop{backdrop-filter:none;background:#000b}
+@media(max-width:350px){#app .statistics-view,#app .journal-view{padding-left:18px;padding-right:18px}.journal-heading h1{font-size:26px}.comparison-grid{gap:6px}.comparison-card{padding:13px 10px}.weekday-options{gap:1px}.weekday-options span{border-radius:9px;font-size:11px}}
+@media(max-height:700px){#app .home-actions{margin-top:14px}#app .home-quick button{min-height:54px;gap:6px}#app .metric-value{margin-top:9px}#app .metric-caption{font-size:12px}#app .journal-actions,#app .v24-sport,#app .water-panel{margin-top:16px}}
+@media(max-height:570px){#app .metric-label{font-size:10px}#app .metric-value,#app.mode-home .metric-value{font-size:34px;min-height:37px;margin-top:7px}#app.mode-sleep .metric-value{font-size:31px}#app .metric-caption{font-size:11px;margin-top:5px}#app .primary-action,#app .water-actions [data-water="250"],#app .v24-sport .main{min-height:44px;padding:10px 12px}#app .home-actions,#app .journal-actions,#app .v24-sport,#app .water-panel{margin-top:10px}}
+@media(prefers-reduced-motion:reduce){#app *,#app *::before,#app *::after{scroll-behavior:auto}}

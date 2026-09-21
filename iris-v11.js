@@ -6,37 +6,20 @@ style.textContent='.sound-trigger.v11-playing .sound-dot{background:rgba(235,245
 document.head.appendChild(style);
 
 // Timestamp-based timing continues when rendering is asleep; only one UI owns the readout.
-const timerKeys=['irisSportElapsedV11','irisSportStartedV11','irisSportRunningV11'];
-let timer;
-function readTimer(){
- const elapsed=Math.max(0,Number(localStorage.getItem(timerKeys[0]))||0),started=Math.max(0,Number(localStorage.getItem(timerKeys[1]))||0);
- timer={elapsed,started,running:localStorage.getItem(timerKeys[2])==='1'&&started>0};
-}
-function persist(next){
- localStorage.setItem(timerKeys[0],String(next.elapsed));
- localStorage.setItem(timerKeys[1],String(next.started));
- localStorage.setItem(timerKeys[2],next.running?'1':'0');
-}
-function snapshot(){return {ms:timer.elapsed+(timer.running?Math.max(0,Date.now()-timer.started):0),running:timer.running}}
-function updateTimer(reset=false){
- readTimer();const prev={...timer},now=Date.now(),current=snapshot();
- const next=reset?{elapsed:0,started:0,running:false}:prev.running?{elapsed:current.ms,started:0,running:false}:{elapsed:prev.elapsed,started:now,running:true};
- try{
-  persist(next);
-  if(prev.running&&now>prev.started)window.IRISData?.addSport(prev.started,now);
-  timer=next;
- }catch(error){
-  try{persist(prev)}catch{}timer=prev;
-  dispatchEvent(new CustomEvent('iris:error',{detail:'Не удалось сохранить тренировку. Освободи немного места и попробуй ещё раз.'}));
-  dispatchEvent(new CustomEvent('iris:sport'));return;
+const D=window.IRISData;
+function snapshot(){const w=D.workout;return {ms:w.elapsed+(w.running?Math.max(0,Date.now()-w.started):0),running:w.running,type:w.type,id:w.id}}
+function updateTimer(finish=false){
+ try{if(!D.updateWorkout(finish))return false}catch(error){
+  dispatchEvent(new CustomEvent('iris:error',{detail:error.message||'Не удалось сохранить тренировку.'}));return false;
  }
- dispatchEvent(new CustomEvent('iris:sport'));reset?playClick():playHit(timer.running);
- try{navigator.vibrate?.(timer.running?[14,28,10]:8)}catch{}
+ const running=snapshot().running;
+ dispatchEvent(new CustomEvent('iris:sport'));finish?playClick():playHit(running);
+ try{navigator.vibrate?.(running?[14,28,10]:8)}catch{}
+ return true;
 }
-readTimer();
-window.IRISSport={snapshot,toggle:()=>updateTimer(),reset:()=>updateTimer(true)};
-addEventListener('storage',e=>{if(e.key!==null&&!timerKeys.includes(e.key))return;readTimer();dispatchEvent(new CustomEvent('iris:sport'))});
-addEventListener('pageshow',()=>{readTimer();dispatchEvent(new CustomEvent('iris:sport'))});
+window.IRISSport={snapshot,toggle:()=>updateTimer(),finish:()=>updateTimer(true),reset:()=>updateTimer(true),setType(type){D.setWorkoutType(type);dispatchEvent(new CustomEvent('iris:sport'))}};
+addEventListener('storage',e=>{if(e.key===null||e.key==='irisJournalV39')dispatchEvent(new CustomEvent('iris:sport'))});
+addEventListener('pageshow',()=>dispatchEvent(new CustomEvent('iris:sport')));
 stage.addEventListener('iris:pupil-tap',()=>{if(app.classList.contains('mode-sport')&&app.dataset.contemplation!=='true')updateTimer()});
 
 /* ---------- iPhone-proof dark background music ---------- */
@@ -47,7 +30,7 @@ function unlockAudio(){if(!enabled||playing)return;let n=performance.now();if(n-
 function syncSound(){const old=qs('#soundToggle'),state=qs('#soundState');old?.classList.toggle('v11-playing',enabled&&playing);old?.classList.toggle('locked',enabled&&!playing);old?.classList.toggle('muted',!enabled);old?.setAttribute('aria-pressed',enabled?'true':'false');if(state)state.textContent=!enabled?'ВЫКЛ':playing?'ВКЛ':'КОСНИСЬ'}
 function setEnabled(v){enabled=!!v;localStorage.setItem('irisSound',enabled?'on':'off');if(!enabled){try{media?.pause()}catch{};playing=false}else unlockAudio();syncSound()}
 function fx(freq,d=.18,g=.035,slide=1){if(!enabled||!ctx||ctx.state!=='running')return;let o=ctx.createOscillator(),q=ctx.createGain();o.type='sine';o.frequency.setValueAtTime(freq,ctx.currentTime);o.frequency.exponentialRampToValueAtTime(Math.max(25,freq*slide),ctx.currentTime+d);q.gain.setValueAtTime(.0001,ctx.currentTime);q.gain.exponentialRampToValueAtTime(g,ctx.currentTime+.012);q.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+d);o.connect(q);q.connect(ctx.destination);o.start();o.stop(ctx.currentTime+d+.03)}
-function playHit(on){fx(on?58:82,.2,.045,on?.8:.72);if(on)setTimeout(()=>fx(82,.1,.025,.82),135)}function playClick(){fx(150,.16,.018,.75)}
+function playHit(on){fx(on?58:82,.2,.045,on?.8:.72);if(on&&enabled&&ctx?.state==='running')setTimeout(()=>fx(82,.1,.025,.82),135)}function playClick(){fx(150,.16,.018,.75)}
 syncSound();
 
 /* Remove old sound button listeners by replacing controls after old engine loaded. */

@@ -10,7 +10,7 @@ let touchEnergy=0,transitionLight=0,waterLevel=clamp(waterMl/waterGoal,0,1);
 let animationId=0,lastTick=null,lastPaint=null,clock=0,boostUntil=0;
 let rasterLimit=2,paintCost=0,costSamples=0,nextQualityCheck=0,pointerBounds=null,menuPosition='';
 let entrance=localStorage.getItem('irisWelcomedV39')==='1'?0:1;
-function visible(){return !document.hidden&&A.dataset.view!=='stats'&&!SP.classList.contains('open')&&!document.querySelector('dialog[open]')}
+function visible(){return !document.hidden&&(!A.dataset.view||A.dataset.view==='eye')&&!SP.classList.contains('open')&&!document.querySelector('dialog[open]')}
 function wake(){
  boostUntil=performance.now()+1100;
  if(!visible()){cancelGesture();if(animationId)cancelAnimationFrame(animationId);animationId=0;lastTick=lastPaint=null;return}
@@ -40,8 +40,8 @@ function tuneQuality(cost,now){
  else return;
  nextQualityCheck=now+5000;costSamples=0;
 }
-let sportRunning=localStorage.getItem('irisSportRunningV11')==='1';
-addEventListener('iris:sport',()=>{sportRunning=localStorage.getItem('irisSportRunningV11')==='1';wake()});
+let sportRunning=!!window.IRISData?.workout.running;
+addEventListener('iris:sport',()=>{sportRunning=!!window.IRISData?.workout.running;wake()});
 addEventListener('iris:record',e=>{if(e.detail===mode)motion.record(e.detail)});
 addEventListener('iris:motion',wake);addEventListener('iris:visibility',wake);
 let accent=[...M.home[4]],shade=[...M.home[5]];
@@ -49,7 +49,13 @@ let strokes;
 const fmt=ml=>(ml/1000).toFixed(2).replace('.',',').replace(/,00$/,',0')+' Л';
 
 const wp=document.createElement('section');wp.className='water-panel';wp.innerHTML='<div class="water-line"><span></span></div><div class="water-head"><strong></strong><small></small></div><div class="water-actions"><button type="button" data-water="-250" aria-label="Убрать 250 мл воды">− 250 мл</button><button type="button" data-water="250" aria-label="Добавить 250 мл воды">+ 250 мл</button></div><div class="water-hint">СВАЙП ВВЕРХ · +250 МЛ</div>';$('#metric').appendChild(wp);const wbar=wp.querySelector('.water-line span'),wcur=wp.querySelector('strong'),wgoal=wp.querySelector('small');
-function waterUI(){if(window.IRISData)waterMl=IRISData.summary().water*1000;let pr=clamp(waterMl/waterGoal,0,1);wbar.style.width=pr*100+'%';wcur.textContent=fmt(waterMl);wgoal.textContent='ИЗ '+fmt(waterGoal);if(mode==='water'){MV.textContent=fmt(waterMl);MC.textContent=`ИЗ ${fmt(waterGoal)} · ${Math.round(pr*100)}%`}}
+const waterPortion=()=>window.IRISData?.routine.waterPortion||250;
+function waterUI(){
+ const data=window.IRISData,plan=data?.dailyPlan();if(data){waterMl=data.summary().water*1000;waterGoal=plan.targets.water*1000}
+ const pr=clamp(waterMl/waterGoal,0,1),portion=waterPortion();wbar.style.width=pr*100+'%';wcur.textContent=fmt(waterMl);wgoal.textContent='ИЗ '+fmt(waterGoal);
+ wp.querySelectorAll('[data-water]').forEach(b=>{const add=+b.dataset.water>0;b.textContent=`${add?'+':'−'} ${portion} мл`;b.setAttribute('aria-label',`${add?'Добавить':'Убрать'} ${portion} мл воды`)});
+ if(mode==='water'){MV.textContent=fmt(waterMl);MC.textContent=plan?.active.water===false?'Вода за сегодня · без цели':`ИЗ ${fmt(waterGoal)} · ${Math.round(pr*100)}%`}
+}
 
 let sound=false,unlocked=false,audio=null,worldT=0,epoch=0;
 function soundUI(){let locked=sound&&!unlocked;SO?.classList.toggle('locked',locked);SO?.classList.toggle('muted',!sound);SO?.setAttribute('aria-pressed',sound?'true':'false');if(SW)SW.textContent=!sound?'ВЫКЛ':locked?'КОСНИСЬ':'ВКЛ'}
@@ -100,9 +106,10 @@ function resize(){
   const bounds=A.getBoundingClientRect();
   const oldW=W,oldH=H,oldD=D,oldR=R;
   D=Math.min(rasterLimit,devicePixelRatio||1);W=Math.round(bounds.width);H=Math.round(bounds.height);
-  const safe=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--content-bottom'))||18;
+  const nav=A.querySelector('.bottom-nav');
+  const safe=nav?Math.max(92,H-(nav.getBoundingClientRect().top-bounds.top)+10):112;
   // Fixed readout reservation prevents the eye from jumping when labels or controls change.
-  const available=H-safe-226-20;
+  const available=H-safe-270-24;
   R=Math.max(48,Math.min(W*.34,H*.178,174,(available-110)/2));
   cx=W/2;cy=Math.max(110+R,Math.min(H*.435,available-R));
   if(oldW===W&&oldH===H&&oldD===D&&Math.abs(oldR-R)<.01)return;
@@ -132,7 +139,7 @@ function changeWater(d){
 }
 function down(e){if(!visible()||S.inert||A.dataset.contemplation==='true'||A.dataset.welcome==='true'||e.target.closest('button')||p.down||e.isPrimary===false)return;let {x,y}=point(e,true);if(menu&&!inside(x,y,1.2)){closeMenu(false);return}if(!inside(x,y,1.1))return;p.id=e.pointerId;p.down=true;p.sx=p.x=p.lx=x;p.sy=p.y=p.ly=y;p.st=p.lt=performance.now();p.v=0;touchEnergy=Math.max(touchEnergy,.55);let q=ec(),dx=x-q.x,dy=y-q.y;p.a=Math.atan2(dy,dx);p.d=Math.hypot(dx,dy);motion.touch(p.a);wake();try{S.setPointerCapture(e.pointerId)}catch{}clearTimeout(hold);hold=setTimeout(openMenu,560);targetX=clamp(dx/R*2.8,-2.8,2.8);targetY=clamp(dy/R*2.4,-2.4,2.4);moveAudio(x,y,0)}
 function move(e){if(!p.down||e.pointerId!==p.id)return;let n=performance.now(),{x,y}=point(e),dt=Math.max(1,n-p.lt);p.v=Math.hypot(x-p.lx,y-p.ly)/dt;p.lt=n;p.lx=x;p.ly=y;p.x=x;p.y=y;let q=ec(),dx=x-q.x,dy=y-q.y;p.a=Math.atan2(dy,dx);p.d=Math.hypot(dx,dy);if(Math.hypot(x-p.sx,y-p.sy)>15&&!menu)clearTimeout(hold);targetX=clamp(dx/R*3.2,-3.2,3.2);targetY=clamp(dy/R*2.7,-2.7,2.7);moveAudio(x,y,p.v);wake();if(menu)choose(x,y)}
-function finish(e,cancel=false){if(!p.down||e.pointerId!==p.id)return;if(cancel){cancelGesture();closeMenu(false);wake();return}clearTimeout(hold);if(audio)audio.mg.gain.setTargetAtTime(0,audio.c.currentTime,.05);let {x,y}=point(e),dt=performance.now()-p.st,dx=x-p.sx,dy=y-p.sy,dist=Math.hypot(dx,dy);p.down=false;targetX=targetY=0;wake();const pointerId=p.id;p.id=null;try{S.releasePointerCapture(pointerId)}catch{}if(cancel){closeMenu(false);return}if(menu){if(sel||dist>22)closeMenu(true);return}if(dt<390&&dist<22){pulse(x,y);const center=ec();if(Math.hypot(x-center.x,y-center.y)<=Math.max(22,R*scale*.24))S.dispatchEvent(new CustomEvent('iris:pupil-tap'));return}if(Math.abs(dx)>68&&Math.abs(dx)>Math.abs(dy)*1.15){dispatchEvent(new CustomEvent('iris:gesture'));let i=O.indexOf(mode);setMode(dx<0?O[(i+1)%O.length]:O[(i-1+O.length)%O.length]);return}if(Math.abs(dy)>72&&Math.abs(dy)>Math.abs(dx)*1.08){if(mode==='water'){changeWater(dy<0?250:-250);return}if(dy<0)setMode('insights')}}
+function finish(e,cancel=false){if(!p.down||e.pointerId!==p.id)return;if(cancel){cancelGesture();closeMenu(false);wake();return}clearTimeout(hold);if(audio)audio.mg.gain.setTargetAtTime(0,audio.c.currentTime,.05);let {x,y}=point(e),dt=performance.now()-p.st,dx=x-p.sx,dy=y-p.sy,dist=Math.hypot(dx,dy);p.down=false;targetX=targetY=0;wake();const pointerId=p.id;p.id=null;try{S.releasePointerCapture(pointerId)}catch{}if(cancel){closeMenu(false);return}if(menu){if(sel||dist>22)closeMenu(true);return}if(dt<390&&dist<22){pulse(x,y);const center=ec();if(Math.hypot(x-center.x,y-center.y)<=Math.max(22,R*scale*.24))S.dispatchEvent(new CustomEvent('iris:pupil-tap'));return}if(Math.abs(dx)>68&&Math.abs(dx)>Math.abs(dy)*1.15){dispatchEvent(new CustomEvent('iris:gesture'));let i=O.indexOf(mode);setMode(dx<0?O[(i+1)%O.length]:O[(i-1+O.length)%O.length]);return}if(Math.abs(dy)>72&&Math.abs(dy)>Math.abs(dx)*1.08){if(mode==='water'){changeWater((dy<0?1:-1)*waterPortion());return}if(dy<0)setMode('insights')}}
 
 function waterFill(t,r,q){
  if(q.weights.water<.003||waterLevel<.002)return;
@@ -234,7 +241,7 @@ function cancelGesture(){
 }
 function settings(open){
  cancelGesture();closeMenu(false);SP.inert=!open;SP.classList.toggle('open',open);SP.setAttribute('aria-hidden',String(!open));A.classList.toggle('settings-open',open);
- S.inert=open||A.dataset.view==='stats'||A.dataset.welcome==='true';$('.topbar').inert=open;
+ S.inert=open||(A.dataset.view&&A.dataset.view!=='eye')||A.dataset.welcome==='true';$('.topbar').inert=open;
  const nav=$('.bottom-nav');if(nav)nav.inert=open;
  if(open)SP.querySelector('.close-settings').focus({preventScroll:true});else ST.focus({preventScroll:true});wake();
 }
@@ -257,9 +264,9 @@ document.addEventListener('keydown',e=>{
 });
 S.tabIndex=0;S.setAttribute('aria-description','Коснись волокон. Удерживай глаз или нажми Enter, чтобы открыть разделы.');
 addEventListener('iris:navigate',e=>{cancelGesture();closeMenu(false);setMode(e.detail)});
-addEventListener('iris:data',()=>{waterUI();wake()});
+addEventListener('iris:data',()=>{sportRunning=!!window.IRISData?.workout.running;waterUI();wake()});
 RI.forEach(i=>i.addEventListener('click',e=>{e.stopPropagation();sel=i.dataset.mode;closeMenu(true)}));
-wp.querySelectorAll('button').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();changeWater(+b.dataset.water)}));
+wp.querySelectorAll('[data-water]').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();changeWater(Math.sign(+b.dataset.water)*waterPortion())}));
 ST.addEventListener('click',()=>settings(true));
 document.querySelectorAll('[data-close-settings]').forEach(el=>el.addEventListener('click',()=>settings(false)));
 SO.addEventListener('click',async e=>{e.stopPropagation();if(!sound){setSound(true);await unlock()}else if(!unlocked)await unlock();else setSound(false)});
@@ -272,7 +279,7 @@ document.addEventListener('visibilitychange',()=>{
  else if(sound&&audio){audio.c.resume().then(()=>{unlocked=audio.c.state==='running';soundUI();if(unlocked)world()}).catch(()=>{unlocked=false;soundUI()})}
  wake();
 });
-addEventListener('storage',e=>{if(['irisSportRunningV11','irisSportStartedV11','irisSportElapsedV11'].includes(e.key)){sportRunning=localStorage.getItem('irisSportRunningV11')==='1';wake()}});
+addEventListener('storage',e=>{if(['irisSportRunningV11','irisSportStartedV11','irisSportElapsedV11'].includes(e.key)){sportRunning=!!window.IRISData?.workout.running;wake()}});
 if(window.ResizeObserver)new ResizeObserver(resize).observe(A);
 RM.inert=true;SP.inert=true;resize();ui();waterUI();wake();
 })();

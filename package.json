@@ -1,0 +1,7 @@
+{
+  "name": "iris-health",
+  "version": "4.6.0",
+  "private": true,
+  "scripts": {"test": "node --test tests/data.test.cjs tests/interface.test.cjs", "test:data": "node --test tests/data.test.cjs"},
+  "devDependencies": {"jsdom": "26.1.0", "@napi-rs/canvas": "0.1.100"}
+}

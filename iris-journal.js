@@ -12,7 +12,7 @@ const dateLabel=(date,options={day:'numeric',month:'long'})=>{const key=JSON.str
 const time=ms=>timeFormat.format(new Date(ms));
 const localInput=ms=>`${D.day(ms)}T${time(ms)}`;
 const duration=hours=>{const total=Math.round(hours*60);return `${Math.floor(total/60)} ч ${String(total%60).padStart(2,'0')} м`};
-let selected=D.day(),period='day',kind='water',historyDate=D.day(),editId=null,editKind=null,statsTimer=0;
+let selected=D.day(),period='day',kind='water',historyDate=D.day(),editId=null,editKind=null,statsTimer=0,lastToday=D.day();
 const returnFocus=new WeakMap();
 const metric=$('#metric');
 metric.insertAdjacentHTML('beforeend',`<div class="journal-actions food-actions"><button id="latestFood" class="last-meal" type="button"></button><button id="addFood" class="primary-action" type="button">${icon('plus')}Добавить еду</button><button id="foodHistory" class="quiet-action" type="button">История питания</button><button id="foodGoal" class="goal-action" type="button"></button></div><div class="journal-actions sleep-actions"><button id="addSleep" class="primary-action" type="button">${icon('plus')}Записать сон</button><button id="sleepHistory" class="quiet-action" type="button">История сна</button></div>`);
@@ -53,7 +53,8 @@ function toast(text,action){
  if(action){const b=document.createElement('button');b.type='button';b.textContent=action.label;b.addEventListener('click',()=>{try{action.run();toast('Отменено')}catch(error){toast(error.message)}});el.append(b)}
  el.hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.hidden=true,action?8000:3200);
 }
-function openDialog(id){const el=$('#'+id);returnFocus.set(el,document.activeElement);if(!el.open)el.showModal();dispatchEvent(new CustomEvent('iris:visibility'))}
+function dismissToast(){clearTimeout(toastTimer);$('#journalToast').hidden=true}
+function openDialog(id){dismissToast();const el=$('#'+id);if(!el.open){returnFocus.set(el,document.activeElement);el.showModal()}dispatchEvent(new CustomEvent('iris:visibility'))}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-close]');if(b)$('#'+b.dataset.close)?.close()});
 function registerDialog(el){
  el.addEventListener('click',e=>{if(e.target===el){const r=el.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)el.close()}});
@@ -71,16 +72,19 @@ document.querySelectorAll('[name="motion"]').forEach(input=>input.addEventListen
 addEventListener('iris:motion',syncAppearance);
 function mode(){return app.className.match(/mode-(\w+)/)?.[1]||'home'}
 function view(name,push=true){
+ dismissToast();
  dispatchEvent(new CustomEvent('iris:close-menu'));
- app.dataset.view=name;$('#statistics').hidden=name!=='stats';$('#stage').inert=name==='stats';
+ app.dataset.view=name;$('#statistics').hidden=name!=='stats';if($('#dailyJournal'))$('#dailyJournal').hidden=name!=='journal';$('#stage').inert=name!=='eye'||app.dataset.welcome==='true';
  $('#eyeTab').setAttribute('aria-current',name==='eye'?'page':'false');$('#statsTab').setAttribute('aria-current',name==='stats'?'page':'false');
+ $('#journalTab')?.setAttribute('aria-current',name==='journal'?'page':'false');
  dispatchEvent(new CustomEvent('iris:visibility'));
- if(push&&((name==='stats')!==(location.hash==='#statistics')))history.pushState(null,'',name==='stats'?'#statistics':location.pathname+location.search);
+ const hash=name==='stats'?'#statistics':name==='journal'?'#journal':'';
+ if(push&&location.hash!==hash)history.pushState(null,'',location.pathname+location.search+hash);
 }
 $('#eyeTab').addEventListener('click',()=>{view('eye');dispatchEvent(new CustomEvent('iris:navigate',{detail:'home'}))});
 $('#statsBack').addEventListener('click',()=>view('eye'));
 $('#statsTab').addEventListener('click',()=>view('stats'));
-addEventListener('popstate',()=>view(location.hash==='#statistics'?'stats':'eye',false));
+addEventListener('popstate',()=>view(location.hash==='#statistics'?'stats':location.hash==='#journal'?'journal':'eye',false));
 addEventListener('iris:statistics',()=>view('stats'));
 const welcomed=localStorage.getItem('irisWelcomedV39')==='1';
 app.dataset.welcome=String(!welcomed);$('#welcome').hidden=welcomed;
@@ -95,8 +99,8 @@ function renderReadout(force=false){
  const sum=(m==='food'||m==='sleep')?D.summary():null;
  if(m==='food'){
   $('#metricLabel').textContent='ПИТАНИЕ';$('#metricValue').textContent=sum.present.food?number(sum.food):'—';
-  const remaining=D.foodGoal-sum.food;
-  $('#metricCaption').textContent=sum.present.food?`из ${number(D.foodGoal)} ккал · ${remaining>=0?'Осталось '+number(remaining):'Сверх цели '+number(-remaining)} ккал`:'Сегодня пока нет записей';
+  const plan=D.dailyPlan(),remaining=plan.targets.food-sum.food;
+  $('#metricCaption').textContent=sum.present.food?(plan.active.food?`из ${number(plan.targets.food)} ккал · ${remaining>=0?'Осталось '+number(remaining):'Сверх цели '+number(-remaining)} ккал`:'Записано за сегодня · без цели'):'Сегодня пока нет записей';
   const latest=D.entries.food.filter(e=>e.date===D.day()).sort((a,b)=>b.at-a.at)[0];
   $('#latestFood').hidden=!latest;
   if(latest){$('#latestFood').dataset.id=latest.id;$('#latestFood').innerHTML=`${icon('food')}<span>${esc(latest.meal)} · ${number(latest.kcal)} ккал</span><time>${time(latest.at)}</time>`}
@@ -104,14 +108,16 @@ function renderReadout(force=false){
   $('#metricLabel').textContent='СОН';$('#metricValue').textContent=sum.present.sleep?duration(sum.sleep):'—';
   $('#metricCaption').textContent=sum.present.sleep?'С пробуждением сегодня':'Время для восстановления';
  }
- $('#foodGoal').textContent=`Цель: ${number(D.foodGoal)} ккал · изменить`;
+ $('#foodGoal').textContent='Цели и личный режим';
 }
-function openFood(id=null,date=D.day()){
- const e=id?D.entries.food.find(e=>e.id===id):null;if(id&&!e)return;
- editId=id;editKind='food';$('#entryTitle').textContent=id?'Приём пищи':'Добавить еду';
- let at=e?.at||Date.now();if(!e&&date!==D.day())at=new Date(date+'T12:00').getTime();
+function openFood(id=null,date=D.day(),copy=null){
+ const e=id?D.entries.food.find(e=>e.id===id):copy;if(id&&!e)return;
+ editId=id;editKind='food';$('#entryTitle').textContent=id?'Приём пищи':copy?'Повторить блюдо':'Добавить еду';
+ let at=id?e.at:Date.now();if(!id&&date!==D.day())at=new Date(date+'T12:00').getTime();
  $('#entryFields').innerHTML=`<label>Название блюда<input name="name" type="text" maxlength="100" placeholder="Например, омлет с овощами" value="${esc(e?.name||'')}" required></label><div class="form-pair"><label>Калории<input name="kcal" type="number" inputmode="numeric" min="0" max="20000" step="1" placeholder="ккал" value="${e?.kcal??''}" required></label><label>Приём пищи<select name="meal">${['Завтрак','Обед','Ужин','Перекус'].map(x=>`<option ${x===(e?.meal||'Перекус')?'selected':''}>${x}</option>`).join('')}</select></label></div><label>Дата и время<input name="at" type="datetime-local" value="${localInput(at)}" max="${localInput(Date.now())}" required></label>`;
  if(!id)$('#entryFields').insertAdjacentHTML('afterbegin',`<button id="chooseFavorite" class="favorite-shortcut" type="button">☆ Избранные блюда <span>${(D.entries.favorites||[]).length||''}</span></button>`);
+ if(id){const b=document.createElement('button');b.type='button';b.className='favorite-shortcut';b.textContent='Повторить сегодня';b.addEventListener('click',()=>openFood(null,D.day(),e));$('#entryFields').prepend(b)}
+ if(copy){$('#entryFields').insertAdjacentHTML('beforeend','<label>Порция относительно записи<select id="repeatPortion"><option value="0.5">Половина</option><option value="1" selected>Такая же</option><option value="1.5">Полторы</option><option value="2">Двойная</option></select></label><p class="field-note">Калории пересчитаны по исходной записи. Проверь их и нажми «Сохранить».</p>');$('#repeatPortion').addEventListener('change',e=>$('#entryForm [name="kcal"]').value=Math.round(copy.kcal*Number(e.target.value)))}
  $('#entryFields').insertAdjacentHTML('beforeend','<label class="check-field"><input name="favorite" type="checkbox"><span>Сохранить блюдо в избранное</span></label>');
  prepareEntry(id);
 }
@@ -119,6 +125,8 @@ function openSleep(id=null,date=D.day()){
  const e=id?D.entries.sleep.find(e=>e.id===id):null;if(id&&!e)return;
  editId=id;editKind='sleep';$('#entryTitle').textContent=id?'Запись сна':'Записать сон';
  $('#entryFields').innerHTML=`<p class="field-note">Укажи фактическое время. Сон попадёт в день пробуждения.</p><label>Засыпание<input name="start" type="datetime-local" value="${e?localInput(e.start):''}" max="${localInput(Date.now())}" required></label><label>Пробуждение<input name="end" type="datetime-local" value="${e?localInput(e.end):''}" max="${localInput(Date.now())}" required></label>`;
+ $('#entryFields').insertAdjacentHTML('beforeend',`<label>Качество сна · по желанию<select name="quality"><option value="">Не отмечать</option>${['Очень плохое','Плохое','Среднее','Хорошее','Отличное'].map((s,i)=>`<option value="${i+1}" ${e?.quality===i+1?'selected':''}>${i+1} · ${s}</option>`).join('')}</select></label>`);
+ if(!e&&date!==D.day())$('#entryFields .field-note').textContent=`Запись за ${dateLabel(date)}. Укажи время засыпания и пробуждения.`;
  prepareEntry(id);
 }
 function prepareEntry(id){$('#entryError').textContent='';$('#deleteEntry').hidden=!id;$('#deleteEntry').dataset.confirm='';$('#deleteEntry').textContent='Удалить запись';openDialog('entryDialog')}
@@ -126,23 +134,23 @@ $('#entryForm').addEventListener('submit',e=>{
  e.preventDefault();const f=new FormData(e.currentTarget);
  try{
   if(editKind==='food')D.saveFood({id:editId,name:f.get('name'),kcal:f.get('kcal'),meal:f.get('meal'),at:new Date(f.get('at')).getTime(),favorite:f.has('favorite')});
-  else if(editKind==='sleep')D.saveSleep({id:editId,start:new Date(f.get('start')).getTime(),end:new Date(f.get('end')).getTime()});
+  else if(editKind==='sleep')D.saveSleep({id:editId,start:new Date(f.get('start')).getTime(),end:new Date(f.get('end')).getTime(),quality:f.get('quality')});
   else D.goal(f.get('goal'));
   $('#entryDialog').close();dispatchEvent(new CustomEvent('iris:record',{detail:editKind}));toast('Сохранено');
  }catch(error){$('#entryError').textContent=error.message}
 });
 $('#deleteEntry').addEventListener('click',e=>{
  if(!e.currentTarget.dataset.confirm){e.currentTarget.dataset.confirm='1';e.currentTarget.textContent='Да, удалить';return}
- try{D.remove(editKind,editId);$('#entryDialog').close();toast('Запись удалена')}catch(error){$('#entryError').textContent=error.message}
+ try{const token=D.remove(editKind,editId);$('#entryDialog').close();toast('Запись удалена',{label:'Отменить',run:()=>D.undoRemove(token)})}catch(error){$('#entryError').textContent=error.message}
 });
 $('#addFood').addEventListener('click',()=>openFood());$('#latestFood').addEventListener('click',e=>openFood(e.currentTarget.dataset.id));
 $('#addSleep').addEventListener('click',()=>openSleep());
-$('#foodGoal').addEventListener('click',()=>{editKind='goal';editId=null;$('#entryTitle').textContent='Твоя цель питания';$('#entryFields').innerHTML=`<label>Калории в день<input name="goal" type="number" inputmode="numeric" min="1" max="20000" value="${D.foodGoal}" required></label><p class="field-note">Установи свою цель. Это настройка дневника.</p>`;prepareEntry(null)});
+$('#foodGoal').addEventListener('click',()=>dispatchEvent(new CustomEvent('iris:goals')));
 function eventText(e){
  if(e.kind==='food')return{title:e.name,sub:`${e.meal} · ${number(e.kcal)} ккал`};
  if(e.kind==='sleep')return{title:duration(e.ms/3600000),sub:`${time(e.start)} — ${time(e.end)} · Сон`};
  if(e.kind==='water')return{title:`${e.ml>0?'+':''}${number(e.ml)} мл`,sub:e.legacy?'Сохранённый итог дня':e.ml<0?'Поправка воды':'Вода'};
- return{title:`${number(e.ms/60000)} мин`,sub:e.running?'Тренировка идёт':e.legacy?'Сохранённая тренировка':'Спорт'};
+ return{title:`${number(e.ms/60000)} мин`,sub:e.running?'Тренировка идёт':e.legacy?'Сохранённая тренировка':D.sportTypes[e.type]||'Спорт'};
 }
 function eventRow(e){const t=eventText(e);return `<button class="event-row" data-entry="${esc(e.id)}" data-kind="${e.kind}" type="button" style="--event-color:${kinds[e.kind].color}"><span class="event-icon">${icon(e.kind)}</span><span class="event-copy"><strong>${esc(t.title)}</strong><small>${esc(t.sub)}</small></span><time>${e.legacy?'Без времени':time(e.at)}</time></button>`}
 function renderHistory(){
@@ -166,16 +174,22 @@ $('#historyDate').addEventListener('change',e=>{if(D.validDate(e.target.value)&&
 $('#historyAdd').addEventListener('click',()=>historyKind==='food'?openFood(null,historyDate):openSleep(null,historyDate));
 function inspectEntry(id,k,date=selected){
  if(k==='food'){openFood(id);return}if(k==='sleep'){openSleep(id);return}
+ if(k==='water'||k==='sport'){dispatchEvent(new CustomEvent('iris:edit',{detail:{id,kind:k,date}}));return}
  const entry=D.events(date).find(e=>e.id===id);if(!entry)return;
  const t=eventText(entry);$('#detailTitle').textContent=kinds[k].label;
  $('#detailBody').innerHTML=`<p class="detail-value">${esc(t.title)}</p><p>${esc(t.sub)}</p><p class="field-note">${dateLabel(date)} · ${entry.legacy?'Время старой записи не сохранялось':time(entry.at)}</p>`;openDialog('detailDialog');
 }
-['historyEntries','statsEvents'].forEach(id=>$('#'+id).addEventListener('click',e=>{const row=e.target.closest('[data-entry]');if(row)inspectEntry(row.dataset.entry,row.dataset.kind);const b=e.target.closest('[data-day]');if(b){selected=b.dataset.day;period='day';renderStats()}}));
+['historyEntries','statsEvents'].forEach(id=>$('#'+id).addEventListener('click',e=>{const row=e.target.closest('[data-entry]');if(row)inspectEntry(row.dataset.entry,row.dataset.kind,id==='historyEntries'?historyDate:selected);const b=e.target.closest('[data-day]');if(b){selected=b.dataset.day;period='day';renderStats()}}));
 const dates=()=>Array.from({length:period==='day'?1:period==='week'?7:30},(_,i)=>D.shift(selected,i-(period==='day'?0:period==='week'?6:29)));
 function timeline(events){
- const timed=events.filter(e=>!e.legacy&&e.at),points=timed.map(e=>({e,x:18+(new Date(e.at).getHours()+new Date(e.at).getMinutes()/60)/24*324}));
- let path='';for(let x=18;x<=342;x+=2){let y=88;for(const p of points)y+=(p.e.kind==='sleep'?30:-30)*Math.exp(-Math.pow((x-p.x)/5,2));y=Math.max(20,Math.min(139,y));path+=(x===18?'M':'L')+x+' '+y.toFixed(2)}
- return `<svg viewBox="0 0 360 174" role="img" aria-label="Время записей за день"><defs><filter id="lineGlow"><feGaussianBlur stdDeviation="3"/></filter></defs><path d="${path}" fill="none" stroke="#97c3e4" opacity=".25" stroke-width="5" filter="url(#lineGlow)"/><path d="${path}" fill="none" stroke="#b5d6ee" stroke-width="1.4"/>${points.map(p=>`<line x1="${p.x}" x2="${p.x}" y1="24" y2="142" stroke="${kinds[p.e.kind].color}" opacity=".12" stroke-dasharray="2 5"/><circle cx="${p.x}" cy="${p.e.kind==='sleep'?118:58}" r="3" fill="${kinds[p.e.kind].color}"/>`).join('')}${[0,6,12,18,24].map((h,i)=>`<text x="${18+i*81}" y="165" text-anchor="middle" fill="#717782" font-size="10">${String(h).padStart(2,'0')}</text>`).join('')}</svg>`;
+ const grouped=new Map();for(const e of events.filter(e=>!e.legacy&&e.at)){
+  const d=new Date(e.at),x=18+(d.getHours()+d.getMinutes()/60)/24*324,key=e.kind+':'+Math.round(x/4);
+  if(grouped.has(key))grouped.get(key).count++;else grouped.set(key,{e,x,count:1});
+ }
+ const points=[...grouped.values()];
+ const yAt=x=>88+49*Math.tanh(points.reduce((sum,p)=>sum+(p.e.kind==='sleep'?1:-1)*Math.exp(-Math.pow((x-p.x)/5,2)),0)*.66);
+ let path='';for(let x=18;x<=342;x++)path+=(x===18?'M':'L')+x+' '+yAt(x).toFixed(2);
+ return `<svg viewBox="0 0 360 174" role="img" aria-label="Время записей за день, не медицинский график"><defs><filter id="lineGlow"><feGaussianBlur stdDeviation="3"/></filter></defs><path d="${path}" fill="none" stroke="#97c3e4" opacity=".25" stroke-width="5" filter="url(#lineGlow)"/><path d="${path}" fill="none" stroke="#b5d6ee" stroke-width="1.4"/>${points.map(p=>`<line x1="${p.x}" x2="${p.x}" y1="24" y2="142" stroke="${kinds[p.e.kind].color}" opacity=".12" stroke-dasharray="2 5"/><circle cx="${p.x}" cy="${yAt(p.x).toFixed(2)}" r="3" fill="${kinds[p.e.kind].color}"><title>${kinds[p.e.kind].label} · ${time(p.e.at)} · записей ${p.count}</title></circle>`).join('')}${[0,6,12,18,24].map((h,i)=>`<text x="${18+i*81}" y="165" text-anchor="middle" fill="#717782" font-size="10">${String(h).padStart(2,'0')}</text>`).join('')}</svg>`;
 }
 function bars(list){
  const max=Math.max(1,...list.map(s=>s[kind])),step=302/list.length,bw=Math.max(3,step*.5);
@@ -190,7 +204,7 @@ function renderStats(){
  $('#statsTitle').textContent=period==='day'?'Твой день':period==='week'?'Твоя неделя':'Твой месяц';
  $('#statsSubtitle').textContent=period==='day'?'Всё, что складывается в тебя.':'История твоего ритма.';
  $('#statsSummary').innerHTML=Object.entries(kinds).map(([k,v])=>`<button data-metric="${k}" type="button" aria-pressed="${kind===k}" style="--stat-color:${v.color}">${icon(k)}<span>${v.label}${k==='sleep'&&period!=='day'?' · ср.':''}</span><strong>${sums[k].present?number(sums[k].value):'—'}<small>${v.unit}</small></strong></button>`).join('');
- const events=D.events(selected),has=period==='day'?events.some(e=>!e.legacy):sums[kind].present;
+ const events=D.journalEvents(selected).filter(e=>e.kind!=='checkins'),has=period==='day'?events.some(e=>!e.legacy):sums[kind].present;
  $('#graphCaption').textContent=period==='day'?'События за 24 часа':`${kinds[kind].label} · ${kinds[kind].unit} по дням`;
  $('#statsGraph').innerHTML=period==='day'?timeline(events):bars(list);
  $('#graphEmpty').hidden=has;
@@ -199,12 +213,12 @@ function renderStats(){
  $('#eventsHeading').textContent=period==='day'?'События дня':`${kinds[kind].label} по дням`;
  $('#eventsCount').textContent=period==='day'?String(events.length):`${list.filter(s=>s.present[kind]).length} из ${list.length} дней`;
  $('#statsEvents').innerHTML=period==='day'?(events.length?events.map(eventRow).join(''):'<p class="empty-note">Вода, тренировки, питание и сон появятся здесь после записи.</p>'):list.slice().reverse().map(s=>`<button class="day-row" data-day="${s.date}" type="button"><span>${dateLabel(s.date,{weekday:'short',day:'numeric',month:'short'})}</span><strong>${s.present[kind]?number(s[kind])+' '+kinds[kind].unit:'Нет данных'}</strong></button>`).join('');
- scheduleStats();
+ dispatchEvent(new CustomEvent('iris:stats-render',{detail:{period,selected,dates:dd,list,kind}}));scheduleStats();
 }
 $('#statsDate').addEventListener('change',e=>{if(D.validDate(e.target.value)&&e.target.value<=D.day()){selected=e.target.value;renderStats()}});
 $('#statsSummary').addEventListener('click',e=>{const b=e.target.closest('[data-metric]');if(b&&kind!==b.dataset.metric){kind=b.dataset.metric;renderStats()}});
 document.querySelectorAll('[data-period]').forEach(b=>b.addEventListener('click',()=>{if(period!==b.dataset.period){period=b.dataset.period;renderStats()}}));
-function refresh(){renderReadout(true);if(app.dataset.view==='stats')renderStats();if($('#historyDialog').open)renderHistory()}
+function refresh(){const today=D.day();if(today!==lastToday){if(selected===lastToday)selected=today;if(historyDate===lastToday)historyDate=today;lastToday=today}renderReadout(true);if(app.dataset.view==='stats')renderStats();if($('#historyDialog').open)renderHistory()}
 new MutationObserver(()=>renderReadout()).observe(app,{attributes:true,attributeFilter:['class']});
 addEventListener('iris:data',refresh);addEventListener('iris:error',e=>toast(e.detail));
 function statsVisible(){return !document.hidden&&app.dataset.view==='stats'&&app.dataset.welcome!=='true'&&!document.querySelector('dialog[open]')}
@@ -212,9 +226,11 @@ function scheduleStats(){clearTimeout(statsTimer);statsTimer=0;if(statsVisible()
 addEventListener('iris:sport',()=>{if(statsVisible())renderStats();else scheduleStats()});
 addEventListener('iris:visibility',()=>{if(statsVisible())renderStats();else scheduleStats()});
 document.addEventListener('visibilitychange',()=>{if(statsVisible())renderStats();else scheduleStats()});
-view(location.hash==='#statistics'?'stats':'eye',false);if(!welcomed)$('#stage').inert=true;renderReadout();
+view(location.hash==='#statistics'?'stats':location.hash==='#journal'?'journal':'eye',false);if(!welcomed)$('#stage').inert=true;renderReadout();
 if(D.error)toast(D.error);
-window.IRISJournal={openDialog,registerDialog,toast,inspectEntry,eventRow,esc,icon};
+window.IRISJournal={openDialog,registerDialog,toast,dismissToast,inspectEntry,eventRow,esc,icon,view,openFood,openSleep};
+let toastMode=mode();new MutationObserver(()=>{const next=mode();if(next!==toastMode||app.classList.contains('settings-open'))dismissToast();toastMode=next}).observe(app,{attributes:true,attributeFilter:['class']});
+document.addEventListener('visibilitychange',()=>{if(document.hidden)dismissToast()});
 addEventListener('iris:favorite',e=>{
  const entry=(D.entries.favorites||[]).find(x=>x.id===e.detail);if(!entry||editKind!=='food')return;
  for(const key of ['name','kcal','meal'])$('#entryForm [name="'+key+'"]').value=entry[key];

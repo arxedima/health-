@@ -74,17 +74,17 @@ function mode(){return app.className.match(/mode-(\w+)/)?.[1]||'home'}
 function view(name,push=true){
  dismissToast();
  dispatchEvent(new CustomEvent('iris:close-menu'));
- app.dataset.view=name;$('#statistics').hidden=name!=='stats';if($('#dailyJournal'))$('#dailyJournal').hidden=name!=='journal';$('#stage').inert=name!=='eye'||app.dataset.welcome==='true';
+ app.dataset.view=name;$('#statistics').hidden=name!=='stats';if($('#dailyJournal'))$('#dailyJournal').hidden=name!=='journal';if($('#plansView'))$('#plansView').hidden=name!=='plans';$('#stage').inert=name!=='eye'||app.dataset.welcome==='true';
  $('#eyeTab').setAttribute('aria-current',name==='eye'?'page':'false');$('#statsTab').setAttribute('aria-current',name==='stats'?'page':'false');
- $('#journalTab')?.setAttribute('aria-current',name==='journal'?'page':'false');
+ $('#journalTab')?.setAttribute('aria-current',name==='journal'?'page':'false');$('#plansTab')?.setAttribute('aria-current',name==='plans'?'page':'false');
  dispatchEvent(new CustomEvent('iris:visibility'));
- const hash=name==='stats'?'#statistics':name==='journal'?'#journal':'';
+ const hash=name==='stats'?'#statistics':name==='journal'?'#journal':name==='plans'?'#plans':'';
  if(push&&location.hash!==hash)history.pushState(null,'',location.pathname+location.search+hash);
 }
 $('#eyeTab').addEventListener('click',()=>{view('eye');dispatchEvent(new CustomEvent('iris:navigate',{detail:'home'}))});
 $('#statsBack').addEventListener('click',()=>view('eye'));
 $('#statsTab').addEventListener('click',()=>view('stats'));
-addEventListener('popstate',()=>view(location.hash==='#statistics'?'stats':location.hash==='#journal'?'journal':'eye',false));
+addEventListener('popstate',()=>view(location.hash==='#statistics'?'stats':location.hash==='#journal'?'journal':location.hash==='#plans'?'plans':'eye',false));
 addEventListener('iris:statistics',()=>view('stats'));
 const welcomed=localStorage.getItem('irisWelcomedV39')==='1';
 app.dataset.welcome=String(!welcomed);$('#welcome').hidden=welcomed;

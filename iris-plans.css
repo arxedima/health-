@@ -1,0 +1,78 @@
+/* IRIS Plans: the second eye. No external fonts or heavy animations. */
+#app[data-view="plans"]>.topbar,#app[data-view="plans"]>#stage,#app[data-view="plans"]>.ambient{visibility:hidden}
+#app .plans-view{position:absolute;inset:0 0 var(--view-bottom,105px);z-index:18;overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y;scrollbar-width:none;padding:calc(env(safe-area-inset-top) + 12px) 22px 38px;background:#000;color:#e9edf0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;box-sizing:border-box}
+#app .plans-view[hidden],#app .plans-dialog[hidden]{display:none}
+#app .plans-top{display:flex;align-items:center;justify-content:space-between;height:48px;color:#a8b5c0;font-size:10px;letter-spacing:.27em}
+#app .plans-top button{display:grid;place-items:center;border:1px solid #1e2b31;border-radius:50%;background:#070b0e;color:#c8d8e3;width:44px;height:44px;font-size:27px;font-weight:200;cursor:pointer}
+#app .plans-intro{text-align:center;padding:10px 0 17px}
+#app .plans-orb{position:relative;width:clamp(122px,37vw,170px);aspect-ratio:1;margin:2px auto 20px;display:grid;place-items:center}
+#app .plans-iris{position:relative;width:84%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at center,#000 0 19%,#8f8877 20%,#343d42 23%,#181f23 27%,transparent 29%),repeating-conic-gradient(from 8deg,rgba(213,198,157,.42) 0deg,rgba(68,83,86,.19) .55deg,rgba(11,17,20,.8) 1.35deg,rgba(164,162,132,.22) 1.8deg,rgba(10,15,19,.8) 2.7deg);box-shadow:inset 0 0 22px 17px #030507,0 0 31px rgba(190,175,135,.09);-webkit-mask-image:radial-gradient(circle,#000 0 71%,transparent 92%);mask-image:radial-gradient(circle,#000 0 71%,transparent 92%)}
+#app .plans-pupil{position:absolute;inset:37%;border-radius:50%;background:#000;box-shadow:0 0 0 2px rgba(12,17,20,.85),0 0 15px rgba(225,207,159,.14)}
+#app .plans-orbit{position:absolute;inset:0;border:1px solid rgba(181,178,153,.27);border-radius:50%;border-top-color:rgba(217,204,160,.85);transform:rotate(-25deg);pointer-events:none}
+#app .plans-orbit:after{content:"";position:absolute;width:5px;height:5px;border-radius:50%;background:#e8d6ac;top:12%;right:13%;box-shadow:0 0 13px #b9a77c}
+#app .plans-eyebrow{color:#b3a78c;font-size:10px;letter-spacing:.34em}
+#app .plans-intro h1{font-weight:270;letter-spacing:-.045em;font-size:clamp(30px,8vw,39px);margin:10px 0 5px}
+#app .plans-intro p{font-size:12px;color:#7f8a94;margin:0;line-height:1.6}
+#app .plans-toolbar{display:flex;align-items:center;gap:12px;justify-content:space-between;margin:10px 0 20px}
+#app .plans-date-label{display:flex;align-items:center;gap:10px;font-size:10px;letter-spacing:.2em;color:#8e9da8}
+#app .plans-date-label input{font:400 13px -apple-system,BlinkMacSystemFont,sans-serif;color:#d8e3e9;background:#0c1115;border:1px solid #29333b;border-radius:12px;padding:10px 8px;max-width:164px;min-height:44px;box-sizing:border-box;color-scheme:dark}
+#app .plans-toolbar>button{min-height:44px;border:1px solid #2c353b;border-radius:24px;background:#0b1014;color:#c2ced5;padding:0 13px}
+#app .plans-toolbar>button:disabled{opacity:.3}
+#app .plans-progress{margin:0 0 21px}
+#app .plans-progress>div:first-child{display:flex;justify-content:space-between;color:#9caab4;font-size:12px;margin-bottom:11px}
+#app .plans-progress #plansPercent{color:#d6c39b}
+#app .plans-track{height:3px;border-radius:8px;background:#1b2327;overflow:hidden}
+#app .plans-track i{display:block;height:100%;width:0;background:#c9b58b;border-radius:8px;transition:width .22s ease}
+#app .plans-filters{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;touch-action:pan-x;margin:0 -22px;padding:0 22px 17px}
+#app .plans-filters button{flex:none;min-height:44px;padding:0 14px;border:1px solid #20282e;border-radius:24px;background:#05080a;color:#84939e;font-size:12px;cursor:pointer}
+#app .plans-filters button[aria-pressed="true"]{color:#f2e5c8;background:#29251d;border-color:#7d6c4b}
+#app .plans-search{height:46px;display:flex;align-items:center;gap:10px;padding:0 14px;background:#0a0e11;border:1px solid #1d282d;border-radius:14px;color:#a3b1ba;box-sizing:border-box}
+#app .plans-search span{font-size:22px}
+#app .plans-search input{flex:1;min-width:0;background:transparent;border:0;outline:0;color:#e5edf0;font:400 14px -apple-system,BlinkMacSystemFont,sans-serif}
+#app .plans-section-head{display:flex;align-items:baseline;justify-content:space-between;margin:24px 0 12px;gap:12px}
+#app .plans-section-head h2{font-size:16px;font-weight:500;margin:0;color:#e1e8ed}
+#app .plans-section-head span{font-size:11px;color:#7b8994}
+#app .plans-list{display:grid;gap:9px}
+#app .plans-card{display:flex;align-items:center;min-height:76px;border:1px solid #222b30;background:#090d10;border-radius:17px;padding:9px 10px;gap:10px;box-sizing:border-box}
+#app .plans-card.is-priority{border-left:2px solid #c4a57e}
+#app .plans-check{flex:none;display:grid;place-items:center;width:28px;height:28px;border:1px solid #677985;border-radius:50%;background:transparent;color:#e8d7ad;font-size:16px;cursor:pointer}
+#app .plans-card.is-done .plans-check{border-color:#a9b998;background:#29342a}
+#app .plans-check[hidden]{display:none}
+#app .plans-card-main{flex:1;min-width:0;text-align:left;display:flex;flex-direction:column;gap:5px;border:0;background:transparent;color:#e2e9ee;padding:5px 0;cursor:pointer}
+#app .plans-card-meta{font-size:9px;letter-spacing:.16em;color:#ae9b7a}
+#app .plans-card-main strong{font-size:14px;font-weight:450;line-height:1.35;overflow-wrap:anywhere}
+#app .plans-card-main small{color:#84939d;font-size:12px;line-height:1.4;white-space:pre-line;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+#app .plans-card-main em{font-style:normal;font-size:10px;color:#788893}
+#app .plans-card.is-done .plans-card-main strong{text-decoration:line-through;color:#7b898e}
+#app .plans-card-edit{flex:none;width:30px;min-height:44px;border:0;background:transparent;color:#8497a3;font-size:25px}
+#app .plans-empty{text-align:center;border:1px dashed #253038;border-radius:18px;padding:25px 16px;color:#a9b6c0}
+#app .plans-empty span{display:block;color:#c9b78e;font-size:29px;margin-bottom:7px}
+#app .plans-empty strong{font-size:15px;font-weight:450}
+#app .plans-empty p{font-size:12px;color:#7d8b95;line-height:1.5}
+#app .plans-add{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;min-height:53px;margin-top:14px;border:1px solid #6b5c42;border-radius:17px;background:#171710;color:#e4d4af;font-size:14px;cursor:pointer}
+#app .plans-add span{font-size:24px}
+#app .plans-privacy{font-size:10px;line-height:1.5;color:#63727c;margin:24px 4px 8px;text-align:center}
+#app .plans-dialog{width:min(100% - 20px,460px);max-height:min(88dvh,800px);overflow-y:auto;border:1px solid #3b403b;border-radius:23px;background:#0b1012;color:#e6edf0;padding:22px;box-sizing:border-box;box-shadow:0 20px 100px #000}
+#app .plans-dialog::backdrop{background:rgba(0,0,0,.8)}
+#app .plans-dialog form{display:grid;gap:15px}
+#app .plans-dialog header{display:flex;align-items:center;justify-content:space-between}
+#app .plans-dialog header h2{font-size:20px;font-weight:450;margin:0}
+#app .plans-dialog header button{width:44px;height:44px;border-radius:50%;border:1px solid #344047;background:#12191e;color:#dce6ed;font-size:24px}
+#app .plans-type{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+#app .plans-type button{min-height:44px;border-radius:12px;border:1px solid #2b363c;background:#11181c;color:#9eacb5}
+#app .plans-type button[aria-pressed="true"]{background:#342e22;border-color:#98805a;color:#f5e6c7}
+#app .plans-dialog label{display:grid;gap:7px;color:#b7c4cd;font-size:12px}
+#app .plans-dialog input:not([type="checkbox"]),#app .plans-dialog textarea,#app .plans-dialog select{width:100%;box-sizing:border-box;min-height:46px;padding:11px;border:1px solid #344049;border-radius:12px;background:#121a1f;color:#e8edf0;color-scheme:dark;font:400 16px -apple-system,BlinkMacSystemFont,sans-serif;outline-offset:2px}
+#app .plans-dialog textarea{resize:vertical;min-height:90px;line-height:1.5}
+#app .plans-form-row{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+#app .plans-form-row[hidden],#app .plans-priority[hidden]{display:none}
+#app .plans-dialog .plans-priority{display:flex;align-items:center;gap:9px;min-height:36px}
+#app .plans-priority input{accent-color:#c5ab7e;width:19px;height:19px}
+#app #plansError{color:#e4a29a;font-size:12px;margin:0}
+#app .plans-save{min-height:49px;border:0;border-radius:13px;background:#c6b18a;color:#151712;font-weight:600;font-size:15px}
+#app .plans-delete{min-height:44px;border:0;background:transparent;color:#dc918b}
+#app .plans-delete[hidden]{display:none}
+#app .bottom-nav button{min-width:0}
+#app .bottom-nav button span{font-size:10px}
+@media(max-width:360px){#app .plans-view{padding-left:15px;padding-right:15px}#app .plans-filters{margin-left:-15px;margin-right:-15px;padding-left:15px;padding-right:15px}#app .plans-form-row{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){#app .plans-track i{transition:none}}

@@ -71,3 +71,9 @@ html:has(#app.iris-light),body:has(#app.iris-light){background:#fbfdff}
 #app.iris-light .bottom-nav{border-top:1px solid rgba(78,123,164,.11)!important}
 #app.iris-light .bottom-nav button svg{stroke-width:1.55}
 #app.iris-light .home-links .quiet-action{font-weight:450;letter-spacing:.01em}
+
+/* v61: true-black dark theme; light theme remains unchanged. */
+#app:not(.iris-light){--editorial-bg:#000; background:#000!important}
+#app:not(.iris-light) .stage,#app:not(.iris-light) .topbar{background:transparent!important}
+#app:not(.iris-light) .ambient,#app:not(.iris-light) .noise{display:none!important}
+html:has(#app:not(.iris-light)),body:has(#app:not(.iris-light)){background:#000}

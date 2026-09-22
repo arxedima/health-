@@ -5,14 +5,14 @@ if(!app||!J)return;
 const $=s=>document.querySelector(s),esc=J.esc;
 const KEY='irisPlansV1',day=(v=new Date())=>{const d=new Date(v);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
 const uid=()=>globalThis.crypto?.randomUUID?.()||Date.now().toString(36)+Math.random().toString(36).slice(2);
-let items=[],selected=day(),editing=null;
+let items=[],selected=day(),editing=null,activeFilter='today';
 try{const saved=JSON.parse(localStorage.getItem(KEY)||'[]');if(Array.isArray(saved))items=saved.filter(x=>x&&typeof x.id==='string'&&['task','note','habit'].includes(x.type)).slice(0,3000)}catch{}
 const icon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 5h14v14H5zM8 10h8M8 14h5"/></svg>';
 $('#journalTab').insertAdjacentHTML('afterend','<button id="plansTab" type="button" aria-current="false">'+icon+'<span>Планы</span></button>');
 const html=[
 '<section id="plansView" class="plans-view" aria-labelledby="plansTitle" hidden>',
 '<header class="plans-top"><button id="plansBack" type="button" aria-label="Меню">☰</button><span id="plansTitle">IRIS <i> / </i> ПЛАНЫ</span><label class="plans-calendar" aria-label="Выбрать дату"><input id="plansDate" type="date"><span>▦</span></label></header><div class="plans-overview"><div><span class="plans-overview-label" id="plansDayLabel">СЕГОДНЯ</span><strong id="plansDayProgress">0 / 0</strong></div><div class="plans-overview-track"><span id="plansDayFill"></span></div><p id="plansDayCaption">Твой день, твой ритм.</p></div>',
-'<div class="plans-groups" id="plansGroups" aria-live="polite"></div>',
+'<form id="plansQuickForm" class="plans-quick"><span aria-hidden="true">＋</span><input id="plansQuickInput" maxlength="180" autocomplete="off" placeholder="Новая задача…" aria-label="Новая задача"><button type="submit" aria-label="Добавить задачу">↑</button></form><nav class="plans-filters" aria-label="Период"><button type="button" data-plan-filter="today" class="active">Сегодня</button><button type="button" data-plan-filter="tomorrow">Завтра</button><button type="button" data-plan-filter="week">На неделе</button><button type="button" data-plan-filter="later">Потом</button></nav><div class="plans-groups" id="plansGroups" aria-live="polite"></div><section class="plans-shortcuts"><h3>Быстрые действия</h3><div><button type="button" data-plan-create="task">＋<small>Задача</small></button><button type="button" data-plan-create="note">▤<small>Заметка</small></button><button type="button" data-plan-create="habit">↻<small>Привычка</small></button></div></section>',
 '<button id="plansFab" class="plans-fab" type="button" aria-label="Новая задача">＋</button>',
 '<div class="plans-menu" id="plansMenu" hidden><button id="plansGoEye" type="button">← На главную</button><button data-plan-create="habit" type="button">＋ Привычка</button><button data-plan-create="note" type="button">＋ Заметка</button><button id="plansMenuClose" type="button">Закрыть</button></div>',
 '</section>',
@@ -48,7 +48,7 @@ function render(){
  $('#plansDate').value=selected;
  const todayItems=items.filter(x=>x.type==='task'&&((x.repeat==='none'&&x.due&&x.due<=now)||(x.repeat==='daily'&&(!x.due||x.due<=now))||(x.repeat==='weekly'&&x.due&&x.due<=now&&new Date(x.due+'T12:00:00').getDay()===new Date(now+'T12:00:00').getDay())));
  const finished=todayItems.filter(x=>completed(x,now)).length;
- $('#plansDayProgress').textContent=finished+' / '+todayItems.length;
+ $('#plansDayProgress').textContent=(todayItems.length?Math.round(finished/todayItems.length*100):0)+'%';
  $('#plansDayFill').style.width=(todayItems.length?Math.round(finished/todayItems.length*100):0)+'%';
  $('#plansDayCaption').textContent=todayItems.length?(finished===todayItems.length?'На сегодня всё готово':(todayItems.length-finished)+' осталось на сегодня'):'Добавь первую задачу на сегодня';
  const card=x=>{
@@ -57,12 +57,15 @@ function render(){
   const sub=Array.isArray(x.subtasks)&&x.subtasks.length?'<small>'+x.subtasks.filter(t=>t.done).length+'/'+x.subtasks.length+' подзадач</small>':'';
   return '<article class="plans-row '+(done?'is-done':'')+'" data-plan-id="'+esc(x.id)+'">'+(isNote?'<span class="plans-note-icon">▤</span>':'<button class="plans-check" data-plan-check="'+esc(x.id)+'" type="button" aria-label="'+(done?'Вернуть':'Выполнить')+' '+esc(x.title)+'">'+(done?'✓':'')+'</button>')+'<button class="plans-row-title" type="button" data-plan-edit="'+esc(x.id)+'"><strong>'+esc(x.title)+'</strong>'+sub+detail+'</button><button class="plans-row-edit" type="button" data-plan-edit="'+esc(x.id)+'" aria-label="Редактировать '+esc(x.title)+'">☷</button></article>';
  };
- $('#plansGroups').innerHTML=groups.map(g=>{
+ $('#plansGroups').innerHTML=groups.filter(g=>g.cls===activeFilter).map(g=>{
   let list=items.filter(g.test).sort((a,b)=>Number(completed(a,now))-Number(completed(b,now))||Number(!!b.priority)-Number(!!a.priority)||(a.due||'').localeCompare(b.due||''));
   const total=list.length,done=list.filter(x=>completed(x,now)).length;
-  return '<section class="plans-group plans-group-'+g.cls+'"><h2>'+g.name+'<span class="plans-badge">'+(g.cls==='today'?done+'/'+total:total)+'</span></h2><div class="plans-group-list">'+(total?list.map(card).join(''):(g.cls==='today'?'<p class="plans-empty">На сегодня задач нет</p>':''))+'</div></section>';
+  return '<section class="plans-group plans-group-'+g.cls+'"><h2>'+g.name+'<span class="plans-badge">'+(g.cls==='today'?done+'/'+total:total)+'</span></h2><div class="plans-group-list">'+(total?list.map(card).join(''):(g.cls==='today'?'<div class="plans-empty-state"><span>✓</span><strong>Задач на сегодня нет</strong><p>Добавь первую задачу</p><button type="button" data-plan-create="task">＋ Добавить задачу</button></div>':''))+'</div></section>';
  }).join('');
 }
+$('#plansQuickForm').addEventListener('submit',e=>{e.preventDefault();const input=$('#plansQuickInput'),title=input.value.trim();if(!title)return;const due=activeFilter==='tomorrow'?shift(day(),1):activeFilter==='week'?shift(day(),3):activeFilter==='later'?'':day();items.push({id:uid(),type:'task',title,body:'',subtasks:[],due,repeat:'none',priority:false,created:new Date().toISOString(),done:false,history:[]});if(save()){input.value='';render()}});
+$('.plans-filters').addEventListener('click',e=>{const b=e.target.closest('[data-plan-filter]');if(!b)return;activeFilter=b.dataset.planFilter;document.querySelectorAll('[data-plan-filter]').forEach(x=>x.classList.toggle('active',x===b));render()});
+$('.plans-shortcuts').addEventListener('click',e=>{const b=e.target.closest('[data-plan-create]');if(b)openEditor(null,b.dataset.planCreate)});
 function updateDue(){const d=form.elements.due.value;$('#plansDueText').textContent=d===day()?'Сегодня':d===shift(day(),1)?'Завтра':d?new Date(d+'T12:00:00').toLocaleDateString('ru-RU',{day:'numeric',month:'short'}):'Потом'}
 function addSubtask(title='',done=false){
  $('#plansSubtasks').hidden=false;
@@ -99,7 +102,7 @@ form.addEventListener('submit',e=>{e.preventDefault();const title=form.elements.
 });
 $('#plansDelete').addEventListener('click',()=>{if(!editing||!confirm('Удалить эту запись?'))return;const before=items;items=items.filter(x=>x.id!==editing);if(save()){dialog.close();render()}else items=before});
 $('#plansClose').addEventListener('click',()=>dialog.close());dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close()});
-$('#plansGroups').addEventListener('click',e=>{const check=e.target.closest('[data-plan-check]'),edit=e.target.closest('[data-plan-edit]');if(check)toggle(check.dataset.planCheck);else if(edit)openEditor(edit.dataset.planEdit)});
+$('#plansGroups').addEventListener('click',e=>{const create=e.target.closest('[data-plan-create]');if(create){openEditor(null,create.dataset.planCreate);return}const check=e.target.closest('[data-plan-check]'),edit=e.target.closest('[data-plan-edit]');if(check)toggle(check.dataset.planCheck);else if(edit)openEditor(edit.dataset.planEdit)});
 $('#plansFab').addEventListener('click',()=>openEditor());
 $('#plansBack').addEventListener('click',()=>{$('#plansMenu').hidden=!$('#plansMenu').hidden});
 $('#plansMenuClose').addEventListener('click',()=>{$('#plansMenu').hidden=true});

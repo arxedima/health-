@@ -64,3 +64,6 @@
 #app .plans-delete[hidden]{display:none}
 @media(max-width:360px){#app .plans-view{padding-left:17px;padding-right:17px}#app .plans-fab{right:17px}}
 @media(prefers-reduced-motion:reduce){#app .plans-fab{transition:none}}
+
+#app .plans-group-habits:has(.plans-group-list:empty),#app .plans-group-notes:has(.plans-group-list:empty){display:none}
+#app[data-view="plans"] .bottom-nav{background:#202127}

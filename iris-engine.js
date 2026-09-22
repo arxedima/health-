@@ -45,7 +45,7 @@ addEventListener('iris:sport',()=>{sportRunning=!!window.IRISData?.workout.runni
 addEventListener('iris:record',e=>{if(e.detail===mode)motion.record(e.detail)});
 addEventListener('iris:motion',wake);addEventListener('iris:visibility',wake);
 let accent=[...M.home[4]],shade=[...M.home[5]];
-let strokes;
+let strokes,irisWeave;
 const fmt=ml=>(ml/1000).toFixed(2).replace('.',',').replace(/,00$/,',0')+' Л';
 
 const wp=document.createElement('section');wp.className='water-panel';wp.innerHTML='<div class="water-line"><span></span></div><div class="water-head"><strong></strong><small></small></div><div class="water-actions"><button type="button" data-water="-250" aria-label="Убрать 250 мл воды">− 250 мл</button><button type="button" data-water="250" aria-label="Добавить 250 мл воды">+ 250 мл</button></div><div class="water-hint">СВАЙП ВВЕРХ · +250 МЛ</div>';$('#metric').appendChild(wp);const wbar=wp.querySelector('.water-line span'),wcur=wp.querySelector('strong'),wgoal=wp.querySelector('small');
@@ -101,6 +101,14 @@ function build(){
   collar:groupStrokes(fib.filter((_,i)=>i%3===0),f=>[.45+f.w*.6,.045+f.al*.3],.08,.01)
  };
  for(let i=0;i<120;i++){const a=rnd(i*2.3)*Math.PI*2,r=.31+rnd(i*3.1)*.56;dots.push({x:Math.cos(a)*r,y:Math.sin(a)*r,s:.25+rnd(i*4.8),al:.02+rnd(i*7.9)*.1})}
+ // Three cached, irregular interlaced paths create natural iris crypts without per-frame allocations.
+ irisWeave=[new Path2D(),new Path2D(),new Path2D()];
+ for(let i=0;i<390;i++){
+  const a=rnd(i*8.11)*Math.PI*2,rad=.30+rnd(i*3.41)*.57,da=(rnd(i*5.23)-.5)*.115,dr=(rnd(i*9.17)-.5)*.095;
+  const path=irisWeave[i%3],a2=a+da,rad2=Math.max(.28,Math.min(.91,rad+dr));
+  path.moveTo(Math.cos(a)*rad,Math.sin(a)*rad);
+  path.quadraticCurveTo(Math.cos(a+da*.4)*(rad+rad2)*.5,Math.sin(a+da*.4)*(rad+rad2)*.5,Math.cos(a2)*rad2,Math.sin(a2)*rad2);
+ }
 }
 function resize(){
   const bounds=A.getBoundingClientRect();
@@ -186,12 +194,13 @@ function draw(t,dt){
  for(const v of rip){X.beginPath();X.arc(v.x,v.y,(1-v.l)*r*1.1,0,Math.PI*2);X.strokeStyle=rgba(col,v.l*.06*q.amount);X.lineWidth=.65;X.stroke();v.l*=Math.pow(.95,step)}
  X.save();X.translate(e.x,e.y);
  const isLight=A.classList.contains('iris-light');const base=X.createRadialGradient(0,0,r*.13,0,0,r);
- base.addColorStop(0,isLight?'#172a3d':'#000');base.addColorStop(.13,isLight?'#8ab6dc':rgba(low,.85));base.addColorStop(.35,isLight?'#dceefe':rgba(col,.29));base.addColorStop(.61,isLight?'#a9d0ef':rgba(low,.61));base.addColorStop(.86,isLight?'#e9f5ff':rgba(low,.22));base.addColorStop(1,isLight?'rgba(233,245,255,0)':rgba(low,0));
+ if(isLight){base.addColorStop(0,'#243e59');base.addColorStop(.18,'#789fc3');base.addColorStop(.33,'#d8edfa');base.addColorStop(.49,'#83b7df');base.addColorStop(.65,'#cce5f5');base.addColorStop(.82,'#a3c9e5');base.addColorStop(.94,'#d9eaf7');base.addColorStop(.985,'rgba(217,234,247,.30)');base.addColorStop(1,'rgba(217,234,247,0)')}
+ else{base.addColorStop(0,'#000');base.addColorStop(.13,rgba(low,.85));base.addColorStop(.35,rgba(col,.29));base.addColorStop(.61,rgba(low,.61));base.addColorStop(.86,rgba(low,.22));base.addColorStop(1,rgba(low,0))}
  X.beginPath();X.arc(0,0,r,0,Math.PI*2);X.fillStyle=base;X.fill();
  X.save();X.beginPath();X.arc(0,0,r*.985,0,Math.PI*2);X.clip();
  // A shared circular fade softens every strand before it reaches the edge.
  const strandGradient=color=>{const g=X.createRadialGradient(0,0,0,0,0,r);g.addColorStop(0,rgba(color,0));g.addColorStop(.22,rgba(color,1));g.addColorStop(.70,rgba(color,1));g.addColorStop(.86,rgba(color,.72));g.addColorStop(.955,rgba(color,0));g.addColorStop(1,rgba(color,0));return g};
- const fineInk=strandGradient(col),deepInk=strandGradient(low);X.lineCap='round';X.lineJoin='round';
+ const fineInk=strandGradient(isLight?[45,98,146]:col),deepInk=strandGradient(isLight?[27,73,116]:low);X.lineCap='round';X.lineJoin='round';
  const springSteps=Math.ceil(step),springStep=step/springSteps,damping=Math.pow(.73,springStep);
  const touching=touchEnergy>.0001,touchDepth=touchEnergy*clamp(1.25-p.d/(r*1.3),0,1),echoing=q.touchEcho*q.amount>.0001;
  const lift=1+q.energy*(q.weights.food+q.weights.sleep)*.26+beat*.2;
@@ -213,10 +222,17 @@ function draw(t,dt){
   if(i%2===0){const v=f.deep,da=f.a+f.b*.18+flow*.4,ri=r*(f.ri-.025),ro=r*f.ro;v[0]=Math.cos(da)*ri;v[1]=Math.sin(da)*ri;v[2]=Math.cos(da-f.b*.7)*r*.57;v[3]=Math.sin(da-f.b*.7)*r*.57;v[4]=Math.cos(da+f.b)*ro;v[5]=Math.sin(da+f.b)*ro}
   if(i%3===0){const v=f.collar,ri=r*(.222+f.s*.015),ro=r*(.29+f.s*.09),aa=f.a+f.b*.3+f.bend*.2,ca=Math.cos(aa),sa=Math.sin(aa);v[0]=Math.cos(f.a)*ri;v[1]=Math.sin(f.a)*ri;v[2]=ca*r*.26;v[3]=sa*r*.26;v[4]=ca*ro;v[5]=sa*ro}
  }
- paintStrokes(strokes.deep,'deep',deepInk);
- X.globalCompositeOperation='screen';
- paintStrokes(strokes.main,'main',fineInk,lift);paintStrokes(strokes.branch,'branch',fineInk,lift);
- paintStrokes(strokes.collar,'collar',rgba(col,1));
+ if(isLight){
+  X.globalCompositeOperation='multiply';paintStrokes(strokes.deep,'deep',deepInk,1.25);
+  paintStrokes(strokes.main,'main',fineInk,lift*1.32);paintStrokes(strokes.branch,'branch',fineInk,lift*1.12);
+  X.save();X.scale(r,r);X.lineWidth=.0024;X.globalAlpha=.24;X.strokeStyle='#4779a4';X.stroke(irisWeave[0]);X.globalAlpha=.17;X.strokeStyle='#2c5e88';X.stroke(irisWeave[1]);X.restore();
+  X.globalCompositeOperation='screen';paintStrokes(strokes.collar,'collar','rgba(240,250,255,.78)',1.4);
+  X.save();X.scale(r,r);X.lineWidth=.0032;X.globalAlpha=.40;X.strokeStyle='#fff';X.stroke(irisWeave[2]);X.restore();
+ }else{
+  paintStrokes(strokes.deep,'deep',deepInk);X.globalCompositeOperation='screen';
+  paintStrokes(strokes.main,'main',fineInk,lift);paintStrokes(strokes.branch,'branch',fineInk,lift);
+  paintStrokes(strokes.collar,'collar',rgba(col,1));
+ }
  // Only the touched sector needs extra light and width; the rest stays in shared batches.
  X.strokeStyle=fineInk;
  for(const f of fib){
@@ -234,12 +250,12 @@ function draw(t,dt){
  }
  X.restore();
  const rim=X.createRadialGradient(0,0,r*.73,0,0,r*1.04);
- rim.addColorStop(0,'rgba(0,0,0,0)');rim.addColorStop(.4,'rgba(0,0,0,.14)');rim.addColorStop(.65,'rgba(0,0,0,.35)');rim.addColorStop(.85,'rgba(0,0,0,.20)');rim.addColorStop(1,'rgba(0,0,0,0)');X.beginPath();X.arc(0,0,r*1.04,0,Math.PI*2);X.fillStyle=rim;X.fill();
+ rim.addColorStop(0,'rgba(0,0,0,0)');rim.addColorStop(.4,isLight?'rgba(39,100,151,.015)':'rgba(0,0,0,.14)');rim.addColorStop(.65,isLight?'rgba(62,124,172,.07)':'rgba(0,0,0,.35)');rim.addColorStop(.85,isLight?'rgba(82,145,193,.035)':'rgba(0,0,0,.20)');rim.addColorStop(1,'rgba(0,0,0,0)');X.beginPath();X.arc(0,0,r*1.04,0,Math.PI*2);X.fillStyle=rim;X.fill();
  // Directional shade and a restrained reflection imply a curved, glassy surface.
- const shadow=X.createLinearGradient(-r*.5,-r,r*.6,r);shadow.addColorStop(0,'rgba(0,0,0,0)');shadow.addColorStop(.5,'rgba(0,0,0,.035)');shadow.addColorStop(1,'rgba(0,0,0,.20)');X.beginPath();X.arc(0,0,r*.97,0,Math.PI*2);X.fillStyle=shadow;X.fill();
+ const shadow=X.createLinearGradient(-r*.5,-r,r*.6,r);shadow.addColorStop(0,'rgba(0,0,0,0)');shadow.addColorStop(.5,isLight?'rgba(34,92,145,.01)':'rgba(0,0,0,.035)');shadow.addColorStop(1,isLight?'rgba(37,102,155,.035)':'rgba(0,0,0,.20)');X.beginPath();X.arc(0,0,r*.97,0,Math.PI*2);X.fillStyle=shadow;X.fill();
  const pr=r*(.205+mm*.08+pupil*.018*q.amount+breath*q.pupil-beat*.004);
- const well=X.createRadialGradient(px,py,pr*.86,px,py,pr*1.25);well.addColorStop(0,'#000');well.addColorStop(.53,'rgba(0,0,0,.98)');well.addColorStop(1,'rgba(0,0,0,0)');X.beginPath();X.arc(px,py,pr*1.25,0,Math.PI*2);X.fillStyle=well;X.fill();
- X.beginPath();X.arc(px,py,pr,0,Math.PI*2);X.fillStyle='#000';X.fill();
+ const well=X.createRadialGradient(px,py,pr*.86,px,py,pr*1.25);well.addColorStop(0,isLight?'#0a1420':'#000');well.addColorStop(.53,isLight?'rgba(13,27,41,.97)':'rgba(0,0,0,.98)');well.addColorStop(1,'rgba(0,0,0,0)');X.beginPath();X.arc(px,py,pr*1.25,0,Math.PI*2);X.fillStyle=well;X.fill();
+ X.beginPath();X.arc(px,py,pr,0,Math.PI*2);X.fillStyle=isLight?'#08121d':'#000';X.fill();
  X.beginPath();X.arc(px,py,pr*1.025,Math.PI*.98,Math.PI*1.86);X.strokeStyle=rgba(col,.13);X.lineWidth=.65;X.stroke();
  X.save();X.globalCompositeOperation='screen';X.translate(-r*.29-eyeX*.12,-r*.32-eyeY*.12);X.rotate(-.65);X.scale(1,.47);
  const highlight=X.createRadialGradient(0,0,0,0,0,r*.24);highlight.addColorStop(0,'rgba(223,240,252,.21)');highlight.addColorStop(.3,'rgba(210,233,250,.075)');highlight.addColorStop(1,'rgba(210,233,250,0)');X.fillStyle=highlight;X.beginPath();X.arc(0,0,r*.24,0,Math.PI*2);X.fill();X.restore();

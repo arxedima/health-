@@ -181,7 +181,7 @@ function draw(t,dt){
  const px=0,py=0;
  if(menu){const left=Math.round(e.x*2)/2,top=Math.round(e.y*2)/2,position=left+':'+top;if(position!==menuPosition){RM.style.left=left+'px';RM.style.top=top+'px';menuPosition=position}}
  const frame={x:e.x,y:e.y,r,baseRadius:R,t,width:W,height:H,dpr:D,mode,col,menu:mm,motion:q,waterLevel};
- X.fillStyle='#000';X.fillRect(0,0,W,H);motion.backdrop(X,frame);
+ X.fillStyle=A.classList.contains('iris-light')?'#fbfdff':'#0b1117';X.fillRect(0,0,W,H);if(!A.classList.contains('iris-light'))motion.backdrop(X,frame);
  rip=still?[]:rip.filter(v=>v.l>.02);
  for(const v of rip){X.beginPath();X.arc(v.x,v.y,(1-v.l)*r*1.1,0,Math.PI*2);X.strokeStyle=rgba(col,v.l*.06*q.amount);X.lineWidth=.65;X.stroke();v.l*=Math.pow(.95,step)}
  X.save();X.translate(e.x,e.y);

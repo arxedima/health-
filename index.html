@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#000000">
+  <meta name="theme-color" content="#090A0C">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -22,7 +22,7 @@
   <link rel="stylesheet" href="./polish-v47.css?v=iris48">
   <link rel="stylesheet" href="./iris-plans.css?v=iris56">
   <link rel="stylesheet" href="./iris-editorial.css?v=iris61">
-  <link rel="stylesheet" href="./iris-obsidian.css?v=iris63">
+  <link rel="stylesheet" href="./iris-obsidian.css?v=iris64">
 </head>
 <body>
 <main id="app" class="app mode-home">
@@ -105,12 +105,12 @@
 <script src="./iris-extras.js?v=iris46"></script>
 <script src="./iris-next.js?v=iris48"></script>
 <script src="./iris-plans.js?v=iris56"></script>
-<script src="./iris-editorial.js?v=iris61"></script>
+<script src="./iris-editorial.js?v=iris64"></script>
 <script>
 if('serviceWorker' in navigator){
   addEventListener('load',async()=>{
     try{
-      const registration=await navigator.serviceWorker.register('./sw.js?v=iris61',{updateViaCache:'none'});
+      const registration=await navigator.serviceWorker.register('./sw.js?v=iris64',{updateViaCache:'none'});
       await registration.update();
     }catch(e){}
   },{once:true});

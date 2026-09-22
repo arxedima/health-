@@ -1,0 +1,29 @@
+/* IRIS editorial light/dark refinement — preserves interactive canvas and data. */
+#app{--editorial-bg:#0b1117;--editorial-ink:#edf5fb;--editorial-muted:#9bafc0;background:var(--editorial-bg)}
+#app .ambient{opacity:.18}
+#app .noise{opacity:.006}
+#app .brand{font-weight:250;letter-spacing:.64em;text-shadow:none}
+#app.mode-home .home-quick{display:none!important}
+#app.mode-home .home-actions{margin-top:12px}
+#app.mode-home .home-links{margin-top:8px}
+#app.mode-home .metric-value{font-weight:250;letter-spacing:-.05em}
+#app .bottom-nav{background:transparent;border-top:0;box-shadow:none}
+#app .bottom-nav button{opacity:.85}
+#app .bottom-nav button.active,#app .bottom-nav button[aria-current="page"]{opacity:1}
+#app .mode-whisper{letter-spacing:.27em}
+#app .settings-list button#irisThemeToggle{display:flex;justify-content:space-between;align-items:center}
+#app.iris-light{color-scheme:light;--editorial-bg:#fbfdff;--editorial-ink:#243b51;--editorial-muted:#728ba2;--text:#243b51;--muted:#728ba2;--iris-ink:#243b51;--iris-subtle:#728ba2;--iris-line:rgba(66,111,149,.16);background:#fbfdff;color:#243b51}
+html:has(#app.iris-light),body:has(#app.iris-light){background:#fbfdff}
+#app.iris-light .ambient{opacity:.08}
+#app.iris-light .brand,#app.iris-light .metric-value,#app.iris-light .metric-label{color:#263e55;text-shadow:none}
+#app.iris-light .metric-caption,#app.iris-light .mode-whisper,#app.iris-light .home-links .quiet-action{color:#738ba1}
+#app.iris-light .settings-trigger,#app.iris-light .sound-trigger,#app.iris-light .bottom-nav button{color:#67849e}
+#app.iris-light .sound-trigger{border-color:rgba(61,98,130,.17)}
+#app.iris-light .sound-dot{background:#557b9d}
+#app.iris-light .bottom-nav button.active,#app.iris-light .bottom-nav button[aria-current="page"]{color:#345d83}
+#app.iris-light .journal-view,#app.iris-light .statistics-view{background:#fbfdff;color:#263e55}
+#app.iris-light .settings-sheet{background:#fbfdff;color:#263e55}
+#app.iris-light .settings-list button{color:#263e55}
+#app.iris-light #irisCanvas{filter:saturate(.88) brightness(1.12) contrast(1.06)}
+#app:not(.iris-light) #irisCanvas{filter:saturate(.85) brightness(1.1) contrast(1.09)}
+@media(prefers-reduced-motion:reduce){#app .ambient{transition:none}}

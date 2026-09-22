@@ -12,25 +12,25 @@ const icon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-wi
 $('#journalTab').insertAdjacentHTML('afterend','<button id="plansTab" type="button" aria-current="false">'+icon+'<span>Планы</span></button>');
 const html=[
 '<section id="plansView" class="plans-view" aria-labelledby="plansTitle" hidden>',
-'<header class="plans-top"><button id="plansBack" type="button" aria-label="К главному глазу">‹</button><span>IRIS · ПЛАНЫ</span><button id="plansNewTop" type="button" aria-label="Новая запись">＋</button></header>',
-'<div class="plans-intro"><div class="plans-eyebrow">ТВОЙ ДЕНЬ · ТВОЙ РИТМ</div><h1 id="plansTitle">Мои планы</h1><p id="plansSub">Задачи, привычки и мысли — в одном месте.</p></div><div class="plans-week" id="plansWeek" role="group" aria-label="Выбрать день недели"></div>',
-'<div class="plans-toolbar"><label class="plans-date-label">ДЕНЬ <input id="plansDate" type="date" aria-label="Выбранная дата"></label><button id="plansToday" type="button">Сегодня</button></div>',
+'<header class="plans-top"><button id="plansBack" type="button" aria-label="Назад">‹</button><span>ПЛАНЫ</span><button id="plansNewTop" type="button" aria-label="Новая запись">＋</button></header>',
+'<div class="plans-intro"><h1 id="plansTitle">Сегодня</h1><p id="plansSub"></p></div><div class="plans-week" id="plansWeek" role="group" aria-label="Выбрать день недели"></div>',
+'<div class="plans-toolbar"><label class="plans-date-label">Выбрать дату <input id="plansDate" type="date" aria-label="Выбранная дата"></label><button id="plansToday" type="button">Сегодня</button></div>',
 '<div class="plans-progress"><div><span id="plansCount">0 из 0</span><span id="plansPercent">0%</span></div><div class="plans-track"><i id="plansFill"></i></div></div>',
-'<div class="plans-filters" role="group" aria-label="Раздел планов"><button data-plan-filter="today" aria-pressed="true">День</button><button data-plan-filter="upcoming">Дальше</button><button data-plan-filter="habit">Привычки</button><button data-plan-filter="note">Заметки</button><button data-plan-filter="all">Все</button></div>',
-'<div class="plans-quick"><input id="plansQuick" maxlength="180" placeholder="Быстро добавить задачу…" aria-label="Быстро добавить задачу"><button id="plansQuickAdd" type="button" aria-label="Добавить задачу">＋</button></div><label class="plans-search"><span>⌕</span><input id="plansSearch" type="search" placeholder="Поиск записей…" autocomplete="off" aria-label="Поиск записей"><button id="plansSearchClear" type="button" aria-label="Очистить поиск">×</button></label>',
-'<div class="plans-section-head"><h2 id="plansListTitle">На сегодня</h2><span id="plansListCount"></span></div>',
+'<div class="plans-filters" role="group" aria-label="Раздел планов"><button data-plan-filter="today" aria-pressed="true">Сегодня</button><button data-plan-filter="upcoming">Предстоящие</button><button data-plan-filter="habit">Привычки</button><button data-plan-filter="note">Заметки</button><button data-plan-filter="all">Все</button></div>',
+'<button id="plansQuickAdd" class="plans-quick-trigger" type="button"><span>＋</span> Новая задача</button><label class="plans-search"><span>⌕</span><input id="plansSearch" type="search" placeholder="Поиск записей…" autocomplete="off" aria-label="Поиск записей"><button id="plansSearchClear" type="button" aria-label="Очистить поиск">×</button></label>',
+'<div class="plans-section-head"><h2 id="plansListTitle">Сегодня</h2><span id="plansListCount"></span></div>',
 '<div id="plansList" class="plans-list" aria-live="polite"></div>',
 '<button id="plansAdd" class="plans-add" type="button"><span>＋</span> Добавить запись</button>',
 '<p class="plans-privacy">Записи хранятся только в этом браузере на устройстве. Для сохранности не очищай данные сайта.</p>',
 '</section>',
 '<dialog id="plansDialog" class="plans-dialog" aria-labelledby="plansDialogTitle"><form id="plansForm">',
-'<header><h2 id="plansDialogTitle">Новая запись</h2><button id="plansClose" type="button" aria-label="Закрыть">×</button></header>',
+'<header><h2 id="plansDialogTitle">Новая задача</h2><button id="plansClose" type="button" aria-label="Закрыть">×</button></header>',
 '<div class="plans-type" role="group" aria-label="Тип записи"><button type="button" data-plan-type="task" aria-pressed="true">Задача</button><button type="button" data-plan-type="habit">Привычка</button><button type="button" data-plan-type="note">Заметка</button></div>',
-'<label>Название<input name="title" maxlength="180" required placeholder="Что важно сделать?"></label>',
+'<label class="plans-title-label"><input name="title" maxlength="180" required placeholder="Что нужно сделать?" aria-label="Название задачи"></label><button id="plansMore" type="button" aria-expanded="false">＋ Детали и дата</button><div id="plansExtra" hidden>',
 '<label id="plansBodyLabel"><span>Описание / шаги</span><textarea name="body" rows="4" maxlength="6000" placeholder="Мысли, детали, чек-лист…"></textarea></label>',
 '<div class="plans-form-row" id="plansDueRow"><label>Дата<input name="due" type="date"></label><label>Повтор<select name="repeat"><option value="none">Без повтора</option><option value="daily">Каждый день</option><option value="weekly">Каждую неделю</option></select></label></div>',
 '<label id="plansPriorityRow" class="plans-priority"><input name="priority" type="checkbox"> Важная задача</label>',
-'<p id="plansError" role="alert"></p><button class="plans-save" type="submit">Сохранить</button><button id="plansDelete" class="plans-delete" type="button" hidden>Удалить запись</button>',
+'</div><p id="plansError" role="alert"></p><button class="plans-save" type="submit">Добавить задачу</button><button id="plansDelete" class="plans-delete" type="button" hidden>Удалить запись</button>',
 '</form></dialog>'
 ].join('');
 app.insertAdjacentHTML('beforeend',html);
@@ -47,19 +47,19 @@ function render(){
  $('#plansSearchClear').hidden=!search;
  const due=items.filter(x=>x.type!=='note'&&active(x,selected));const done=due.filter(x=>completed(x,selected)).length;
  $('#plansCount').textContent=done+' из '+due.length+' выполнено';$('#plansPercent').textContent=due.length?Math.round(done/due.length*100)+'%':'0%';$('#plansFill').style.width=(due.length?done/due.length*100:0)+'%';
- $('#plansSub').textContent=dateName(selected);
+ $('#plansSub').textContent=dateName(selected);$('#plansTitle').textContent=selected===day()?'Сегодня':dateName(selected);
  document.querySelectorAll('[data-plan-filter]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.planFilter===filter)));
- const titles={today:'На выбранный день',upcoming:'Впереди',habit:'Мои привычки',note:'Мои заметки',all:'Все записи'};$('#plansListTitle').textContent=titles[filter];
+ const titles={today:'Задачи',upcoming:'Предстоящие',habit:'Привычки',note:'Заметки',all:'Все записи'};$('#plansListTitle').textContent=titles[filter];
  const list=listing();$('#plansListCount').textContent=list.length+' записей';
  $('#plansList').innerHTML=list.length?list.map(x=>{
  const done=completed(x,selected),type=x.type==='note'?'ЗАМЕТКА':x.type==='habit'?'ПРИВЫЧКА':'ЗАДАЧА';
- const detail=x.type==='note'?'':x.repeat==='daily'?'Каждый день':x.repeat==='weekly'?'Каждую неделю':x.due?dateName(x.due):'Без срока';
+ const detail=x.type==='note'?'':x.repeat==='daily'?'Каждый день':x.repeat==='weekly'?'Каждую неделю':x.due&&x.due!==selected?dateName(x.due):'';
  return '<article class="plans-card '+(done?'is-done ':'')+(x.priority?'is-priority':'')+'" data-plan-id="'+esc(x.id)+'"><button class="plans-check" data-plan-check="'+esc(x.id)+'" type="button" '+(x.type==='note'?'hidden':'')+' aria-label="'+(done?'Вернуть':'Выполнить')+' '+esc(x.title)+'">'+(done?'✓':'')+'</button><button class="plans-card-main" type="button" data-plan-edit="'+esc(x.id)+'"><span class="plans-card-meta">'+type+(x.priority?' · ВАЖНО':'')+'</span><strong>'+esc(x.title)+'</strong>'+(x.body?'<small>'+esc(x.body)+'</small>':'')+'<em>'+esc(detail)+'</em></button><button class="plans-card-edit" type="button" data-plan-edit="'+esc(x.id)+'" aria-label="Изменить '+esc(x.title)+'">›</button></article>';
- }).join(''):'<div class="plans-empty"><span>✧</span><strong>Здесь пока тихо.</strong><p>Добавь первую запись — и IRIS поможет держать её в поле зрения.</p></div>';
+ }).join(''):'<div class="plans-empty"><strong>Пока нет задач</strong><p>Добавь задачу, чтобы начать день.</p></div>';
 }
 function typeUI(type){form.dataset.type=type;form.querySelectorAll('[data-plan-type]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.planType===type)));$('#plansDueRow').hidden=type==='note';$('#plansPriorityRow').hidden=type!=='task';$('#plansBodyLabel').querySelector('span').textContent=type==='note'?'Текст заметки':type==='habit'?'Описание привычки':'Описание / шаги';}
 function openEditor(id=null,type='task'){
- editing=id;const x=items.find(v=>v.id===id);form.reset();typeUI(x?.type||type);$('#plansDialogTitle').textContent=x?'Изменить запись':'Новая запись';form.elements.title.value=x?.title||'';form.elements.body.value=x?.body||'';form.elements.due.value=x?.due||selected;form.elements.repeat.value=x?.repeat|| (type==='habit'?'daily':'none');form.elements.priority.checked=!!x?.priority;$('#plansDelete').hidden=!x;$('#plansError').textContent='';dialog.showModal();requestAnimationFrame(()=>form.elements.title.focus());
+ editing=id;const x=items.find(v=>v.id===id);form.reset();typeUI(x?.type||type);$('#plansDialogTitle').textContent=x?'Изменить запись':'Новая задача';$('#plansExtra').hidden=!x;$('#plansMore').setAttribute('aria-expanded',String(!!x));$('#plansMore').textContent=x?'− Скрыть детали':'＋ Детали и дата';form.querySelector('.plans-save').textContent=x?'Сохранить':'Добавить';form.elements.title.value=x?.title||'';form.elements.body.value=x?.body||'';form.elements.due.value=x?.due||selected;form.elements.repeat.value=x?.repeat|| (type==='habit'?'daily':'none');form.elements.priority.checked=!!x?.priority;$('#plansDelete').hidden=!x;$('#plansError').textContent='';dialog.showModal();requestAnimationFrame(()=>form.elements.title.focus());
 }
 form.addEventListener('click',e=>{const b=e.target.closest('[data-plan-type]');if(!b)return;typeUI(b.dataset.planType);form.elements.repeat.value=b.dataset.planType==='habit'?'daily':'none'});
 form.addEventListener('submit',e=>{e.preventDefault();const title=form.elements.title.value.trim(),type=form.dataset.type;if(!title){$('#plansError').textContent='Напиши название';return}const x=items.find(v=>v.id===editing);const next={id:x?.id||uid(),type,title,body:form.elements.body.value.trim(),due:type==='note'?'':form.elements.due.value||selected,repeat:type==='note'?'none':form.elements.repeat.value,priority:type==='task'&&form.elements.priority.checked,created:x?.created||new Date().toISOString(),done:x?.done||false,history:x?.history||[]};if(x)items[items.indexOf(x)]=next;else items.push(next);if(save()){dialog.close();render()}});
@@ -68,9 +68,8 @@ $('#plansClose').addEventListener('click',()=>dialog.close());dialog.addEventLis
 $('#plansList').addEventListener('click',e=>{const check=e.target.closest('[data-plan-check]'),edit=e.target.closest('[data-plan-edit]');if(check)toggle(check.dataset.planCheck);else if(edit)openEditor(edit.dataset.planEdit)});
 $('#plansAdd').addEventListener('click',()=>openEditor());$('#plansNewTop').addEventListener('click',()=>openEditor());
 $('#plansWeek').addEventListener('click',e=>{const b=e.target.closest('[data-plan-day]');if(b){selected=b.dataset.planDay;filter='today';render()}});
-function quickAdd(){const input=$('#plansQuick'),title=input.value.trim();if(!title)return;items.push({id:uid(),type:'task',title,body:'',due:selected,repeat:'none',priority:false,created:new Date().toISOString(),done:false,history:[]});if(save()){input.value='';filter='today';search='';$('#plansSearch').value='';render()}}
-$('#plansQuickAdd').addEventListener('click',quickAdd);
-$('#plansQuick').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();quickAdd()}});
+$('#plansQuickAdd').addEventListener('click',()=>openEditor());
+$('#plansMore').addEventListener('click',()=>{const extra=$('#plansExtra');extra.hidden=!extra.hidden;$('#plansMore').setAttribute('aria-expanded',String(!extra.hidden));$('#plansMore').textContent=extra.hidden?'＋ Детали и дата':'− Скрыть детали'});
 $('#plansSearchClear').addEventListener('click',()=>{search='';$('#plansSearch').value='';render();$('#plansSearch').focus()});
 $('#plansDate').addEventListener('change',e=>{if(e.target.value){selected=e.target.value;render()}});$('#plansToday').addEventListener('click',()=>{selected=day();render()});
 $('#plansSearch').addEventListener('input',e=>{search=e.target.value.toLocaleLowerCase('ru').trim();render()});

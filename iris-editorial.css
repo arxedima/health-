@@ -27,3 +27,30 @@ html:has(#app.iris-light),body:has(#app.iris-light){background:#fbfdff}
 #app.iris-light #irisCanvas{filter:saturate(.88) brightness(1.12) contrast(1.06)}
 #app:not(.iris-light) #irisCanvas{filter:saturate(.85) brightness(1.1) contrast(1.09)}
 @media(prefers-reduced-motion:reduce){#app .ambient{transition:none}}
+
+/* v58: complete theme coverage, including the planner and navigation. */
+#app.iris-light .plans-view{background:#fbfdff!important;color:#263e55!important}
+#app.iris-light[data-view="plans"] .bottom-nav{background:#fbfdff!important}
+#app.iris-light .plans-view .plans-top>span,#app.iris-light .plans-view .plans-top button,#app.iris-light .plans-view .plans-calendar{color:#34516b}
+#app.iris-light .plans-view .plans-group h2,#app.iris-light .plans-view .plans-group-title,#app.iris-light .plans-view .plans-task-title{color:#263e55}
+#app.iris-light .plans-view .plans-group,#app.iris-light .plans-view .plans-empty,#app.iris-light .plans-view .plans-task{color:#506b81}
+#app.iris-light .plans-view input,#app.iris-light .plans-view textarea,#app.iris-light .plans-view select{color:#263e55;background:#fff;border-color:#dce7f0}
+#app.iris-light .plans-menu,#app.iris-light .plans-dialog{background:#fff;color:#263e55;border-color:#dce7f0}
+#app.iris-light .plans-menu button,#app.iris-light .plans-dialog header h2{color:#34516b}
+#app.iris-light .plans-dialog input,#app.iris-light .plans-dialog textarea,#app.iris-light .plans-dialog select{background:#f3f7fa;color:#263e55;border-color:#dce7f0}
+#app.iris-light .plans-dialog input::placeholder,#app.iris-light .plans-dialog textarea::placeholder{color:#8295a7}
+#app.iris-light .bottom-nav{background:#fbfdff!important;border-top:1px solid #e7edf2}
+#app.iris-light .settings{color:#263e55}
+#app.iris-light .settings-sheet{background:#fff!important}
+#app.iris-light .settings-head,#app.iris-light .settings-list button{color:#263e55!important;border-color:#e7edf2}
+#app.iris-light .settings-signature{color:#728ba2}
+#app.iris-light .settings-list em{color:#537ca0}
+#app.iris-light .metric{color:#263e55}
+#app.iris-light .metric-label{color:#49647d}
+#app.iris-light .metric-caption{color:#728ba2}
+#app.iris-light .radial-item{color:#34516b}
+#app.iris-light .insight-panel{color:#263e55}
+#app.iris-light .insight-panel .insight-eyebrow{color:#728ba2}
+#app.iris-light #irisCanvas{filter:none}
+#app:not(.iris-light) #irisCanvas{filter:none}
+#app.iris-light .ambient{display:none}

@@ -76,3 +76,35 @@
 #app .bottom-nav button span{font-size:10px}
 @media(max-width:360px){#app .plans-view{padding-left:15px;padding-right:15px}#app .plans-filters{margin-left:-15px;margin-right:-15px;padding-left:15px;padding-right:15px}#app .plans-form-row{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){#app .plans-track i{transition:none}}
+
+/* v51: focused planner layout, no decorative iris */
+#app .plans-view{padding:calc(env(safe-area-inset-top) + 8px) 20px 38px}
+#app .plans-top{height:50px}
+#app .plans-top button{width:42px;height:42px}
+#app .plans-intro{text-align:left;padding:24px 0 12px}
+#app .plans-intro h1{font-size:clamp(30px,8vw,38px);margin:7px 0 4px;font-weight:380;letter-spacing:-.045em}
+#app .plans-intro p{font-size:12px}
+#app .plans-eyebrow{font-size:10px;letter-spacing:.21em}
+#app .plans-week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;margin:14px 0 12px}
+#app .plans-week button{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-width:0;height:62px;border:1px solid transparent;border-radius:15px;background:#090d10;color:#8c9aa4;cursor:pointer}
+#app .plans-week button span{font-size:9px;letter-spacing:.06em}
+#app .plans-week button strong{font-size:16px;font-weight:450}
+#app .plans-week button i{position:absolute;bottom:5px;width:3px;height:3px;border-radius:50%;background:#bca985}
+#app .plans-week button[aria-pressed="true"]{border-color:#ab9570;background:#28251f;color:#f0e2c6}
+#app .plans-toolbar{margin:0 0 17px}
+#app .plans-date-label{font-size:9px;letter-spacing:.12em}
+#app .plans-date-label input{font-size:12px;padding:8px 6px;min-height:42px}
+#app .plans-progress{margin-bottom:17px}
+#app .plans-filters{padding-bottom:13px}
+#app .plans-quick{display:flex;align-items:center;gap:7px;margin-bottom:10px;border:1px solid #5e513b;border-radius:15px;background:#13130f;padding:5px 5px 5px 14px;min-height:53px;box-sizing:border-box}
+#app .plans-quick input{flex:1;min-width:0;border:0;outline:0;background:transparent;color:#f0e8d7;font:400 14px -apple-system,BlinkMacSystemFont,sans-serif}
+#app .plans-quick input::placeholder{color:#9a9385}
+#app .plans-quick button{flex:none;width:42px;height:42px;border:0;border-radius:11px;background:#c9b58d;color:#171813;font-size:25px}
+#app .plans-search{height:40px;background:transparent;border-color:#192126}
+#app .plans-search input{font-size:12px}
+#app #plansSearchClear{width:32px;height:32px;border:0;background:transparent;color:#aebcc4;font-size:22px}
+#app #plansSearchClear[hidden]{display:none}
+#app .plans-section-head{margin:20px 0 12px}
+#app .plans-card{min-height:72px}
+#app .plans-add{margin-top:12px}
+@media(max-width:360px){#app .plans-week{gap:3px}#app .plans-week button{height:56px}#app .plans-date-label{gap:5px}}

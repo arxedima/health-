@@ -54,3 +54,12 @@ html:has(#app.iris-light),body:has(#app.iris-light){background:#fbfdff}
 #app.iris-light #irisCanvas{filter:none}
 #app:not(.iris-light) #irisCanvas{filter:none}
 #app.iris-light .ambient{display:none}
+
+/* v59: high-contrast light home, without opaque dark overlays. */
+#app.iris-light .stage,#app.iris-light .topbar{background:transparent!important;color:#233c56!important}
+#app.iris-light .brand,#app.iris-light .metric-value{color:#203a55!important;opacity:1!important}
+#app.iris-light .metric-label,#app.iris-light .metric-caption,#app.iris-light .home-links .quiet-action{color:#526d85!important;opacity:1!important}
+#app.iris-light .bottom-nav button{color:#667f98!important;opacity:1!important}
+#app.iris-light .bottom-nav button.active,#app.iris-light .bottom-nav button[aria-current="page"]{color:#254c70!important}
+#app.iris-light .noise{display:none}
+#app.iris-light .home-links{color:#526d85}

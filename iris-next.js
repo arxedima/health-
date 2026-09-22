@@ -111,6 +111,8 @@ $('#openSections').className='quiet-action';$('#openSections').textContent='Ра
 $('#openDayTrail').textContent='След дня';
 home.insertAdjacentHTML('afterbegin',`<div class="home-quick">${['water','food','sleep','sport'].map(k=>`<button type="button" data-home-add="${k}" style="--quick-color:${colors[k]}">${icon(k)}<span>${k==='water'?'+ '+D.routine.waterPortion:k==='food'?'Еда':labels[k]}</span></button>`).join('')}</div>`);
 footer.insertAdjacentHTML('beforeend','<button id="homeCheckin" class="quiet-action" type="button">Как ты?</button>');
+// The home readout is taller after the quick actions mount; recalculate eye geometry.
+requestAnimationFrame(()=>dispatchEvent(new Event('resize')));
 $('#homeCheckin').addEventListener('click',()=>editEntry('checkins'));
 home.addEventListener('click',e=>{const b=e.target.closest('[data-home-add]');if(!b)return;const k=b.dataset.homeAdd;if(k==='water'){try{D.changeWater(D.routine.waterPortion)}catch(error){J.toast(error.message)}}else if(k==='sport'){dispatchEvent(new CustomEvent('iris:navigate',{detail:'sport'}))}else editEntry(k)});
 $('.water-panel').insertAdjacentHTML('beforeend','<button id="waterPortion" class="quiet-action" type="button"></button>');

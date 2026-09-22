@@ -63,3 +63,11 @@ html:has(#app.iris-light),body:has(#app.iris-light){background:#fbfdff}
 #app.iris-light .bottom-nav button.active,#app.iris-light .bottom-nav button[aria-current="page"]{color:#254c70!important}
 #app.iris-light .noise{display:none}
 #app.iris-light .home-links{color:#526d85}
+
+/* v60: quiet light-theme hierarchy and refined bottom navigation. */
+#app.iris-light.mode-home .metric-label{letter-spacing:.32em;color:#66809a!important}
+#app.iris-light.mode-home .metric-value{font-weight:250;letter-spacing:-.055em}
+#app.iris-light.mode-home .metric-caption{color:#667f96!important;letter-spacing:.025em}
+#app.iris-light .bottom-nav{border-top:1px solid rgba(78,123,164,.11)!important}
+#app.iris-light .bottom-nav button svg{stroke-width:1.55}
+#app.iris-light .home-links .quiet-action{font-weight:450;letter-spacing:.01em}

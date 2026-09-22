@@ -11,7 +11,7 @@ const icon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-wi
 $('#journalTab').insertAdjacentHTML('afterend','<button id="plansTab" type="button" aria-current="false">'+icon+'<span>Планы</span></button>');
 const html=[
 '<section id="plansView" class="plans-view" aria-labelledby="plansTitle" hidden>',
-'<header class="plans-top"><button id="plansBack" type="button" aria-label="Меню">☰</button><span id="plansTitle">IRIS <i>·</i> ПЛАНЫ</span><label class="plans-calendar" aria-label="Выбрать дату"><input id="plansDate" type="date"><span>▦</span></label></header>',
+'<header class="plans-top"><button id="plansBack" type="button" aria-label="Меню">☰</button><span id="plansTitle">IRIS <i> / </i> ПЛАНЫ</span><label class="plans-calendar" aria-label="Выбрать дату"><input id="plansDate" type="date"><span>▦</span></label></header><div class="plans-overview"><div><span class="plans-overview-label" id="plansDayLabel">СЕГОДНЯ</span><strong id="plansDayProgress">0 / 0</strong></div><div class="plans-overview-track"><span id="plansDayFill"></span></div><p id="plansDayCaption">Твой день, твой ритм.</p></div>',
 '<div class="plans-groups" id="plansGroups" aria-live="polite"></div>',
 '<button id="plansFab" class="plans-fab" type="button" aria-label="Новая задача">＋</button>',
 '<div class="plans-menu" id="plansMenu" hidden><button id="plansGoEye" type="button">← На главную</button><button data-plan-create="habit" type="button">＋ Привычка</button><button data-plan-create="note" type="button">＋ Заметка</button><button id="plansMenuClose" type="button">Закрыть</button></div>',
@@ -46,6 +46,11 @@ function render(){
   {name:'ЗАМЕТКИ',cls:'notes',test:x=>x.type==='note'}
  ];
  $('#plansDate').value=selected;
+ const todayItems=items.filter(x=>x.type==='task'&&((x.repeat==='none'&&x.due&&x.due<=now)||(x.repeat==='daily'&&(!x.due||x.due<=now))||(x.repeat==='weekly'&&x.due&&x.due<=now&&new Date(x.due+'T12:00:00').getDay()===new Date(now+'T12:00:00').getDay())));
+ const finished=todayItems.filter(x=>completed(x,now)).length;
+ $('#plansDayProgress').textContent=finished+' / '+todayItems.length;
+ $('#plansDayFill').style.width=(todayItems.length?Math.round(finished/todayItems.length*100):0)+'%';
+ $('#plansDayCaption').textContent=todayItems.length?(finished===todayItems.length?'На сегодня всё готово':(todayItems.length-finished)+' осталось на сегодня'):'Добавь первую задачу на сегодня';
  const card=x=>{
   const done=completed(x,now),isNote=x.type==='note';
   const detail=x.body?'<small>'+esc(x.body)+'</small>':'';

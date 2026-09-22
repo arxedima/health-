@@ -8,7 +8,8 @@ let waterMl=clamp(parseInt(localStorage.getItem('irisWaterMl')||'0',10)||0,0,600
 const motion=window.IRISMotion;
 let touchEnergy=0,transitionLight=0,waterLevel=clamp(waterMl/waterGoal,0,1);
 let animationId=0,lastTick=null,lastPaint=null,clock=0,boostUntil=0;
-let rasterLimit=2,paintCost=0,costSamples=0,nextQualityCheck=0,pointerBounds=null,menuPosition='';
+// Stable canvas resolution: changing DPR while animating clears the canvas and makes fibers flash.
+let rasterLimit=Math.min(1.5,window.devicePixelRatio||1),paintCost=0,costSamples=0,nextQualityCheck=0,pointerBounds=null,menuPosition='';
 let entrance=localStorage.getItem('irisWelcomedV39')==='1'?0:1;
 function visible(){return !document.hidden&&(!A.dataset.view||A.dataset.view==='eye')&&!SP.classList.contains('open')&&!document.querySelector('dialog[open]')}
 function wake(){
@@ -20,11 +21,11 @@ function tick(now){
  animationId=0;if(!visible()){lastTick=lastPaint=null;return}
  const dt=lastTick===null?16.667:clamp(now-lastTick,0,50);lastTick=now;clock+=dt;
  const active=p.down||Math.abs(mm-tmm)>.003||now<boostUntil;
- if(lastPaint===null||now-lastPaint>=(active?1000/60:1000/30)-.5){
+ if(lastPaint===null||now-lastPaint>=(active?1000/60:1000/45)-.5){
   const density=Math.min(rasterLimit,devicePixelRatio||1);
   if(density!==D){D=density;sizeCanvas()}
   const started=performance.now();draw(clock,lastPaint===null?16.667:clamp(now-lastPaint,1,50));lastPaint=now;
-  tuneQuality(performance.now()-started,now);
+  // Keep backing resolution constant between real viewport resizes; no adaptive DPR oscillation.
  }
  if(motion.intensity())animationId=requestAnimationFrame(tick);else lastTick=lastPaint=null;
 }
@@ -189,7 +190,7 @@ function draw(t,dt){
  const px=0,py=0;
  if(menu){const left=Math.round(e.x*2)/2,top=Math.round(e.y*2)/2,position=left+':'+top;if(position!==menuPosition){RM.style.left=left+'px';RM.style.top=top+'px';menuPosition=position}}
  const frame={x:e.x,y:e.y,r,baseRadius:R,t,width:W,height:H,dpr:D,mode,col,menu:mm,motion:q,waterLevel};
- X.fillStyle=A.classList.contains('iris-light')?'#fbfdff':'#0b1117';X.fillRect(0,0,W,H);if(!A.classList.contains('iris-light'))motion.backdrop(X,frame);
+ X.fillStyle=A.classList.contains('iris-light')?'#fbfdff':'#000000';X.fillRect(0,0,W,H);if(!A.classList.contains('iris-light'))motion.backdrop(X,frame);
  rip=still?[]:rip.filter(v=>v.l>.02);
  for(const v of rip){X.beginPath();X.arc(v.x,v.y,(1-v.l)*r*1.1,0,Math.PI*2);X.strokeStyle=rgba(col,v.l*.06*q.amount);X.lineWidth=.65;X.stroke();v.l*=Math.pow(.95,step)}
  X.save();X.translate(e.x,e.y);

@@ -1,10 +1,11 @@
-const CACHE='iris-v4.6.0-journal-routine-icon23';
+const CACHE='iris-v4.7.0-quiet-depth';
 const CORE=[
   '/health-/?v=46&music=4',
   '/health-/index.html?v=46&music=4',
   '/health-/styles.css?v=iris46',
   '/health-/journal.css?v=iris46',
   '/health-/next.css?v=iris46',
+  '/health-/polish-v47.css?v=iris47',
   '/health-/iris-data.js?v=iris46',
   '/health-/iris-journal.js?v=iris46',
   '/health-/iris-extras.js?v=iris46',

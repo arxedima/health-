@@ -104,15 +104,28 @@ function build(){
 }
 function resize(){
   const bounds=A.getBoundingClientRect();
-  const oldW=W,oldH=H,oldD=D,oldR=R;
+  const oldW=W,oldH=H,oldD=D,oldR=R,oldCy=cy;
   D=Math.min(rasterLimit,devicePixelRatio||1);W=Math.round(bounds.width);H=Math.round(bounds.height);
   const nav=A.querySelector('.bottom-nav');
   const safe=nav?Math.max(92,H-(nav.getBoundingClientRect().top-bounds.top)+10):112;
-  // Fixed readout reservation prevents the eye from jumping when labels or controls change.
-  const available=H-safe-270-24;
-  R=Math.max(48,Math.min(W*.34,H*.178,174,(available-110)/2));
-  cx=W/2;cy=Math.max(110+R,Math.min(H*.435,available-R));
-  if(oldW===W&&oldH===H&&oldD===D&&Math.abs(oldR-R)<.01)return;
+  // Measure the real home readout rather than reserving a fixed 270px block.
+  // The eye fills the available space without covering the controls or bottom tabs.
+  const navTop=nav?nav.getBoundingClientRect().top-bounds.top:H-safe;
+  const header=A.querySelector('.topbar');
+  const headerBottom=header?header.getBoundingClientRect().bottom-bounds.top:94;
+  const readout=$('#metric');
+  if(mode==='home'&&A.dataset.welcome!=='true'){
+    const readoutHeight=readout.getBoundingClientRect().height||215;
+    const top=Math.max(90,headerBottom)+10;
+    const bottom=navTop-12;
+    R=Math.max(48,Math.min(W*.385,174,(bottom-top-readoutHeight-18)/2));
+    cx=W/2;cy=top+R;
+  }else{
+    const available=H-safe-270-24;
+    R=Math.max(48,Math.min(W*.34,H*.178,174,(available-110)/2));
+    cx=W/2;cy=Math.max(110+R,Math.min(H*.435,available-R));
+  }
+  if(oldW===W&&oldH===H&&oldD===D&&Math.abs(oldR-R)<.01&&Math.abs(oldCy-cy)<.01)return;
   cancelGesture();closeMenu(false);sizeCanvas();C.style.width=W+'px';C.style.height=H+'px';
   build();layout();wake();
 }
@@ -122,12 +135,12 @@ function layout(){
   document.documentElement.style.setProperty('--eye-y',yy+'px');
   document.documentElement.style.setProperty('--eye-r',rr+'px');
   MW.style.top=Math.max(88,yy-rr-34)+'px';
-  $('#metric').style.top=(yy+rr+24)+'px';
+  $('#metric').style.top=(yy+rr+(mode==='home'?14:24))+'px';
 }
 function point(e,start=false){const b=start||!pointerBounds?(pointerBounds=S.getBoundingClientRect()):pointerBounds;return{x:e.clientX-b.left,y:e.clientY-b.top}}
 function inside(x,y,m=1.08){let e=ec();return Math.hypot(x-e.x,y-e.y)<=R*scale*(1-entrance*.2)*m}
 function ui(){let m=M[mode];document.documentElement.style.setProperty('--accent',m[4].join(' '));ML.textContent=m[0];MV.textContent=m[1];MC.textContent=m[2];MW.textContent=m[3];A.className=`app mode-${mode}${menu?' menu-open':''}${SP.classList.contains('open')?' settings-open':''}`;IP.classList.toggle('visible',mode==='insights');targetScale=mode==='insights'?.66:1;targetShift=mode==='insights'?-H*.1:0;MD.innerHTML='';O.forEach(v=>{let d=document.createElement('span');if(v===mode)d.className='active';MD.appendChild(d)});MD.classList.toggle('visible',mode!=='home'&&mode!=='water');layout();waterUI();audioMode()}
-function setMode(m){cancelGesture();if(m==='insights'){dispatchEvent(new CustomEvent('iris:statistics'));return}if(!M[m])return;if(m===mode){wake();return}mode=m;pupil=1;transitionLight=1;ui();const el=$('#metric');el.classList.remove('readout-enter');void el.offsetWidth;el.classList.add('readout-enter');wake();world();if(unlocked)tone(M[m][6]*2,.3,.007);try{navigator.vibrate?.(8)}catch{}}
+function setMode(m){cancelGesture();if(m==='insights'){dispatchEvent(new CustomEvent('iris:statistics'));return}if(!M[m])return;if(m===mode){wake();return}mode=m;pupil=1;transitionLight=1;ui();resize();const el=$('#metric');el.classList.remove('readout-enter');void el.offsetWidth;el.classList.add('readout-enter');wake();world();if(unlocked)tone(M[m][6]*2,.3,.007);try{navigator.vibrate?.(8)}catch{}}
 function pulse(x,y){wake();TR.style.left=x+'px';TR.style.top=y+'px';TR.classList.remove('pulse');void TR.offsetWidth;TR.classList.add('pulse');rip.push({x,y,l:1});pupil=1;if(unlocked)tone(M[mode][6]*4,.16,.01,'sine',1.1)}
 function openMenu(keyboard=false){if(menu||!visible()||A.dataset.contemplation==='true'||A.dataset.welcome==='true'||(!p.down&&!keyboard))return;menu=true;$('#metric').inert=true;sel=null;tmm=1;RM.classList.add('open');RM.setAttribute('aria-hidden','false');RM.inert=false;A.classList.add('menu-open');dispatchEvent(new CustomEvent('iris:gesture'));wake();if(keyboard)RI[0]?.focus({preventScroll:true});if(unlocked)tone(M[mode][6],.48,.018,'sine',1.28)}function closeMenu(commit=true){if(!menu)return;let s=sel;menu=false;$('#metric').inert=false;sel=null;tmm=0;RI.forEach(i=>i.classList.remove('active'));RM.classList.remove('open');RM.setAttribute('aria-hidden','true');RM.inert=true;A.classList.remove('menu-open');wake();if(commit&&s)setMode(s)}
 function choose(x,y){const previous=sel;let e=ec(),dx=x-e.x,dy=y-e.y,d=Math.hypot(dx,dy);if(d<R*.4)sel=null;else{let a=Math.atan2(dy,dx);sel=a>-.25*Math.PI&&a<=.25*Math.PI?'food':a>.25*Math.PI&&a<=.75*Math.PI?'sleep':a<=-.25*Math.PI&&a>-.75*Math.PI?'sport':'water'}if(previous!==sel)RI.forEach(i=>i.classList.toggle('active',i.dataset.mode===sel))}

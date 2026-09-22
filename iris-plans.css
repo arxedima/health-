@@ -108,3 +108,71 @@
 #app .plans-card{min-height:72px}
 #app .plans-add{margin-top:12px}
 @media(max-width:360px){#app .plans-week{gap:3px}#app .plans-week button{height:56px}#app .plans-date-label{gap:5px}}
+
+/* v52 — task-first, calm minimalism */
+#app .plans-view{background:#090a0c;color:#f4f4f5;padding:calc(env(safe-area-inset-top) + 5px) 22px 36px}
+#app .plans-top{height:46px;letter-spacing:.15em;color:#a4a7ae}
+#app .plans-top button{background:transparent;border:0;color:#e8e8e9;font-size:30px}
+#app .plans-top button:last-child{font-size:30px}
+#app .plans-intro{padding:20px 0 16px}
+#app .plans-intro h1{font-size:37px;font-weight:600;letter-spacing:-.05em;margin:0 0 5px}
+#app .plans-intro p{font-size:13px;color:#8b9099}
+#app .plans-week{gap:3px;margin:8px 0 12px}
+#app .plans-week button{height:56px;border:0;background:transparent;border-radius:12px;color:#8b9099;gap:6px}
+#app .plans-week button strong{font-size:15px}
+#app .plans-week button[aria-pressed="true"]{background:#252a30;border:0;color:#f7f7f7}
+#app .plans-week button i{background:#d6d8dd}
+#app .plans-toolbar{margin:0 0 15px}
+#app .plans-date-label{color:#868c95;letter-spacing:0;text-transform:none;font-size:12px}
+#app .plans-date-label input{background:transparent;border:0;color:#b9c1c9;min-height:36px;padding:5px;font-size:12px}
+#app .plans-toolbar>button{min-height:36px;background:transparent;border:0;color:#a9b0b9}
+#app .plans-progress{margin-bottom:17px}
+#app .plans-progress>div:first-child{font-size:11px;margin-bottom:8px;color:#91969f}
+#app .plans-progress #plansPercent{color:#c7ccd2}
+#app .plans-track{background:#24272c;height:2px}
+#app .plans-track i{background:#b8c7d6}
+#app .plans-filters{gap:6px;padding-bottom:15px}
+#app .plans-filters button{border:0;background:#171a1e;color:#989da5;min-height:37px;padding:0 13px;font-size:12px}
+#app .plans-filters button[aria-pressed="true"]{background:#e5e8eb;color:#17191c}
+#app .plans-quick-trigger{width:100%;height:51px;display:flex;align-items:center;gap:12px;padding:0 15px;background:#171b20;color:#e8e9eb;border:1px solid #303740;border-radius:13px;text-align:left;font-size:14px}
+#app .plans-quick-trigger span{font-size:23px;font-weight:300}
+#app .plans-search{height:35px;border:0;background:transparent;padding:0 4px;margin-top:8px}
+#app .plans-search input{font-size:12px}
+#app .plans-section-head{margin:19px 0 5px}
+#app .plans-section-head h2{font-size:19px;font-weight:600}
+#app .plans-list{gap:0}
+#app .plans-card{min-height:60px;padding:8px 1px;border:0;border-bottom:1px solid #202329;border-radius:0;background:transparent;gap:12px}
+#app .plans-card.is-priority{border-left:0}
+#app .plans-check{width:23px;height:23px;border-radius:7px;border:1.5px solid #747d88}
+#app .plans-card.is-done .plans-check{background:#c0cbd3;color:#14181c;border-color:#c0cbd3}
+#app .plans-card-main{gap:3px}
+#app .plans-card-meta:empty,#app .plans-card-main em:empty{display:none}
+#app .plans-card-meta{font-size:9px;color:#bfa87e}
+#app .plans-card-main strong{font-size:15px;font-weight:430;line-height:1.4}
+#app .plans-card-main small{font-size:11px;color:#868e98}
+#app .plans-card-main em{font-size:10px;color:#8c959e}
+#app .plans-card-edit{color:#66717b;font-size:22px}
+#app .plans-empty{border:0;padding:30px 8px;color:#9ba1aa}
+#app .plans-empty strong{font-size:14px}
+#app .plans-empty p{font-size:12px}
+#app .plans-empty span{display:none}
+#app .plans-add{min-height:43px;background:transparent;border:0;color:#8f9ba7;font-size:12px;justify-content:flex-start;padding:0}
+#app .plans-add span{font-size:19px}
+#app .plans-privacy{color:#666d76;font-size:10px}
+#app .plans-dialog{width:100%;max-width:100%;max-height:min(86dvh,850px);position:fixed;inset:auto 0 0;margin:0;border:1px solid #30353c;border-bottom:0;border-radius:24px 24px 0 0;background:#191c22;padding:22px 22px calc(env(safe-area-inset-bottom) + 22px);box-shadow:0 -15px 70px #000a}
+#app .plans-dialog::backdrop{background:#0009}
+#app .plans-dialog form{gap:13px}
+#app .plans-dialog header h2{font-size:16px;font-weight:500}
+#app .plans-dialog header button{background:transparent;border:0;color:#9ba4af}
+#app .plans-type{gap:6px}
+#app .plans-type button{border:0;border-radius:10px;background:#252a31;color:#a7adb5;min-height:38px;font-size:12px}
+#app .plans-type button[aria-pressed="true"]{background:#d7dde3;color:#171a20;border:0}
+#app .plans-title-label{margin:4px 0}
+#app .plans-dialog .plans-title-label input{font-size:22px;font-weight:450;min-height:62px;background:transparent;border:0;border-bottom:1px solid #41464e;border-radius:0;padding:10px 0}
+#app #plansMore{border:0;background:transparent;color:#aab5c0;font-size:13px;text-align:left;min-height:36px}
+#app #plansExtra[hidden]{display:none}
+#app #plansExtra{display:grid;gap:13px}
+#app .plans-dialog input:not([type="checkbox"]),#app .plans-dialog textarea,#app .plans-dialog select{background:#232830;border-color:#3b424b}
+#app .plans-save{background:#dce3e9;color:#15191e;border-radius:12px;min-height:48px}
+#app .plans-delete{font-size:12px}
+@media(max-width:360px){#app .plans-view{padding-left:15px;padding-right:15px}}

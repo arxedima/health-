@@ -104,3 +104,45 @@
 #app .plans-save{background:#b5d5e6;color:#101b23}
 #app .plans-check:focus-visible,#app .plans-fab:focus-visible,#app .plans-row-title:focus-visible{outline:2px solid #c5e8fb;outline-offset:3px}
 @media(max-width:360px){#app .plans-view{padding-left:17px;padding-right:17px}}
+
+/* v56 — original compact IRIS planner */
+#app .plans-view{background:radial-gradient(ellipse at 85% 2%,#151b23 0%,#0b0e12 42%,#090b0e 85%);padding:calc(env(safe-area-inset-top) + 9px) 20px 95px}
+#app[data-view="plans"] .bottom-nav{background:#0b0e12}
+#app .plans-top{border:0;margin-bottom:12px}
+#app .plans-overview{border:0;margin:0;padding:10px 0 20px}
+#app .plans-overview>div:first-child{align-items:center}
+#app .plans-overview-label{font-size:27px;font-weight:650;letter-spacing:-.025em;color:#f0f4fa}
+#app .plans-overview strong{font-size:24px;color:#a4c7ff}
+#app .plans-overview-track{height:3px;margin:13px 0 9px;background:#252e3a}
+#app .plans-overview-track span{background:linear-gradient(90deg,#789bfa,#8cc7fa)}
+#app .plans-overview p{font-size:13px;color:#99a6b8}
+#app .plans-quick{display:flex;align-items:center;gap:12px;min-height:59px;border:1px solid #303a48;border-radius:16px;padding:0 10px 0 16px;background:#171c23;margin:0 0 17px}
+#app .plans-quick>span{font-size:26px;color:#9db6d8;font-weight:200}
+#app .plans-quick input{flex:1;min-width:0;background:transparent;border:0;outline:0;color:#f3f6fc;font-size:16px}
+#app .plans-quick input::placeholder{color:#8b99ab}
+#app .plans-quick button{border:1px solid #3a5074;border-radius:50%;background:#24334d;color:#9cc3ff;font-size:23px;width:40px;height:40px}
+#app .plans-filters{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;margin:0 0 22px}
+#app .plans-filters button{white-space:nowrap;border:1px solid #303945;border-radius:20px;background:#141920;color:#a5b0c0;font-size:12px;padding:10px 12px}
+#app .plans-filters button.active{background:#25344c;color:#bcd7ff;border-color:#698bcb}
+#app .plans-groups{gap:0}
+#app .plans-group{border:0;padding:0}
+#app .plans-group h2{font-size:13px;font-weight:550;letter-spacing:.05em;margin:0 0 10px;color:#a5b8cf}
+#app .plans-group .plans-badge{color:#9eb9df}
+#app .plans-row{min-height:58px;border-bottom:1px solid #222a33}
+#app .plans-check{width:23px;height:23px;border-color:#749bdb}
+#app .plans-row-title strong{font-size:15px}
+#app .plans-empty-state{border:1px solid #252e39;background:#11161c;border-radius:19px;padding:28px 14px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px}
+#app .plans-empty-state>span{width:48px;height:48px;border:1px solid #56677b;border-radius:50%;display:grid;place-items:center;color:#8ea9c8;font-size:23px}
+#app .plans-empty-state strong{font-size:16px;font-weight:550}
+#app .plans-empty-state p{margin:0;color:#8998ab;font-size:13px}
+#app .plans-empty-state button{margin-top:8px;border:1px solid #46628f;border-radius:20px;background:#223047;color:#a6c9ff;padding:11px 18px;font-size:13px}
+#app .plans-shortcuts{margin-top:27px}
+#app .plans-shortcuts h3{font-size:14px;font-weight:550;margin:0 0 12px}
+#app .plans-shortcuts>div{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+#app .plans-shortcuts button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;min-height:80px;background:#141a21;border:1px solid #2a3440;border-radius:15px;color:#9dc0f8;font-size:24px}
+#app .plans-shortcuts small{color:#c5cfdd;font-size:12px}
+#app .plans-fab{width:46px;height:46px;right:20px;bottom:calc(var(--view-bottom,105px) + 15px);font-size:26px;background:#789ee9;color:#09111e;box-shadow:0 4px 16px #0005}
+#app .plans-dialog{background:#151a22}
+#app .plans-title-label input{font-size:22px}
+#app .plans-quick button:active,#app .plans-filters button:active,#app .plans-shortcuts button:active{transform:scale(.97)}
+@media(prefers-reduced-motion:reduce){#app .plans-overview-track span{transition:none}}

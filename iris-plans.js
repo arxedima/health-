@@ -70,5 +70,6 @@ $('.plans-filters').addEventListener('click',e=>{const b=e.target.closest('[data
 $('#plansTab').addEventListener('click',()=>{J.view('plans');render();view.scrollTop=0});
 $('#plansBack').addEventListener('click',()=>J.view('eye'));
 addEventListener('popstate',()=>{if(location.hash==='#plans')render()});
+if(location.hash==='#plans')J.view('plans',false);
 render();
 })();

@@ -143,7 +143,7 @@ function layout(){
   document.documentElement.style.setProperty('--eye-y',yy+'px');
   document.documentElement.style.setProperty('--eye-r',rr+'px');
   MW.style.top=Math.max(88,yy-rr-34)+'px';
-  $('#metric').style.top=(yy+rr+(mode==='home'?14:24))+'px';
+  $('#metric').style.top=(yy+rr+(mode==='home'?22:24))+'px';
 }
 function point(e,start=false){const b=start||!pointerBounds?(pointerBounds=S.getBoundingClientRect()):pointerBounds;return{x:e.clientX-b.left,y:e.clientY-b.top}}
 function inside(x,y,m=1.08){let e=ec();return Math.hypot(x-e.x,y-e.y)<=R*scale*(1-entrance*.2)*m}

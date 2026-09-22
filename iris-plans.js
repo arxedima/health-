@@ -13,11 +13,11 @@ $('#journalTab').insertAdjacentHTML('afterend','<button id="plansTab" type="butt
 const html=[
 '<section id="plansView" class="plans-view" aria-labelledby="plansTitle" hidden>',
 '<header class="plans-top"><button id="plansBack" type="button" aria-label="К главному глазу">‹</button><span>IRIS · ПЛАНЫ</span><button id="plansNewTop" type="button" aria-label="Новая запись">＋</button></header>',
-'<div class="plans-intro"><div class="plans-orb" aria-hidden="true"><div class="plans-iris"><div class="plans-pupil"></div></div><div class="plans-orbit"></div></div><div class="plans-eyebrow">ТВОЙ ВТОРОЙ ГЛАЗ</div><h1 id="plansTitle">Ясность в делах.</h1><p id="plansSub">Задачи, привычки и мысли — в одном ритме.</p></div>',
+'<div class="plans-intro"><div class="plans-eyebrow">ТВОЙ ДЕНЬ · ТВОЙ РИТМ</div><h1 id="plansTitle">Мои планы</h1><p id="plansSub">Задачи, привычки и мысли — в одном месте.</p></div><div class="plans-week" id="plansWeek" role="group" aria-label="Выбрать день недели"></div>',
 '<div class="plans-toolbar"><label class="plans-date-label">ДЕНЬ <input id="plansDate" type="date" aria-label="Выбранная дата"></label><button id="plansToday" type="button">Сегодня</button></div>',
 '<div class="plans-progress"><div><span id="plansCount">0 из 0</span><span id="plansPercent">0%</span></div><div class="plans-track"><i id="plansFill"></i></div></div>',
 '<div class="plans-filters" role="group" aria-label="Раздел планов"><button data-plan-filter="today" aria-pressed="true">День</button><button data-plan-filter="upcoming">Дальше</button><button data-plan-filter="habit">Привычки</button><button data-plan-filter="note">Заметки</button><button data-plan-filter="all">Все</button></div>',
-'<label class="plans-search"><span>⌕</span><input id="plansSearch" type="search" placeholder="Найти задачу или мысль…" autocomplete="off" aria-label="Поиск записей"></label>',
+'<div class="plans-quick"><input id="plansQuick" maxlength="180" placeholder="Быстро добавить задачу…" aria-label="Быстро добавить задачу"><button id="plansQuickAdd" type="button" aria-label="Добавить задачу">＋</button></div><label class="plans-search"><span>⌕</span><input id="plansSearch" type="search" placeholder="Поиск записей…" autocomplete="off" aria-label="Поиск записей"><button id="plansSearchClear" type="button" aria-label="Очистить поиск">×</button></label>',
 '<div class="plans-section-head"><h2 id="plansListTitle">На сегодня</h2><span id="plansListCount"></span></div>',
 '<div id="plansList" class="plans-list" aria-live="polite"></div>',
 '<button id="plansAdd" class="plans-add" type="button"><span>＋</span> Добавить запись</button>',
@@ -42,6 +42,9 @@ function toggle(id){const x=items.find(v=>v.id===id);if(!x||x.type==='note')retu
 function listing(){let list=items.filter(x=>(x.title+' '+(x.body||'')).toLocaleLowerCase('ru').includes(search));if(filter==='today')list=list.filter(x=>x.type!=='note'&&active(x,selected));if(filter==='upcoming')list=list.filter(x=>x.type==='task'&&x.due>selected&&x.repeat==='none'&&!x.done);if(filter==='habit')list=list.filter(x=>x.type==='habit'&&active(x,selected));if(filter==='note')list=list.filter(x=>x.type==='note');return list.sort((a,b)=>Number(completed(a,selected))-Number(completed(b,selected))||Number(!!b.priority)-Number(!!a.priority)||(a.due||'').localeCompare(b.due||'')||(b.created||'').localeCompare(a.created||''))}
 function render(){
  $('#plansDate').value=selected;$('#plansToday').disabled=selected===day();
+ const base=new Date(selected+'T12:00:00'),start=new Date(base);start.setDate(base.getDate()-((base.getDay()+6)%7));
+ $('#plansWeek').innerHTML=Array.from({length:7},(_,i)=>{const d=new Date(start);d.setDate(start.getDate()+i);const key=day(d),today=key===day();return '<button type="button" data-plan-day="'+key+'" aria-pressed="'+(key===selected)+'" aria-label="'+dateName(key)+'"><span>'+['ПН','ВТ','СР','ЧТ','ПТ','СБ','ВС'][i]+'</span><strong>'+d.getDate()+'</strong>'+(today?'<i></i>':'')+'</button>'}).join('');
+ $('#plansSearchClear').hidden=!search;
  const due=items.filter(x=>x.type!=='note'&&active(x,selected));const done=due.filter(x=>completed(x,selected)).length;
  $('#plansCount').textContent=done+' из '+due.length+' выполнено';$('#plansPercent').textContent=due.length?Math.round(done/due.length*100)+'%':'0%';$('#plansFill').style.width=(due.length?done/due.length*100:0)+'%';
  $('#plansSub').textContent=dateName(selected);
@@ -64,6 +67,11 @@ $('#plansDelete').addEventListener('click',()=>{if(!editing||!confirm('Удал�
 $('#plansClose').addEventListener('click',()=>dialog.close());dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close()});
 $('#plansList').addEventListener('click',e=>{const check=e.target.closest('[data-plan-check]'),edit=e.target.closest('[data-plan-edit]');if(check)toggle(check.dataset.planCheck);else if(edit)openEditor(edit.dataset.planEdit)});
 $('#plansAdd').addEventListener('click',()=>openEditor());$('#plansNewTop').addEventListener('click',()=>openEditor());
+$('#plansWeek').addEventListener('click',e=>{const b=e.target.closest('[data-plan-day]');if(b){selected=b.dataset.planDay;filter='today';render()}});
+function quickAdd(){const input=$('#plansQuick'),title=input.value.trim();if(!title)return;items.push({id:uid(),type:'task',title,body:'',due:selected,repeat:'none',priority:false,created:new Date().toISOString(),done:false,history:[]});if(save()){input.value='';filter='today';search='';$('#plansSearch').value='';render()}}
+$('#plansQuickAdd').addEventListener('click',quickAdd);
+$('#plansQuick').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();quickAdd()}});
+$('#plansSearchClear').addEventListener('click',()=>{search='';$('#plansSearch').value='';render();$('#plansSearch').focus()});
 $('#plansDate').addEventListener('change',e=>{if(e.target.value){selected=e.target.value;render()}});$('#plansToday').addEventListener('click',()=>{selected=day();render()});
 $('#plansSearch').addEventListener('input',e=>{search=e.target.value.toLocaleLowerCase('ru').trim();render()});
 $('.plans-filters').addEventListener('click',e=>{const b=e.target.closest('[data-plan-filter]');if(b){filter=b.dataset.planFilter;render()}});

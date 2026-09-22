@@ -12,7 +12,7 @@ const profiles={
 const media=matchMedia('(prefers-reduced-motion: reduce)');
 let preference='full';try{preference=localStorage.getItem('irisMotionV41')||'full'}catch{}
 if(!['full','soft','still'].includes(preference))preference='full';
-let background=60;try{const raw=localStorage.getItem('irisBackgroundV42');if(raw!==null&&Number.isFinite(Number(raw)))background=clamp(Number(raw),0,100)}catch{}
+let background=18;try{const raw=localStorage.getItem('irisBackgroundV42');if(raw!==null&&Number.isFinite(Number(raw)))background=clamp(Number(raw),0,100)}catch{}
 const listeners=new Set(),weights={home:1,water:0,sport:0,food:0,sleep:0};
 const energyByKind={food:0,sleep:0};
 let waterWave=0,sport=0,touchEcho=0,touchAngle=0;
@@ -24,7 +24,7 @@ function setPreference(value){if(!['full','soft','still'].includes(value))return
 function setBackground(value){if(!Number.isFinite(Number(value)))return;background=clamp(Number(value),0,100);try{localStorage.setItem('irisBackgroundV42',String(background))}catch{}invalidate()}
 media.addEventListener?.('change',publishPreference);
 addEventListener('storage',e=>{if(e.key==='irisMotionV41'){preference=['full','soft','still'].includes(e.newValue)?e.newValue:'full';publishPreference()}});
-addEventListener('storage',e=>{if(e.key==='irisBackgroundV42'){background=e.newValue===null?60:clamp(Number(e.newValue)||0,0,100);invalidate()}});
+addEventListener('storage',e=>{if(e.key==='irisBackgroundV42'){background=e.newValue===null?18:clamp(Number(e.newValue)||0,0,100);invalidate()}});
 function record(kind){if(!intensity())return;if(kind in energyByKind)energyByKind[kind]=1;if(kind==='water')waterWave=1;invalidate()}
 function touch(angle){touchAngle=angle;touchEcho=1;invalidate()}
 function update(mode,t,dt,running){
@@ -50,14 +50,15 @@ function backdrop(ctx,f){
  // The canvas outside this small halo stays completely black in every mode.
  const {x,y,r,col,motion:q}=f;
  if(!background)return;
- const alpha=(.11+q.breathing*.006+q.beat*.012)*background/100*(1-f.menu*.25);
- const edge=r*1.24,g=ctx.createRadialGradient(x,y,r*.78,x,y,edge);
+ const alpha=.045*background/100*(1-f.menu*.25);
+ const edge=r*1.13,g=ctx.createRadialGradient(x,y,r*.91,x,y,edge);
  g.addColorStop(0,rgba(col,0));g.addColorStop(.30,rgba(col,alpha));g.addColorStop(.57,rgba(col,alpha*.34));g.addColorStop(.8,rgba(col,alpha*.07));g.addColorStop(1,rgba(col,0));
  ctx.save();ctx.fillStyle=g;ctx.fillRect(x-edge,y-edge,edge*2,edge*2);ctx.restore();
 }
 function fiber(f,t,q){
  const a=f.a,w=q.weights,amount=q.amount;
- return amount*(w.home*Math.sin(a*2+t*.00023)*.005+w.water*Math.sin(a*3-t*.00085+f.s*.6)*.021+w.food*Math.sin(a*5+t*.00035)*.012+w.sleep*Math.sin(a*2+t*.00026)*.01)+q.beat*Math.sin(a*4)*.007;
+ // Gentle, continuous per-fiber motion: distinct phase offsets prevent the iris looking frozen.
+ return amount*(w.home*Math.sin(a*2+t*.00038+f.s*5)*.013+w.water*Math.sin(a*3-t*.0007+f.s*4)*.020+w.sport*Math.sin(a*3+t*.00046+f.s*5)*.012+w.food*Math.sin(a*5+t*.00035+f.s*4)*.013+w.sleep*Math.sin(a*2+t*.00026+f.s*5)*.011)+q.beat*Math.sin(a*4)*.007;
 }
 function inner(ctx,f){
  const {r,t,col,motion:q}=f,w=q.weights;

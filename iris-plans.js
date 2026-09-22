@@ -38,7 +38,7 @@ function shift(d,n){const v=new Date(d+'T12:00:00');v.setDate(v.getDate()+n);ret
 function render(){
  const now=day(),tomorrow=shift(now,1),weekEnd=shift(now,7);
  const groups=[
-  {name:'СЕГОДНЯ',cls:'today',test:x=>x.type==='task'&&x.repeat==='none'&&(x.due||x.created?.slice(0,10)||now)<=now},
+  {name:'СЕГОДНЯ',cls:'today',test:x=>x.type==='task'&&((x.repeat==='none'&&x.due&&x.due<=now)||(x.repeat==='daily'&&(!x.due||x.due<=now))||(x.repeat==='weekly'&&x.due&&x.due<=now&&new Date(x.due+'T12:00:00').getDay()===new Date(now+'T12:00:00').getDay()))},
   {name:'ЗАВТРА',cls:'tomorrow',test:x=>x.type==='task'&&x.repeat==='none'&&x.due===tomorrow},
   {name:'НА НЕДЕЛЕ',cls:'week',test:x=>x.type==='task'&&x.repeat==='none'&&x.due>tomorrow&&x.due<=weekEnd},
   {name:'ПОТОМ',cls:'later',test:x=>x.type==='task'&&x.repeat==='none'&&(!x.due||x.due>weekEnd)},
@@ -88,7 +88,7 @@ form.elements.due.addEventListener('change',updateDue);
 form.addEventListener('submit',e=>{e.preventDefault();const title=form.elements.title.value.trim(),type=form.elements.type.value;if(!title){$('#plansError').textContent='Напиши название';return}
  const x=items.find(v=>v.id===editing);
  const subtasks=[...$('#plansSubtasks').children].map(row=>({title:row.querySelector('input[type="text"]').value.trim(),done:row.querySelector('input[type="checkbox"]').checked})).filter(t=>t.title);
- const next={id:x?.id||uid(),type,title,body:form.elements.body.value.trim(),subtasks,due:type==='note'?'':form.elements.due.value||day(),repeat:type==='note'?'none':form.elements.repeat.value,priority:type==='task'&&form.elements.priority.checked,created:x?.created||new Date().toISOString(),done:x?.done||false,history:x?.history||[]};
+ const next={id:x?.id||uid(),type,title,body:form.elements.body.value.trim(),subtasks,due:type==='note'?'':form.elements.due.value,repeat:type==='note'?'none':form.elements.repeat.value,priority:type==='task'&&form.elements.priority.checked,created:x?.created||new Date().toISOString(),done:x?.done||false,history:x?.history||[]};
  if(x)items[items.indexOf(x)]=next;else items.push(next);
  if(save()){dialog.close();render()}
 });

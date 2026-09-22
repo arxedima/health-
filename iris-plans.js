@@ -57,8 +57,8 @@ $('#plansBack').addEventListener('click',()=>{$('#plansMenu').hidden=!$('#plansM
 $('#plansMenuClose').addEventListener('click',()=>{$('#plansMenu').hidden=true});
 $('#plansMenu').addEventListener('click',e=>{const b=e.target.closest('[data-plan-create]');if(b)openEditor(null,b.dataset.planCreate)});
 $('#plansDate').addEventListener('change',e=>{if(e.target.value){selected=e.target.value;openEditor(null,'task')}});
-$('#plansTab').addEventListener('click',()=>{J.view('plans');render();view.scrollTop=0});
-$('#plansBack').addEventListener('click',()=>J.view('eye'));
+$('#plansTab').addEventListener('click',()=>{selected=day();J.view('plans');render();view.scrollTop=0});
+$('#plansGoEye').addEventListener('click',()=>{ $('#plansMenu').hidden=true;J.view('eye') });
 addEventListener('popstate',()=>{if(location.hash==='#plans')render()});
 if(location.hash==='#plans')J.view('plans',false);
 render();

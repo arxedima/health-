@@ -1,15 +1,15 @@
-const CACHE='iris-v4.9.0-plans-eye';
+const CACHE='iris-v5.0.0-plans-fix';
 const CORE=[
-  '/health-/?v=49&music=4',
-  '/health-/index.html?v=49&music=4',
+  '/health-/?v=50&music=4',
+  '/health-/index.html?v=50&music=4',
   '/health-/styles.css?v=iris46',
   '/health-/journal.css?v=iris46',
   '/health-/next.css?v=iris46',
   '/health-/polish-v47.css?v=iris48',
-  '/health-/iris-plans.css?v=iris49',
-  '/health-/iris-plans.js?v=iris49',
+  '/health-/iris-plans.css?v=iris50',
+  '/health-/iris-plans.js?v=iris50',
   '/health-/iris-data.js?v=iris46',
-  '/health-/iris-journal.js?v=iris46',
+  '/health-/iris-journal.js?v=iris50',
   '/health-/iris-extras.js?v=iris46',
   '/health-/iris-next.js?v=iris48',
   '/health-/iris-motion.js?v=iris46',
@@ -41,7 +41,7 @@ self.addEventListener('fetch',event=>{
       if(response.ok||!navigation)return response;
     }catch{}
     if(cached)return cached;
-    if(navigation)return await cache.match('/health-/?v=49&music=4')||Response.error();
+    if(navigation)return await cache.match('/health-/?v=50&music=4')||Response.error();
     return Response.error();
   })());
 });

@@ -1,0 +1,53 @@
+/* IRIS Obsidian: one dark surface across every screen; light theme untouched. */
+#app:not(.iris-light){
+  --editorial-bg:#090A0C;
+  --iris-bg:#090A0C;
+  --iris-surface:#15191F;
+  --iris-ink:#F5F7FA;
+  --iris-subtle:#929BA8;
+  --iris-line:rgba(146,155,168,.17);
+  background:#090A0C!important;
+  color:#F5F7FA;
+}
+html:has(#app:not(.iris-light)),body:has(#app:not(.iris-light)){background:#090A0C!important}
+#app:not(.iris-light) .stage,
+#app:not(.iris-light) .topbar,
+#app:not(.iris-light) .plans-view,
+#app:not(.iris-light) .journal-view,
+#app:not(.iris-light) .statistics-view,
+#app:not(.iris-light) .bottom-nav{
+  background:#090A0C!important;
+  background-image:none!important;
+}
+#app:not(.iris-light) .plans-view{color:#F5F7FA}
+#app:not(.iris-light) .plans-dialog,
+#app:not(.iris-light) .plans-menu,
+#app:not(.iris-light) .settings-sheet{background:#15191F!important;background-image:none!important;color:#F5F7FA}
+#app:not(.iris-light) .plans-quick,
+#app:not(.iris-light) .plans-empty-state,
+#app:not(.iris-light) .plans-shortcuts button,
+#app:not(.iris-light) .plans-filters button,
+#app:not(.iris-light) .plans-subtask-row input[type="text"],
+#app:not(.iris-light) .plans-body-label textarea,
+#app:not(.iris-light) .plans-extra input,
+#app:not(.iris-light) .plans-extra select{
+  background:#15191F!important;background-image:none!important;
+  border-color:#303741;color:#F5F7FA;
+}
+#app:not(.iris-light) .plans-filters button.active,
+#app:not(.iris-light) .plans-quick button,
+#app:not(.iris-light) .plans-save,
+#app:not(.iris-light) .plans-fab{background:#8CAEF0!important;background-image:none!important;color:#090A0C}
+#app:not(.iris-light) .plans-overview-track{background:#252B33}
+#app:not(.iris-light) .plans-overview-track span{background:#8CAEF0}
+#app:not(.iris-light) .plans-overview strong,
+#app:not(.iris-light) .plans-group-today h2{color:#8CAEF0}
+#app:not(.iris-light) .plans-group,
+#app:not(.iris-light) .plans-row,
+#app:not(.iris-light) .plans-top{border-color:#252B33}
+#app:not(.iris-light) .plans-overview p,
+#app:not(.iris-light) .plans-row-title small,
+#app:not(.iris-light) .plans-empty{color:#929BA8}
+#app:not(.iris-light) .bottom-nav{box-shadow:none!important;border-top:1px solid #20252B}
+#app:not(.iris-light) .ambient,
+#app:not(.iris-light) .noise{display:none!important}

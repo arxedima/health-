@@ -1,0 +1,31 @@
+/* IRIS v47 — quiet depth. Visual-only layer: no changes to records or gesture handling. */
+:root{--iris-ink:#eaf2f7;--iris-subtle:#98a8b4;--iris-line:rgba(173,203,225,.15)}
+#app{background:#000}
+#app .ambient{opacity:.42;filter:saturate(.78)}
+#app .noise{opacity:.012}
+#app .brand{font-weight:260;letter-spacing:.65em;text-shadow:0 0 25px rgba(194,219,241,.11)}
+#app .topbar .icon-button{min-width:44px;min-height:44px}
+#app .metric-label{font-size:10px;letter-spacing:.34em;color:#b9c9d5}
+#app.mode-home .metric-value{font-weight:230;font-size:clamp(48px,11vw,67px);letter-spacing:-.055em;line-height:1.07;text-shadow:0 0 28px rgba(185,218,244,.09)}
+#app .metric-caption{font-size:11px;letter-spacing:.035em;line-height:1.55;color:#97a6b2}
+#app .home-actions{width:min(100%,360px);margin-top:20px}
+#app .home-quick{gap:8px}
+#app .home-quick button{position:relative;min-width:0;min-height:68px;border:1px solid rgba(176,200,218,.13);border-radius:20px;background:linear-gradient(160deg,rgba(20,29,35,.68),rgba(5,8,10,.85));gap:9px;color:#c3cdd5;font-size:12px;letter-spacing:.01em;transition:transform .2s ease,border-color .2s ease,background .2s ease}
+#app .home-quick button svg{width:23px;height:23px;filter:drop-shadow(0 0 8px color-mix(in srgb,var(--quick-color),transparent 72%))}
+#app .home-quick button:active{transform:scale(.96);border-color:var(--quick-color)}
+#app .home-quick button:focus-visible,#app .bottom-nav button:focus-visible,#app .home-links button:focus-visible{outline:2px solid #b8d9ef;outline-offset:3px}
+#app .home-links{margin-top:12px;gap:4px}
+#app .home-links .quiet-action{min-height:44px;font-size:12px;color:#9cabb7;letter-spacing:.01em}
+#app .bottom-nav{border-top:1px solid rgba(163,190,209,.09);background:linear-gradient(180deg,rgba(0,0,0,.94),#000 30%);padding-top:7px}
+#app .bottom-nav button{color:#8796a3;transition:color .22s ease,transform .22s ease}
+#app .bottom-nav button[aria-current="page"],#app .bottom-nav button[aria-selected="true"],#app .bottom-nav button.active{color:#d8e9f4}
+#app .bottom-nav button:active{transform:scale(.96)}
+#app .journal-view,#app .statistics-view{background:#000}
+#app .journal-heading h1{font-size:clamp(27px,7vw,34px);font-weight:280;letter-spacing:-.045em}
+#app .comparison-card{background:linear-gradient(155deg,#0b1115,#040608);border-color:rgba(165,192,211,.15);border-radius:21px}
+#app .comparison-card>strong{font-variant-numeric:tabular-nums}
+#app .journal-filters button[aria-pressed="true"]{background:#17242c;color:#e1edf5;border-color:#557082}
+#app .iris-dialog{color-scheme:dark}
+@media(max-width:380px){#app .home-actions{width:min(100%,336px)}#app .home-quick{gap:6px}#app .home-quick button{min-height:61px;border-radius:17px;font-size:11px}#app .home-links .quiet-action{font-size:11px}}
+@media(max-height:740px){#app .home-actions{margin-top:12px}#app .home-quick button{min-height:54px;gap:5px}#app.mode-home .metric-value{font-size:clamp(39px,9vw,52px)}}
+@media(prefers-reduced-motion:reduce){#app .home-quick button,#app .bottom-nav button{transition:none}}

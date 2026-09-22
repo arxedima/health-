@@ -1,4 +1,4 @@
-const CACHE='iris-v4.7.0-quiet-depth';
+const CACHE='iris-v4.8.0-large-iris';
 const CORE=[
   '/health-/?v=46&music=4',
   '/health-/index.html?v=46&music=4',
@@ -9,9 +9,9 @@ const CORE=[
   '/health-/iris-data.js?v=iris46',
   '/health-/iris-journal.js?v=iris46',
   '/health-/iris-extras.js?v=iris46',
-  '/health-/iris-next.js?v=iris46',
+  '/health-/iris-next.js?v=iris48',
   '/health-/iris-motion.js?v=iris46',
-  '/health-/iris-engine.js?v=iris46',
+  '/health-/iris-engine.js?v=iris48',
   '/health-/iris-music.m4a?v=4',
   '/health-/iris-v11.js?v=iris46',
   '/health-/iris-v24.js?v=iris46',

@@ -1,21 +1,21 @@
-const CACHE='iris-v5.8.0-theme-canvas';
+const CACHE='iris-v5.9.0-theme-preserve';
 const CORE=[
-  '/health-/?v=58&music=4',
-  '/health-/index.html?v=58&music=4',
+  '/health-/?v=59&music=4',
+  '/health-/index.html?v=59&music=4',
   '/health-/styles.css?v=iris46',
   '/health-/journal.css?v=iris46',
   '/health-/next.css?v=iris46',
   '/health-/polish-v47.css?v=iris48',
   '/health-/iris-plans.css?v=iris56',
-  '/health-/iris-editorial.css?v=iris58',
-  '/health-/iris-editorial.js?v=iris58',
+  '/health-/iris-editorial.css?v=iris59',
+  '/health-/iris-editorial.js?v=iris59',
   '/health-/iris-plans.js?v=iris56',
   '/health-/iris-data.js?v=iris46',
   '/health-/iris-journal.js?v=iris56',
   '/health-/iris-extras.js?v=iris46',
   '/health-/iris-next.js?v=iris48',
   '/health-/iris-motion.js?v=iris46',
-  '/health-/iris-engine.js?v=iris58',
+  '/health-/iris-engine.js?v=iris59',
   '/health-/iris-music.m4a?v=4',
   '/health-/iris-v11.js?v=iris46',
   '/health-/iris-v24.js?v=iris46',
@@ -43,7 +43,7 @@ self.addEventListener('fetch',event=>{
       if(response.ok||!navigation)return response;
     }catch{}
     if(cached)return cached;
-    if(navigation)return await cache.match('/health-/?v=58&music=4')||Response.error();
+    if(navigation)return await cache.match('/health-/?v=59&music=4')||Response.error();
     return Response.error();
   })());
 });

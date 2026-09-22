@@ -29,3 +29,13 @@
 @media(max-width:380px){#app .home-actions{width:min(100%,336px)}#app .home-quick{gap:6px}#app .home-quick button{min-height:61px;border-radius:17px;font-size:11px}#app .home-links .quiet-action{font-size:11px}}
 @media(max-height:740px){#app .home-actions{margin-top:12px}#app .home-quick button{min-height:54px;gap:5px}#app.mode-home .metric-value{font-size:clamp(39px,9vw,52px)}}
 @media(prefers-reduced-motion:reduce){#app .home-quick button,#app .bottom-nav button{transition:none}}
+
+/* v48: reclaim vertical space for the living iris, without shrinking touch targets below 44px. */
+#app.mode-home .metric-value{font-size:clamp(43px,10vw,56px);min-height:0;margin-top:6px}
+#app.mode-home .metric-caption{margin-top:5px;line-height:1.35}
+#app.mode-home .home-actions{margin-top:10px}
+#app.mode-home .home-quick button{min-height:50px;gap:4px;border-radius:16px;padding:5px 2px}
+#app.mode-home .home-quick button svg{width:20px;height:20px}
+#app.mode-home .home-links{margin-top:3px}
+#app.mode-home .home-links .quiet-action{min-height:44px}
+@media(max-height:740px){#app.mode-home .metric-value{font-size:clamp(39px,9vw,49px)}#app.mode-home .home-actions{margin-top:7px}#app.mode-home .home-quick button{min-height:46px}}

@@ -44,12 +44,12 @@ function draw(f,ctx){
  const weight=1-f.menu*.88;if(weight<.003)return;
  // Every eye uses the same geometry, canvas and clock. Zero stays zero.
  let p=0;for(const k of ['home','water','sport','food','sleep'])p+=(progress[k]||0)*(f.motion.weights[k]||0);
- const r=f.r*1.026,start=-Math.PI*.76,col=f.col;
- ctx.save();ctx.globalCompositeOperation='screen';
- ctx.beginPath();ctx.arc(f.x,f.y,r,0,Math.PI*2);ctx.strokeStyle=rgba(col,.13*weight);ctx.lineWidth=.8;ctx.stroke();
- if(p>0){ctx.beginPath();ctx.arc(f.x,f.y,r,start,start+Math.PI*2*p);ctx.strokeStyle=rgba(col,.6*weight);ctx.lineWidth=1.65;ctx.lineCap='round';ctx.stroke()}
+ const r=f.r*1.035,start=-Math.PI*.76,light=app.classList.contains('iris-light'),col=light?[69,124,175]:f.col;
+ ctx.save();ctx.globalCompositeOperation=light?'source-over':'screen';
+ ctx.beginPath();ctx.arc(f.x,f.y,r,0,Math.PI*2);ctx.strokeStyle=rgba(col,(light?.20:.13)*weight);ctx.lineWidth=.8;ctx.stroke();
+ if(p>0){ctx.beginPath();ctx.arc(f.x,f.y,r,start,start+Math.PI*2*p);ctx.strokeStyle=rgba(col,(light?.82:.6)*weight);ctx.lineWidth=1.65;ctx.lineCap='round';ctx.stroke()}
  const a=start+Math.PI*2*p,dx=f.x+Math.cos(a)*r,dy=f.y+Math.sin(a)*r;
- ctx.beginPath();ctx.arc(dx,dy,p>0?2.05:1.5,0,Math.PI*2);ctx.fillStyle=rgba(p>0?[255,255,255]:col,(p>0?.92:.32)*weight);ctx.fill();
+ ctx.beginPath();ctx.arc(dx,dy,p>0?2.05:1.5,0,Math.PI*2);ctx.fillStyle=rgba(light?col:(p>0?[255,255,255]:col),(p>0?.92:.48)*weight);ctx.fill();
  if(p>0){const g=ctx.createRadialGradient(dx,dy,0,dx,dy,13);g.addColorStop(0,rgba(col,.22*weight));g.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(dx,dy,13,0,Math.PI*2);ctx.fill()}
  ctx.restore();
 }

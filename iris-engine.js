@@ -203,16 +203,17 @@ function draw(t,dt){
  const strandGradient=color=>{const g=X.createRadialGradient(0,0,0,0,0,r);g.addColorStop(0,rgba(color,0));g.addColorStop(.22,rgba(color,1));g.addColorStop(.70,rgba(color,1));g.addColorStop(.86,rgba(color,.72));g.addColorStop(.955,rgba(color,0));g.addColorStop(1,rgba(color,0));return g};
  const fineInk=strandGradient(col),deepInk=strandGradient(low);X.lineCap='round';X.lineJoin='round';
  const springSteps=Math.ceil(step),springStep=step/springSteps,damping=Math.pow(.73,springStep);
- const touching=touchEnergy>.0001,touchDepth=touchEnergy*clamp((isLight?1.55:1.25)-p.d/(r*(isLight?1.65:1.3)),0,1),echoing=q.touchEcho*q.amount>.0001;
+ const touching=p.down||touchEnergy>.0001,touchDepth=(p.down?1:touchEnergy)*clamp((isLight?1.7:1.25)-p.d/(r*(isLight?1.8:1.3)),0,1),echoing=q.touchEcho*q.amount>.0001;
  const lift=(isLight?1.45:1)+q.energy*(q.weights.food+q.weights.sleep)*.26+beat*.2;
  // Calculate each spring once. Reused numeric buffers avoid thousands of temporary paths.
  for(let i=0;i<fib.length;i++){
   const f=fib[i],flow=motion.fiber(f,t,q),a=f.a+flow+Math.sin(t*q.pace+f.s*18)*.003*q.amount;
   let delta=0;if(touching){delta=p.a-a;delta-=Math.round(delta/(Math.PI*2))*Math.PI*2}
   const influence=touching?touchDepth*Math.exp(-delta*delta/(isLight?.34:.12)):0;
-  const target=influence*((isLight?.28:.09)+clamp(delta,-.45,.45)*(isLight?1.35:.65));
+  const dragTurn=p.down?clamp((p.x-p.lx)/Math.max(r,1),-.12,.12)*4:0;
+  const target=influence*((isLight?.34:.09)+clamp(delta,-.45,.45)*(isLight?1.55:.65)+dragTurn);
   if(still){f.bend=target;f.velocity=0}else if(target||Math.abs(f.bend)+Math.abs(f.velocity)>.000001){for(let j=0;j<springSteps;j++){f.velocity=(f.velocity+(target-f.bend)*.16*springStep)*damping;f.bend+=f.velocity*springStep}}else{f.bend=f.velocity=0}
-  const r1=r*(f.ri-influence*(isLight?.035:.015)),r2=r*(f.ro+influence*(isLight?.075:.035)),mid=(r1+r2)*.52,ma=a+f.b*.4+f.bend;
+  const r1=r*(f.ri-influence*(isLight?.05:.015)),r2=r*(f.ro+influence*(isLight?.10:.035)),mid=(r1+r2)*.52,ma=a+f.b*.4+f.bend;
   let echo=0;if(echoing){let da=q.touchAngle-a;da-=Math.round(da/(Math.PI*2))*Math.PI*2;echo=q.touchEcho*Math.exp(-da*da/.22)*.22*q.amount}
   f.glow=influence*(isLight?1.8:.95)+echo;f.influence=influence;
   const v=f.main,cm=Math.cos(ma),sm=Math.sin(ma);v[0]=Math.cos(a)*r1;v[1]=Math.sin(a)*r1;v[2]=cm*mid;v[3]=sm*mid;v[4]=Math.cos(a+f.b+f.bend*.65)*r2;v[5]=Math.sin(a+f.b+f.bend*.65)*r2;

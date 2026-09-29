@@ -2,7 +2,7 @@
 const $=s=>document.querySelector(s),C=$('#irisCanvas'),X=C.getContext('2d',{alpha:false}),A=$('#app'),S=$('#stage'),ML=$('#metricLabel'),MV=$('#metricValue'),MC=$('#metricCaption'),MW=$('#modeWhisper'),RM=$('#radialMenu'),RI=[...document.querySelectorAll('.radial-item')],TR=$('#touchRing'),MH=$('#motionHint'),MD=$('#modeDots'),IP=$('#insightPanel'),SP=$('#settingsPanel'),ST=$('#settingsTrigger'),SO=$('#soundToggle'),SS=$('#soundSettings'),SW=$('#soundState');
 const M={home:['ГЛАВНАЯ','','КОСНИСЬ ГЛАЗА','IRIS НАБЛЮДАЕТ',[116,168,214],[42,76,108],55],sport:['СПОРТ','24:17','ТРЕНИРОВКА','ПУЛЬС · ДВИЖЕНИЕ',[232,92,82],[128,45,42],61.7],water:['ВОДА','','ДНЕВНОЙ БАЛАНС','ЖИДКОСТЬ · БАЛАНС',[56,151,232],[20,82,143],73.4],food:['ПИТАНИЕ','—','Нет записей','ЭНЕРГИЯ ИЗ ЕДЫ',[72,177,108],[30,105,64],82.4],sleep:['СОН','—','Нет записей','ВОССТАНОВЛЕНИЕ',[145,103,224],[77,47,142],49],insights:['ИТОГИ','84','ИНДЕКС ДНЯ','СВОДКА СОСТОЯНИЯ',[187,202,214],[62,80,96],65.4]},O=['home','sport','water','food','sleep'];
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v)),lerp=(a,b,t)=>a+(b-a)*t,rnd=n=>{let q=Math.sin(n*12.9898+78.233)*43758.5453;return q-Math.floor(q)},rgba=(c,a=1)=>`rgba(${c[0]|0},${c[1]|0},${c[2]|0},${a})`;
-let mode='home',W=0,H=0,D=1,cx=0,cy=0,R=135,eyeX=0,eyeY=0,targetX=0,targetY=0,scale=1,targetScale=1,yShift=0,targetShift=0,fib=[],dots=[],rip=[],field=null,fieldAngles=null,menu=false,sel=null,hold=0,mm=0,tmm=0,pupil=0;
+let mode='home',W=0,H=0,D=1,cx=0,cy=0,R=135,eyeX=0,eyeY=0,targetX=0,targetY=0,scale=1,targetScale=1,yShift=0,targetShift=0,fib=[],dots=[],rip=[],menu=false,sel=null,hold=0,mm=0,tmm=0,pupil=0;
 let p={id:null,down:false,sx:0,sy:0,x:0,y:0,st:0,lx:0,ly:0,lt:0,v:0,a:0,d:0};
 let waterMl=clamp(parseInt(localStorage.getItem('irisWaterMl')||'0',10)||0,0,6000),waterGoal=clamp(parseInt(localStorage.getItem('irisWaterGoalMl')||'2000',10)||2000,500,6000),wave=0;
 const motion=window.IRISMotion;
@@ -27,7 +27,7 @@ function tick(now){
   const started=performance.now();draw(clock,lastPaint===null?16.667:clamp(now-lastPaint,1,50));lastPaint=now;tuneQuality(performance.now()-started,now);
   // Keep backing resolution constant between real viewport resizes; no adaptive DPR oscillation.
  }
- if(motion.intensity()||p.down||touchEnergy>.002||now<boostUntil)animationId=requestAnimationFrame(tick);else lastTick=lastPaint=null;
+ if(motion.intensity())animationId=requestAnimationFrame(tick);else lastTick=lastPaint=null;
 }
 function sizeCanvas(){C.width=Math.round(W*D);C.height=Math.round(H*D);X.setTransform(D,0,0,D,0,0)}
 function tuneQuality(cost,now){
@@ -89,11 +89,10 @@ function paintStrokes(groups,key,ink,lift=1){
 }
 function build(){
  if(fib.length)return;
- const n=520,sector=Math.PI*2/n; field=new window.IRISFieldEngine(n); fieldAngles=new Float32Array(n);
+ const n=520,sector=Math.PI*2/n;
  // One strand per angular sector prevents clumps and gaps. Edge variation stays subtle.
  for(let i=0;i<n;i++){
   const a=i*sector+(rnd(i)-.5)*sector*.48;
-  fieldAngles[i]=a;
   fib.push({a,ri:.225+rnd(i*3.2)*.115,ro:.913+Math.sin(a*7+.6)*.008+(rnd(i*7.7)-.5)*.022,b:(rnd(i*9.1)-.5)*.29+Math.sin(a*5.7)*.018,w:.16+rnd(i*4.4)*.46,al:.04+rnd(i*6.7)*.13,s:rnd(i*11.3),bend:0,velocity:0,main:new Float64Array(6),branch:new Float64Array(6),deep:new Float64Array(6),collar:new Float64Array(6),glow:0,influence:0});
  }
  strokes={
@@ -173,7 +172,7 @@ function waterFill(t,r,q){
  X.lineTo(r,r);X.lineTo(-r,r);X.fillStyle=g;X.fill();X.restore();
 }
 function draw(t,dt){
- const step=clamp(dt/16.667,.25,3),q=motion.update(mode,t,dt,sportRunning),still=!q.amount&&!p.down&&touchEnergy<.002;
+ const step=clamp(dt/16.667,.25,3),q=motion.update(mode,t,dt,sportRunning),still=!q.amount;
  const ease=(rate)=>still?1:1-Math.pow(1-rate,step);
  if(still)t=0;
  touchEnergy=lerp(touchEnergy,p.down&&!menu?1:0,ease(.12));
@@ -181,7 +180,7 @@ function draw(t,dt){
  scale=lerp(scale,targetScale,ease(.06));yShift=lerp(yShift,targetShift,ease(.06));
  const idleX=p.down||menu?0:Math.sin(t*.00021)*R*.006*q.wander*q.amount;
  const idleY=p.down||menu?0:Math.sin(t*.00017+1.3)*R*.004*q.wander*q.amount;
- eyeX=lerp(eyeX,targetX+idleX*q.amount,ease(.08));eyeY=lerp(eyeY,targetY+idleY*q.amount,ease(.08));
+ eyeX=lerp(eyeX,(targetX+idleX)*q.amount,ease(.08));eyeY=lerp(eyeY,(targetY+idleY)*q.amount,ease(.08));
  mm=lerp(mm,tmm,ease(.11));pupil=lerp(pupil,0,ease(.05));transitionLight=lerp(transitionLight,0,ease(.026));
  waterLevel=lerp(waterLevel,clamp(waterMl/waterGoal,0,1),ease(.055));wave*=Math.pow(.95,step);
  const breath=q.breathing,beat=q.beat;
@@ -204,18 +203,16 @@ function draw(t,dt){
  const strandGradient=color=>{const g=X.createRadialGradient(0,0,0,0,0,r);g.addColorStop(0,rgba(color,0));g.addColorStop(.22,rgba(color,1));g.addColorStop(.70,rgba(color,1));g.addColorStop(.86,rgba(color,.72));g.addColorStop(.955,rgba(color,0));g.addColorStop(1,rgba(color,0));return g};
  const fineInk=strandGradient(col),deepInk=strandGradient(low);X.lineCap='round';X.lineJoin='round';
  const springSteps=Math.ceil(step),springStep=step/springSteps,damping=Math.pow(.73,springStep);
- field.pointerTo(p.down,p.a,p.d/Math.max(r,1)); field.step(dt,fieldAngles,isLight);
- const touching=p.down||touchEnergy>.0001,touchDepth=(p.down?1:touchEnergy)*clamp((isLight?1.7:1.25)-p.d/(r*(isLight?1.8:1.3)),0,1),echoing=q.touchEcho*q.amount>.0001;
+ const touching=touchEnergy>.0001,touchDepth=touchEnergy*clamp((isLight?1.55:1.25)-p.d/(r*(isLight?1.65:1.3)),0,1),echoing=q.touchEcho*q.amount>.0001;
  const lift=(isLight?1.45:1)+q.energy*(q.weights.food+q.weights.sleep)*.26+beat*.2;
  // Calculate each spring once. Reused numeric buffers avoid thousands of temporary paths.
  for(let i=0;i<fib.length;i++){
   const f=fib[i],flow=motion.fiber(f,t,q),a=f.a+flow+Math.sin(t*q.pace+f.s*18)*.003*q.amount;
   let delta=0;if(touching){delta=p.a-a;delta-=Math.round(delta/(Math.PI*2))*Math.PI*2}
   const influence=touching?touchDepth*Math.exp(-delta*delta/(isLight?.34:.12)):0;
-  const target=field.bend(i);
+  const target=influence*((isLight?.28:.09)+clamp(delta,-.45,.45)*(isLight?1.35:.65))*(still?.3:1);
   if(still){f.bend=target;f.velocity=0}else if(target||Math.abs(f.bend)+Math.abs(f.velocity)>.000001){for(let j=0;j<springSteps;j++){f.velocity=(f.velocity+(target-f.bend)*.16*springStep)*damping;f.bend+=f.velocity*springStep}}else{f.bend=f.velocity=0}
-  const radialPull=field.radial(i,a);
-  const r1=r*(f.ri-influence*(isLight?.018:.015)),r2=r*(f.ro+influence*(isLight?.025:.035)+radialPull),mid=(r1+r2)*.52,ma=a+f.b*.4+f.bend;
+  const r1=r*(f.ri-influence*(isLight?.035:.015)),r2=r*(f.ro+influence*(isLight?.075:.035)),mid=(r1+r2)*.52,ma=a+f.b*.4+f.bend;
   let echo=0;if(echoing){let da=q.touchAngle-a;da-=Math.round(da/(Math.PI*2))*Math.PI*2;echo=q.touchEcho*Math.exp(-da*da/.22)*.22*q.amount}
   f.glow=influence*(isLight?1.8:.95)+echo;f.influence=influence;
   const v=f.main,cm=Math.cos(ma),sm=Math.sin(ma);v[0]=Math.cos(a)*r1;v[1]=Math.sin(a)*r1;v[2]=cm*mid;v[3]=sm*mid;v[4]=Math.cos(a+f.b+f.bend*.65)*r2;v[5]=Math.sin(a+f.b+f.bend*.65)*r2;
@@ -237,14 +234,12 @@ function draw(t,dt){
   paintStrokes(strokes.main,'main',fineInk,lift);paintStrokes(strokes.branch,'branch',fineInk,lift);
   paintStrokes(strokes.collar,'collar',rgba(col,1));
  }
- // Touch bends the fibers already present in the iris; light mode gets no brighter duplicate strand.
- if(!isLight){
-  X.strokeStyle=fineInk;
-  for(const f of fib){
-   if(f.glow<.003)continue;
-   X.beginPath();curve(f.main);X.globalAlpha=Math.min(1,f.al*f.glow*(.9+f.s*.45));X.lineWidth=f.w+f.influence*.28;X.stroke();
-   if(f.s>.48){X.beginPath();curve(f.branch);X.globalAlpha=f.al*.43*f.glow;X.lineWidth=.22+f.w*.2;X.stroke()}
-  }
+ // Only the touched sector needs extra light and width; the rest stays in shared batches.
+ X.strokeStyle=fineInk;
+ for(const f of fib){
+  if(f.glow<.003)continue;
+  X.beginPath();curve(f.main);X.globalAlpha=Math.min(1,f.al*f.glow*(.9+f.s*.45));X.lineWidth=f.w+f.influence*.28;X.stroke();
+  if(f.s>.48){X.beginPath();curve(f.branch);X.globalAlpha=f.al*.43*f.glow;X.lineWidth=.22+f.w*.2;X.stroke()}
  }
  X.globalAlpha=1;
  for(const d of dots){X.beginPath();X.arc(d.x*r,d.y*r,d.s*.7,0,Math.PI*2);X.fillStyle=rgba(col,d.al*.6);X.fill()}

@@ -27,7 +27,7 @@ function tick(now){
   const started=performance.now();draw(clock,lastPaint===null?16.667:clamp(now-lastPaint,1,50));lastPaint=now;tuneQuality(performance.now()-started,now);
   // Keep backing resolution constant between real viewport resizes; no adaptive DPR oscillation.
  }
- if(motion.intensity())animationId=requestAnimationFrame(tick);else lastTick=lastPaint=null;
+ if(motion.intensity()||p.down||touchEnergy>.002||now<boostUntil)animationId=requestAnimationFrame(tick);else lastTick=lastPaint=null;
 }
 function sizeCanvas(){C.width=Math.round(W*D);C.height=Math.round(H*D);X.setTransform(D,0,0,D,0,0)}
 function tuneQuality(cost,now){
@@ -172,7 +172,7 @@ function waterFill(t,r,q){
  X.lineTo(r,r);X.lineTo(-r,r);X.fillStyle=g;X.fill();X.restore();
 }
 function draw(t,dt){
- const step=clamp(dt/16.667,.25,3),q=motion.update(mode,t,dt,sportRunning),still=!q.amount;
+ const step=clamp(dt/16.667,.25,3),q=motion.update(mode,t,dt,sportRunning),still=!q.amount&&!p.down&&touchEnergy<.002;
  const ease=(rate)=>still?1:1-Math.pow(1-rate,step);
  if(still)t=0;
  touchEnergy=lerp(touchEnergy,p.down&&!menu?1:0,ease(.12));

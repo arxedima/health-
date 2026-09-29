@@ -3,7 +3,7 @@ const $=s=>document.querySelector(s),C=$('#irisCanvas'),X=C.getContext('2d',{alp
 const M={home:['ГЛАВНАЯ','','КОСНИСЬ ГЛАЗА','IRIS НАБЛЮДАЕТ',[116,168,214],[42,76,108],55],sport:['СПОРТ','24:17','ТРЕНИРОВКА','ПУЛЬС · ДВИЖЕНИЕ',[232,92,82],[128,45,42],61.7],water:['ВОДА','','ДНЕВНОЙ БАЛАНС','ЖИДКОСТЬ · БАЛАНС',[56,151,232],[20,82,143],73.4],food:['ПИТАНИЕ','—','Нет записей','ЭНЕРГИЯ ИЗ ЕДЫ',[72,177,108],[30,105,64],82.4],sleep:['СОН','—','Нет записей','ВОССТАНОВЛЕНИЕ',[145,103,224],[77,47,142],49],insights:['ИТОГИ','84','ИНДЕКС ДНЯ','СВОДКА СОСТОЯНИЯ',[187,202,214],[62,80,96],65.4]},O=['home','sport','water','food','sleep'];
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v)),lerp=(a,b,t)=>a+(b-a)*t,rnd=n=>{let q=Math.sin(n*12.9898+78.233)*43758.5453;return q-Math.floor(q)},rgba=(c,a=1)=>`rgba(${c[0]|0},${c[1]|0},${c[2]|0},${a})`;
 let mode='home',W=0,H=0,D=1,cx=0,cy=0,R=135,eyeX=0,eyeY=0,targetX=0,targetY=0,scale=1,targetScale=1,yShift=0,targetShift=0,fib=[],dots=[],rip=[],menu=false,sel=null,hold=0,mm=0,tmm=0,pupil=0;
-let p={id:null,down:false,sx:0,sy:0,x:0,y:0,st:0,lx:0,ly:0,lt:0,v:0,a:0,d:0};
+let p={id:null,down:false,sx:0,sy:0,x:0,y:0,st:0,lx:0,ly:0,lt:0,v:0,a:0,d:0,drag:0};
 let waterMl=clamp(parseInt(localStorage.getItem('irisWaterMl')||'0',10)||0,0,6000),waterGoal=clamp(parseInt(localStorage.getItem('irisWaterGoalMl')||'2000',10)||2000,500,6000),wave=0;
 const motion=window.IRISMotion;
 let touchEnergy=0,transitionLight=0,waterLevel=clamp(waterMl/waterGoal,0,1);
@@ -160,7 +160,7 @@ function changeWater(d){
  wave=1;motion.record('water');wake();if(unlocked)waterSfx(d>0);try{navigator.vibrate?.(d>0?10:6)}catch{}
 }
 function down(e){if(!visible()||S.inert||A.dataset.contemplation==='true'||A.dataset.welcome==='true'||e.target.closest('button')||p.down||e.isPrimary===false)return;let {x,y}=point(e,true);if(menu&&!inside(x,y,1.2)){closeMenu(false);return}if(!inside(x,y,1.1))return;p.id=e.pointerId;p.down=true;p.sx=p.x=p.lx=x;p.sy=p.y=p.ly=y;p.st=p.lt=performance.now();p.v=0;touchEnergy=Math.max(touchEnergy,.55);let q=ec(),dx=x-q.x,dy=y-q.y;p.a=Math.atan2(dy,dx);p.d=Math.hypot(dx,dy);motion.touch(p.a);wake();try{S.setPointerCapture(e.pointerId)}catch{}clearTimeout(hold);hold=setTimeout(openMenu,560);targetX=clamp(dx/R*2.8,-2.8,2.8);targetY=clamp(dy/R*2.4,-2.4,2.4);moveAudio(x,y,0)}
-function move(e){if(!p.down||e.pointerId!==p.id)return;let n=performance.now(),{x,y}=point(e),dt=Math.max(1,n-p.lt);p.v=Math.hypot(x-p.lx,y-p.ly)/dt;p.lt=n;p.lx=x;p.ly=y;p.x=x;p.y=y;let q=ec(),dx=x-q.x,dy=y-q.y;p.a=Math.atan2(dy,dx);p.d=Math.hypot(dx,dy);if(Math.hypot(x-p.sx,y-p.sy)>15&&!menu)clearTimeout(hold);targetX=clamp(dx/R*3.2,-3.2,3.2);targetY=clamp(dy/R*2.7,-2.7,2.7);moveAudio(x,y,p.v);wake();if(menu)choose(x,y)}
+function move(e){if(!p.down||e.pointerId!==p.id)return;let n=performance.now(),{x,y}=point(e),dt=Math.max(1,n-p.lt);p.v=Math.hypot(x-p.lx,y-p.ly)/dt;p.lt=n;p.lx=x;p.ly=y;p.x=x;p.y=y;let q=ec(),dx=x-q.x,dy=y-q.y,newA=Math.atan2(dy,dx),da=newA-p.a;da-=Math.round(da/(Math.PI*2))*Math.PI*2;p.drag=clamp(da*5,-.42,.42);p.a=newA;p.d=Math.hypot(dx,dy);if(Math.hypot(x-p.sx,y-p.sy)>15&&!menu)clearTimeout(hold);targetX=clamp(dx/R*3.2,-3.2,3.2);targetY=clamp(dy/R*2.7,-2.7,2.7);moveAudio(x,y,p.v);wake();if(menu)choose(x,y)}
 function finish(e,cancel=false){if(!p.down||e.pointerId!==p.id)return;if(cancel){cancelGesture();closeMenu(false);wake();return}clearTimeout(hold);if(audio)audio.mg.gain.setTargetAtTime(0,audio.c.currentTime,.05);let {x,y}=point(e),dt=performance.now()-p.st,dx=x-p.sx,dy=y-p.sy,dist=Math.hypot(dx,dy);p.down=false;targetX=targetY=0;wake();const pointerId=p.id;p.id=null;try{S.releasePointerCapture(pointerId)}catch{}if(cancel){closeMenu(false);return}if(menu){if(sel||dist>22)closeMenu(true);return}if(dt<390&&dist<22){pulse(x,y);const center=ec();if(Math.hypot(x-center.x,y-center.y)<=Math.max(22,R*scale*.24))S.dispatchEvent(new CustomEvent('iris:pupil-tap'));return}if(Math.abs(dx)>68&&Math.abs(dx)>Math.abs(dy)*1.15){dispatchEvent(new CustomEvent('iris:gesture'));let i=O.indexOf(mode);setMode(dx<0?O[(i+1)%O.length]:O[(i-1+O.length)%O.length]);return}if(Math.abs(dy)>72&&Math.abs(dy)>Math.abs(dx)*1.08){if(mode==='water'){changeWater((dy<0?1:-1)*waterPortion());return}if(dy<0)setMode('insights')}}
 
 function waterFill(t,r,q){
@@ -175,7 +175,7 @@ function draw(t,dt){
  const step=clamp(dt/16.667,.25,3),q=motion.update(mode,t,dt,sportRunning),still=!q.amount&&!p.down&&touchEnergy<.002;
  const ease=(rate)=>still?1:1-Math.pow(1-rate,step);
  if(still)t=0;
- touchEnergy=lerp(touchEnergy,p.down&&!menu?1:0,ease(.12));
+ touchEnergy=lerp(touchEnergy,p.down&&!menu?1:0,ease(.12));p.drag*=Math.pow(.82,step);
  accent=accent.map((v,i)=>lerp(v,M[mode][4][i],ease(.065)));shade=shade.map((v,i)=>lerp(v,M[mode][5][i],ease(.065)));
  scale=lerp(scale,targetScale,ease(.06));yShift=lerp(yShift,targetShift,ease(.06));
  const idleX=p.down||menu?0:Math.sin(t*.00021)*R*.006*q.wander*q.amount;
@@ -207,11 +207,11 @@ function draw(t,dt){
  const lift=(isLight?1.45:1)+q.energy*(q.weights.food+q.weights.sleep)*.26+beat*.2;
  // Calculate each spring once. Reused numeric buffers avoid thousands of temporary paths.
  for(let i=0;i<fib.length;i++){
-  const f=fib[i],flow=motion.fiber(f,t,q),a=f.a+flow+Math.sin(t*q.pace+f.s*18)*.003*q.amount;
+  const f=fib[i],flow=motion.fiber(f,t,q)*(isLight?2.8:1),a=f.a+flow+Math.sin(t*q.pace+f.s*18)*.003*q.amount*(isLight?2.2:1);
   let delta=0;if(touching){delta=p.a-a;delta-=Math.round(delta/(Math.PI*2))*Math.PI*2}
   const influence=touching?touchDepth*Math.exp(-delta*delta/(isLight?.34:.12)):0;
-  const dragTurn=p.down?clamp((p.x-p.lx)/Math.max(r,1),-.12,.12)*4:0;
-  const target=influence*(clamp(delta,-.55,.55)*(isLight?1.65:.65)+dragTurn);
+  const dragTurn=p.down&&isLight?p.drag:0;
+  const target=influence*(clamp(delta,-.55,.55)*(isLight?2.15:.65)+dragTurn);
   if(still){f.bend=target;f.velocity=0}else if(target||Math.abs(f.bend)+Math.abs(f.velocity)>.000001){for(let j=0;j<springSteps;j++){f.velocity=(f.velocity+(target-f.bend)*.16*springStep)*damping;f.bend+=f.velocity*springStep}}else{f.bend=f.velocity=0}
   const radialPull=isLight&&p.down?clamp((p.d/r)-.58,-.22,.22)*influence*.16:0;
   const r1=r*(f.ri-influence*(isLight?.018:.015)),r2=r*(f.ro+influence*(isLight?.025:.035)+radialPull),mid=(r1+r2)*.52,ma=a+f.b*.4+f.bend;

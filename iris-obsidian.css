@@ -85,3 +85,46 @@ html:has(#app:not(.iris-light)),body:has(#app:not(.iris-light)){background:#090A
 #app:not(.iris-light) .journal-view,#app:not(.iris-light) .statistics-view,#app:not(.iris-light) .plans-view{scroll-behavior:smooth}
 @media(max-width:360px){#app:not(.iris-light) .journal-view,#app:not(.iris-light) .statistics-view,#app:not(.iris-light) .plans-view{padding-left:17px;padding-right:17px}}
 @media(prefers-reduced-motion:reduce){#app:not(.iris-light) .bottom-nav button{transition:none}#app:not(.iris-light) .journal-view,#app:not(.iris-light) .statistics-view,#app:not(.iris-light) .plans-view{scroll-behavior:auto}}
+
+
+/* v66 IRIS Light v2 — purpose-built light system, not a dark-theme inversion. */
+#app.iris-light{
+  --light-bg:#F7F9FC;--light-surface:#FFFFFF;--light-soft:#F0F4F8;--light-line:#E5EAF0;
+  --light-ink:#1B2633;--light-muted:#738195;--light-accent:#5E8FD8;
+  --editorial-bg:#F7F9FC;--editorial-ink:#1B2633;--editorial-muted:#738195;
+  --text:#1B2633;--muted:#738195;--iris-ink:#1B2633;--iris-subtle:#738195;
+  --iris-line:rgba(69,91,117,.13);background:#F7F9FC!important;color:#1B2633;
+}
+html:has(#app.iris-light),body:has(#app.iris-light){background:#F7F9FC!important}
+#app.iris-light .stage,#app.iris-light .topbar,#app.iris-light .journal-view,#app.iris-light .statistics-view,#app.iris-light .plans-view,#app.iris-light .bottom-nav{background:#F7F9FC!important;background-image:none!important}
+#app.iris-light .brand,#app.iris-light .metric-value,#app.iris-light .journal-heading h1,#app.iris-light .stats-heading h1,#app.iris-light .plans-overview-label{color:#1B2633!important}
+#app.iris-light .metric-label{color:#51657C!important}
+#app.iris-light .metric-caption,#app.iris-light .mode-whisper,#app.iris-light .eyebrow,#app.iris-light .journal-heading>p:last-child,#app.iris-light .stats-heading p{color:#738195!important}
+#app.iris-light .settings-trigger,#app.iris-light .sound-trigger{color:#60758D!important}
+#app.iris-light .sound-trigger{background:#FFFFFF;border-color:#E5EAF0;box-shadow:0 4px 16px rgba(42,66,91,.05)}
+#app.iris-light #irisCanvas{filter:saturate(.94) brightness(1.045) contrast(1.035)!important}
+#app.iris-light .journal-date input,#app.iris-light .quick-grid button,#app.iris-light .comparison-card,#app.iris-light .period-tabs,#app.iris-light .plans-quick,#app.iris-light .plans-empty-state,#app.iris-light .plans-shortcuts button{background:#FFFFFF!important;background-image:none!important;border-color:#E5EAF0!important;color:#1B2633!important;box-shadow:0 6px 22px rgba(40,64,89,.035)}
+#app.iris-light .journal-filters button,#app.iris-light .plans-filters button{background:#FFFFFF!important;border-color:#E5EAF0!important;color:#738195!important}
+#app.iris-light .journal-filters button[aria-pressed="true"],#app.iris-light .plans-filters button.active,#app.iris-light .period-tabs button[aria-pressed="true"]{background:#EAF1FB!important;border-color:#B8CAE3!important;color:#315F9C!important;box-shadow:none}
+#app.iris-light .plans-overview strong,#app.iris-light .plans-group-today h2{color:#5E8FD8!important}
+#app.iris-light .plans-group h2{color:#65758A!important}
+#app.iris-light .plans-row-title{color:#263444!important}
+#app.iris-light .plans-row-title small,#app.iris-light .plans-empty,#app.iris-light .plans-overview p{color:#7B899A!important}
+#app.iris-light .plans-row,#app.iris-light .plans-group,#app.iris-light .plans-top{border-color:#E5EAF0!important}
+#app.iris-light .plans-check{border-color:#8FA8CA!important}
+#app.iris-light .plans-fab,#app.iris-light .plans-save{background:#5E8FD8!important;background-image:none!important;color:#FFFFFF!important;box-shadow:0 8px 24px rgba(94,143,216,.22)}
+#app.iris-light .plans-quick button{background:#EAF1FB!important;border-color:#C6D5E9!important;color:#416FAE!important}
+#app.iris-light .plans-menu,#app.iris-light .plans-dialog,#app.iris-light .settings-sheet,#app.iris-light .iris-dialog{background:#FFFFFF!important;background-image:none!important;color:#1B2633!important;border-color:#E5EAF0!important;box-shadow:0 18px 60px rgba(32,52,73,.12)}
+#app.iris-light .settings-list button{color:#273748!important;border-color:#E9EDF2!important}
+#app.iris-light .settings-note,#app.iris-light .settings-signature{color:#738195!important}
+#app.iris-light .iris-dialog textarea,#app.iris-light .iris-dialog input:not([type="range"]):not([type="checkbox"]):not([type="radio"]):not([type="file"]),#app.iris-light .iris-dialog select,#app.iris-light .plans-dialog input,#app.iris-light .plans-dialog textarea,#app.iris-light .plans-dialog select{background:#F4F7FA!important;color:#1B2633!important;border-color:#DCE4EC!important}
+#app.iris-light .bottom-nav{border-top:1px solid rgba(70,93,119,.10)!important;box-shadow:0 -8px 30px rgba(44,67,91,.025)!important}
+#app.iris-light .bottom-nav button{color:#8190A2!important;opacity:1!important;transition:color .18s ease,transform .18s ease}
+#app.iris-light .bottom-nav button.active,#app.iris-light .bottom-nav button[aria-current="page"],#app.iris-light .bottom-nav button[aria-selected="true"]{color:#3F6FAF!important}
+#app.iris-light .bottom-nav button:active{transform:scale(.96)}
+#app.iris-light .radial-item{color:#425B75!important}
+#app.iris-light .radial-item.active{color:#234F83!important;border-color:rgba(94,143,216,.28)!important}
+#app.iris-light .insight-panel{background:rgba(255,255,255,.88)!important;border-color:#E5EAF0!important;color:#1B2633!important;box-shadow:0 16px 44px rgba(40,64,89,.08)}
+#app.iris-light .week-row span{background:#F2F5F8!important;border-color:#E5EAF0!important;color:#617286!important}
+#app.iris-light .week-row span:nth-child(2),#app.iris-light .week-row span:nth-child(3),#app.iris-light .week-row span:nth-child(4){background:#E8F0FA!important;color:#315F9C!important}
+@media(prefers-reduced-motion:reduce){#app.iris-light .bottom-nav button{transition:none}}

@@ -234,12 +234,14 @@ function draw(t,dt){
   paintStrokes(strokes.main,'main',fineInk,lift);paintStrokes(strokes.branch,'branch',fineInk,lift);
   paintStrokes(strokes.collar,'collar',rgba(col,1));
  }
- // Only the touched sector needs extra light and width; the rest stays in shared batches.
- X.strokeStyle=fineInk;
- for(const f of fib){
-  if(f.glow<.003)continue;
-  X.beginPath();curve(f.main);X.globalAlpha=Math.min(1,f.al*f.glow*(.9+f.s*.45));X.lineWidth=f.w+f.influence*.28;X.stroke();
-  if(f.s>.48){X.beginPath();curve(f.branch);X.globalAlpha=f.al*.43*f.glow;X.lineWidth=.22+f.w*.2;X.stroke()}
+ // Touch bends the fibers already present in the iris; light mode gets no brighter duplicate strand.
+ if(!isLight){
+  X.strokeStyle=fineInk;
+  for(const f of fib){
+   if(f.glow<.003)continue;
+   X.beginPath();curve(f.main);X.globalAlpha=Math.min(1,f.al*f.glow*(.9+f.s*.45));X.lineWidth=f.w+f.influence*.28;X.stroke();
+   if(f.s>.48){X.beginPath();curve(f.branch);X.globalAlpha=f.al*.43*f.glow;X.lineWidth=.22+f.w*.2;X.stroke()}
+  }
  }
  X.globalAlpha=1;
  for(const d of dots){X.beginPath();X.arc(d.x*r,d.y*r,d.s*.7,0,Math.PI*2);X.fillStyle=rgba(col,d.al*.6);X.fill()}

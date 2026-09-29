@@ -227,3 +227,27 @@ html:has(#app.iris-light),body:has(#app.iris-light){background:#F6FAFE!important
 #app.iris-light.mode-food .journal-actions{display:none!important}
 #app.iris-light.mode-food .home-links{margin-top:10px!important}
 @media(max-width:430px){#app.iris-light{--eye-r:128px}}
+
+
+/* v70 Light system cleanup — cold neutral palette, coherent icon treatment. */
+#app.iris-light{
+ --cold-bg:#F5F9FD;--cold-white:#FFFFFF;--cold-ink:#142235;--cold-muted:#71839A;--cold-blue:#3978C5;
+ background:radial-gradient(circle at 50% 29%,rgba(202,226,248,.30),transparent 32%),linear-gradient(160deg,#FBFDFF 0%,#F3F8FD 58%,#F8FBFE 100%)!important;
+}
+#app.iris-light .stage,#app.iris-light .topbar,#app.iris-light .journal-view,#app.iris-light .statistics-view,#app.iris-light .plans-view{background:transparent!important;background-image:none!important}
+#app.iris-light .plans-menu,#app.iris-light .plans-dialog,#app.iris-light .settings-sheet,#app.iris-light .iris-dialog{background:#FFFFFF!important}
+#app.iris-light .journal-date input,#app.iris-light .quick-grid button,#app.iris-light .comparison-card,#app.iris-light .period-tabs,#app.iris-light .plans-quick,#app.iris-light .plans-empty-state,#app.iris-light .plans-shortcuts button{background:rgba(255,255,255,.72)!important}
+#app.iris-light .bottom-nav{background:rgba(247,251,255,.88)!important}
+#app.iris-light .sound-trigger{background:rgba(255,255,255,.72)!important}
+#app.iris-light .radial-item{background:rgba(255,255,255,.36)!important;border-color:rgba(75,111,148,.10)!important;box-shadow:none!important}
+#app.iris-light .radial-item svg,#app.iris-light .bottom-nav svg,#app.iris-light .home-links svg{stroke:currentColor!important;fill:none!important;stroke-width:1.7!important;stroke-linecap:round!important;stroke-linejoin:round!important}
+#app.iris-light .radial-item[data-mode="food"]{color:#29945A!important}
+#app.iris-light .radial-item[data-mode="water"]{color:#3978C5!important}
+#app.iris-light .radial-item[data-mode="sleep"]{color:#7659C7!important}
+#app.iris-light .radial-item[data-mode="sport"]{color:#D15B5B!important}
+#app.iris-light .radial-item.active{border-color:currentColor!important;box-shadow:0 0 0 5px rgba(255,255,255,.38)!important}
+#app.iris-light .bottom-nav button{font-weight:500}
+#app.iris-light .bottom-nav button svg{width:24px;height:24px}
+#app.iris-light .plans-fab,#app.iris-light .plans-save{background:#3978C5!important;color:#fff!important}
+#app.iris-light .journal-filters button[aria-pressed="true"],#app.iris-light .plans-filters button.active,#app.iris-light .period-tabs button[aria-pressed="true"]{background:#E9F2FB!important;color:#315F9C!important}
+#app.iris-light .week-row span:nth-child(2),#app.iris-light .week-row span:nth-child(3),#app.iris-light .week-row span:nth-child(4){background:#EAF3FC!important;color:#315F9C!important}

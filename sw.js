@@ -1,50 +1,7 @@
-const CACHE='iris-v7.2.0-eye-fix';
-const CORE=[
-  '/health-/?v=72',
-  '/health-/index.html?v=72',
-  '/health-/styles.css?v=iris46',
-  '/health-/journal.css?v=iris46',
-  '/health-/next.css?v=iris46',
-  '/health-/polish-v47.css?v=iris48',
-  '/health-/iris-plans.css?v=iris56',
-  '/health-/iris-editorial.css?v=iris61',
-  '/health-/iris-obsidian.css?v=iris72',
-  '/health-/iris-editorial.js?v=iris72',
-  '/health-/iris-plans.js?v=iris56',
-  '/health-/iris-data.js?v=iris46',
-  '/health-/iris-journal.js?v=iris56',
-  '/health-/iris-extras.js?v=iris46',
-  '/health-/iris-next.js?v=iris48',
-  '/health-/iris-motion.js?v=iris61',
-  '/health-/iris-engine.js?v=iris72',
-  '/health-/iris-music.m4a?v=4',
-  '/health-/iris-v11.js?v=iris46',
-  '/health-/iris-v24.js?v=iris60',
-  '/health-/manifest.webmanifest?v=iris46-icon23',
-  '/health-/app-icon-large.png?v=23',
-  '/health-/app-icon-large-192.png?v=23',
-  '/health-/apple-touch-icon-large.png?v=23'
-];
-self.addEventListener('install',event=>{
-  event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>self.skipWaiting()));
-});
-self.addEventListener('activate',event=>{
-  event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith('iris-')&&key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim()));
-});
+const CACHE='iris-v7.3.0-network-first';
+self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
+self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('iris-')).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
 self.addEventListener('fetch',event=>{
-  if(event.request.method!=='GET'||new URL(event.request.url).origin!==self.location.origin)return;
-  const navigation=event.request.mode==='navigate';
-  event.respondWith((async()=>{
-    const cache=await caches.open(CACHE),cached=await cache.match(event.request);
-    // Versioned assets are immutable within a release, so taps never wait for revalidation.
-    if(!navigation&&cached)return cached;
-    try{
-      const response=await fetch(event.request);
-      if(response.status===200){const copy=response.clone();event.waitUntil(cache.put(event.request,copy).catch(()=>{}))}
-      if(response.ok||!navigation)return response;
-    }catch{}
-    if(cached)return cached;
-    if(navigation)return await cache.match('/health-/?v=72')||Response.error();
-    return Response.error();
-  })());
+ if(event.request.method!=='GET'||new URL(event.request.url).origin!==self.location.origin)return;
+ event.respondWith(fetch(event.request,{cache:'no-store'}).catch(()=>caches.match(event.request)));
 });

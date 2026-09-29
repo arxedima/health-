@@ -211,9 +211,10 @@ function draw(t,dt){
   let delta=0;if(touching){delta=p.a-a;delta-=Math.round(delta/(Math.PI*2))*Math.PI*2}
   const influence=touching?touchDepth*Math.exp(-delta*delta/(isLight?.34:.12)):0;
   const dragTurn=p.down?clamp((p.x-p.lx)/Math.max(r,1),-.12,.12)*4:0;
-  const target=influence*((isLight?.34:.09)+clamp(delta,-.45,.45)*(isLight?1.55:.65)+dragTurn);
+  const target=influence*(clamp(delta,-.55,.55)*(isLight?1.65:.65)+dragTurn);
   if(still){f.bend=target;f.velocity=0}else if(target||Math.abs(f.bend)+Math.abs(f.velocity)>.000001){for(let j=0;j<springSteps;j++){f.velocity=(f.velocity+(target-f.bend)*.16*springStep)*damping;f.bend+=f.velocity*springStep}}else{f.bend=f.velocity=0}
-  const r1=r*(f.ri-influence*(isLight?.05:.015)),r2=r*(f.ro+influence*(isLight?.10:.035)),mid=(r1+r2)*.52,ma=a+f.b*.4+f.bend;
+  const radialPull=isLight&&p.down?clamp((p.d/r)-.58,-.22,.22)*influence*.16:0;
+  const r1=r*(f.ri-influence*(isLight?.018:.015)),r2=r*(f.ro+influence*(isLight?.025:.035)+radialPull),mid=(r1+r2)*.52,ma=a+f.b*.4+f.bend;
   let echo=0;if(echoing){let da=q.touchAngle-a;da-=Math.round(da/(Math.PI*2))*Math.PI*2;echo=q.touchEcho*Math.exp(-da*da/.22)*.22*q.amount}
   f.glow=influence*(isLight?1.8:.95)+echo;f.influence=influence;
   const v=f.main,cm=Math.cos(ma),sm=Math.sin(ma);v[0]=Math.cos(a)*r1;v[1]=Math.sin(a)*r1;v[2]=cm*mid;v[3]=sm*mid;v[4]=Math.cos(a+f.b+f.bend*.65)*r2;v[5]=Math.sin(a+f.b+f.bend*.65)*r2;

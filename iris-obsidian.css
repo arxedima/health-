@@ -251,3 +251,22 @@ html:has(#app.iris-light),body:has(#app.iris-light){background:#F6FAFE!important
 #app.iris-light .plans-fab,#app.iris-light .plans-save{background:#3978C5!important;color:#fff!important}
 #app.iris-light .journal-filters button[aria-pressed="true"],#app.iris-light .plans-filters button.active,#app.iris-light .period-tabs button[aria-pressed="true"]{background:#E9F2FB!important;color:#315F9C!important}
 #app.iris-light .week-row span:nth-child(2),#app.iris-light .week-row span:nth-child(3),#app.iris-light .week-row span:nth-child(4){background:#EAF3FC!important;color:#315F9C!important}
+
+
+/* v71 System pass — reference icon language + motion polish across every light tab. */
+#app.iris-light{--ui-blue:#3978C5;--ui-green:#2D9B61;--ui-violet:#735CC8;--ui-red:#D25C5C}
+#app.iris-light .journal-view,#app.iris-light .statistics-view,#app.iris-light .plans-view{background:linear-gradient(180deg,rgba(255,255,255,.20),rgba(238,247,255,.28))!important}
+#app.iris-light .quick-grid button,#app.iris-light .comparison-card,#app.iris-light .plans-quick,#app.iris-light .plans-empty-state,#app.iris-light .plans-shortcuts button{border-radius:20px!important;border-color:rgba(71,104,139,.09)!important;box-shadow:0 8px 30px rgba(48,86,124,.045)!important}
+#app.iris-light .bottom-nav button{transition:color .2s ease,transform .2s cubic-bezier(.2,.8,.2,1),opacity .2s ease}
+#app.iris-light .bottom-nav button:active{transform:scale(.94)}
+#app.iris-light .bottom-nav button::after{content:"";display:block;width:22px;height:22px;margin:0 auto 4px;background:currentColor;opacity:.92;mask-repeat:no-repeat;mask-position:center;mask-size:contain;-webkit-mask-repeat:no-repeat;-webkit-mask-position:center;-webkit-mask-size:contain}
+#app.iris-light .bottom-nav button svg,#app.iris-light .bottom-nav button img{display:none!important}
+#app.iris-light .bottom-nav button:nth-child(1)::after{mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M1.8 12s3.7-6 10.2-6 10.2 6 10.2 6-3.7 6-10.2 6S1.8 12 1.8 12Zm10.2 3.3a3.3 3.3 0 1 0 0-6.6 3.3 3.3 0 0 0 0 6.6Zm0-1.7a1.6 1.6 0 1 1 0-3.2 1.6 1.6 0 0 1 0 3.2Z'/%3E%3C/svg%3E");-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M1.8 12s3.7-6 10.2-6 10.2 6 10.2 6-3.7 6-10.2 6S1.8 12 1.8 12Zm10.2 3.3a3.3 3.3 0 1 0 0-6.6 3.3 3.3 0 0 0 0 6.6Zm0-1.7a1.6 1.6 0 1 1 0-3.2 1.6 1.6 0 0 1 0 3.2Z'/%3E%3C/svg%3E")}
+#app.iris-light .bottom-nav button:nth-child(2)::after{mask-image:linear-gradient(#000,#000);-webkit-mask-image:linear-gradient(#000,#000);border:2px solid currentColor;border-radius:2px;background:linear-gradient(currentColor,currentColor) 5px 5px/9px 2px no-repeat,linear-gradient(currentColor,currentColor) 5px 10px/9px 2px no-repeat,linear-gradient(currentColor,currentColor) 5px 15px/7px 2px no-repeat}
+#app.iris-light .bottom-nav button:nth-child(3)::after{mask-image:linear-gradient(#000,#000);-webkit-mask-image:linear-gradient(#000,#000);border:2px solid currentColor;border-radius:2px;background:linear-gradient(currentColor,currentColor) 5px 6px/9px 2px no-repeat,linear-gradient(currentColor,currentColor) 5px 11px/6px 2px no-repeat}
+#app.iris-light .bottom-nav button:nth-child(4)::after{mask-image:none;-webkit-mask-image:none;background:linear-gradient(currentColor,currentColor) 2px 13px/2px 9px no-repeat,linear-gradient(currentColor,currentColor) 9px 7px/2px 15px no-repeat,linear-gradient(currentColor,currentColor) 16px 2px/2px 20px no-repeat}
+#app.iris-light .radial-item{transition:transform .24s cubic-bezier(.2,.8,.2,1),border-color .2s ease,box-shadow .2s ease,color .2s ease}
+#app.iris-light .radial-item:active{transform:scale(.96)}
+#app.iris-light .metric.readout-enter{animation:lightReadout .38s cubic-bezier(.16,1,.3,1)}
+@keyframes lightReadout{from{opacity:.15;transform:translateX(-50%) translateY(7px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+@media(prefers-reduced-motion:reduce){#app.iris-light .metric.readout-enter{animation:none}}

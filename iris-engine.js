@@ -150,7 +150,7 @@ function point(e,start=false){const b=start||!pointerBounds?(pointerBounds=S.get
 function inside(x,y,m=1.08){let e=ec();return Math.hypot(x-e.x,y-e.y)<=R*scale*(1-entrance*.2)*m}
 function ui(){let m=M[mode];document.documentElement.style.setProperty('--accent',m[4].join(' '));ML.textContent=m[0];MV.textContent=m[1];MC.textContent=m[2];MW.textContent=m[3];A.className=`app mode-${mode}${menu?' menu-open':''}${SP.classList.contains('open')?' settings-open':''}${A.classList.contains('iris-light')?' iris-light':''}`;IP.classList.toggle('visible',mode==='insights');targetScale=mode==='insights'?.66:1;targetShift=mode==='insights'?-H*.1:0;MD.innerHTML='';O.forEach(v=>{let d=document.createElement('span');if(v===mode)d.className='active';MD.appendChild(d)});MD.classList.toggle('visible',mode!=='home'&&mode!=='water');layout();waterUI();audioMode()}
 function setMode(m){cancelGesture();if(m==='insights'){dispatchEvent(new CustomEvent('iris:statistics'));return}if(!M[m])return;if(m===mode){wake();return}mode=m;pupil=1;transitionLight=1;ui();resize();const el=$('#metric');el.classList.remove('readout-enter');void el.offsetWidth;el.classList.add('readout-enter');wake();world();if(unlocked)tone(M[m][6]*2,.3,.007);try{navigator.vibrate?.(8)}catch{}}
-function pulse(x,y){wake();TR.style.left=x+'px';TR.style.top=y+'px';TR.classList.remove('pulse');void TR.offsetWidth;TR.classList.add('pulse');rip.push({x,y,l:1});pupil=1;if(unlocked)tone(M[mode][6]*4,.16,.01,'sine',1.1)}
+function pulse(x,y){touchEnergy=1;motion.touch(Math.atan2(y-ec().y,x-ec().x));boostUntil=performance.now()+900;wake();TR.style.left=x+'px';TR.style.top=y+'px';TR.classList.remove('pulse');void TR.offsetWidth;TR.classList.add('pulse');rip.push({x,y,l:1});pupil=1;if(unlocked)tone(M[mode][6]*4,.16,.01,'sine',1.1)}
 function openMenu(keyboard=false){if(menu||!visible()||A.dataset.contemplation==='true'||A.dataset.welcome==='true'||(!p.down&&!keyboard))return;menu=true;$('#metric').inert=true;sel=null;tmm=1;RM.classList.add('open');RM.setAttribute('aria-hidden','false');RM.inert=false;A.classList.add('menu-open');dispatchEvent(new CustomEvent('iris:gesture'));wake();if(keyboard)RI[0]?.focus({preventScroll:true});if(unlocked)tone(M[mode][6],.48,.018,'sine',1.28)}function closeMenu(commit=true){if(!menu)return;let s=sel;menu=false;$('#metric').inert=false;sel=null;tmm=0;RI.forEach(i=>i.classList.remove('active'));RM.classList.remove('open');RM.setAttribute('aria-hidden','true');RM.inert=true;A.classList.remove('menu-open');wake();if(commit&&s)setMode(s)}
 function choose(x,y){const previous=sel;let e=ec(),dx=x-e.x,dy=y-e.y,d=Math.hypot(dx,dy);if(d<R*.4)sel=null;else{let a=Math.atan2(dy,dx);sel=a>-.25*Math.PI&&a<=.25*Math.PI?'food':a>.25*Math.PI&&a<=.75*Math.PI?'sleep':a<=-.25*Math.PI&&a>-.75*Math.PI?'sport':'water'}if(previous!==sel)RI.forEach(i=>i.classList.toggle('active',i.dataset.mode===sel))}
 function changeWater(d){
@@ -201,7 +201,7 @@ function draw(t,dt){
  X.save();X.beginPath();X.arc(0,0,r*.985,0,Math.PI*2);X.clip();
  // A shared circular fade softens every strand before it reaches the edge.
  const strandGradient=color=>{const g=X.createRadialGradient(0,0,0,0,0,r);g.addColorStop(0,rgba(color,0));g.addColorStop(.22,rgba(color,1));g.addColorStop(.70,rgba(color,1));g.addColorStop(.86,rgba(color,.72));g.addColorStop(.955,rgba(color,0));g.addColorStop(1,rgba(color,0));return g};
- const fineInk=strandGradient(isLight?col:col),deepInk=strandGradient(isLight?low:low);X.lineCap='round';X.lineJoin='round';
+ const fineInk=strandGradient(col),deepInk=strandGradient(low);X.lineCap='round';X.lineJoin='round';
  const springSteps=Math.ceil(step),springStep=step/springSteps,damping=Math.pow(.73,springStep);
  const touching=touchEnergy>.0001,touchDepth=touchEnergy*clamp(1.25-p.d/(r*1.3),0,1),echoing=q.touchEcho*q.amount>.0001;
  const lift=(isLight?1.45:1)+q.energy*(q.weights.food+q.weights.sleep)*.26+beat*.2;
@@ -224,10 +224,10 @@ function draw(t,dt){
   if(i%3===0){const v=f.collar,ri=r*(.222+f.s*.015),ro=r*(.29+f.s*.09),aa=f.a+f.b*.3+f.bend*.2,ca=Math.cos(aa),sa=Math.sin(aa);v[0]=Math.cos(f.a)*ri;v[1]=Math.sin(f.a)*ri;v[2]=ca*r*.26;v[3]=sa*r*.26;v[4]=ca*ro;v[5]=sa*ro}
  }
  if(isLight){
-  X.globalCompositeOperation='multiply';paintStrokes(strokes.deep,'deep',deepInk,1.25);
-  paintStrokes(strokes.main,'main',fineInk,lift*.94);paintStrokes(strokes.branch,'branch',fineInk,lift*.86);
+  X.globalCompositeOperation='source-over';paintStrokes(strokes.deep,'deep',deepInk,1.55);
+  paintStrokes(strokes.main,'main',fineInk,lift*1.18);paintStrokes(strokes.branch,'branch',fineInk,lift*1.05);
   X.save();X.scale(r,r);X.lineWidth=.0024;X.globalAlpha=.18;X.strokeStyle=rgba(low,.9);X.stroke(irisWeave[0]);X.globalAlpha=.13;X.strokeStyle=rgba(col,.9);X.stroke(irisWeave[1]);X.restore();
-  X.globalCompositeOperation='screen';paintStrokes(strokes.collar,'collar','rgba(240,250,255,.78)',1.4);
+  X.globalCompositeOperation='source-over';paintStrokes(strokes.collar,'collar',rgba(col,.48),1.25);
   X.save();X.scale(r,r);X.lineWidth=.0032;X.globalAlpha=.24;X.strokeStyle='#fff';X.stroke(irisWeave[2]);X.restore();
  }else{
   paintStrokes(strokes.deep,'deep',deepInk);X.globalCompositeOperation='screen';

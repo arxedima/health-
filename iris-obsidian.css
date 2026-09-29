@@ -128,3 +128,27 @@ html:has(#app.iris-light),body:has(#app.iris-light){background:#F7F9FC!important
 #app.iris-light .week-row span{background:#F2F5F8!important;border-color:#E5EAF0!important;color:#617286!important}
 #app.iris-light .week-row span:nth-child(2),#app.iris-light .week-row span:nth-child(3),#app.iris-light .week-row span:nth-child(4){background:#E8F0FA!important;color:#315F9C!important}
 @media(prefers-reduced-motion:reduce){#app.iris-light .bottom-nav button{transition:none}}
+
+
+/* v67 Light home balance — based on device review. */
+#app.iris-light{background:#F7F9FC!important}
+#app.iris-light .stage,#app.iris-light .topbar,#app.iris-light .bottom-nav{background:#F7F9FC!important}
+#app.iris-light .topbar{border-bottom:0!important}
+#app.iris-light .sound-trigger{background:rgba(255,255,255,.72)!important;border-color:rgba(67,91,117,.10)!important;box-shadow:0 3px 14px rgba(37,58,80,.045)!important}
+#app.iris-light .metric-label{color:#40566F!important;font-weight:500}
+#app.iris-light .metric-value{color:#172433!important}
+#app.iris-light .metric-caption{color:#66788D!important;font-weight:450}
+#app.iris-light .journal-actions button,#app.iris-light .water-actions button,#app.iris-light .v24-sport button,#app.iris-light .primary-action{color:#315F9C!important;border-color:#CAD7E5!important;background:#FFFFFF!important;box-shadow:0 5px 18px rgba(42,66,91,.035)}
+#app.iris-light .journal-actions button:disabled,#app.iris-light button:disabled{opacity:.48}
+#app.iris-light .home-links .quiet-action{color:#64768A!important}
+#app.iris-light .bottom-nav{width:min(94%,420px);background:#F7F9FC!important;border-top:1px solid rgba(69,91,117,.10)!important;box-shadow:none!important}
+#app.iris-light .bottom-nav button{color:#78889B!important}
+#app.iris-light .bottom-nav button.active,#app.iris-light .bottom-nav button[aria-current="page"],#app.iris-light .bottom-nav button[aria-selected="true"]{color:#356BAE!important}
+#app.iris-light .bottom-nav button[aria-current="page"]::before{background:#6C8DB8!important;box-shadow:none!important}
+#app.iris-light #irisCanvas{filter:saturate(1.02) brightness(.99) contrast(1.075)!important}
+@media(max-width:430px){
+  #app.iris-light{--eye-r:132px}
+  #app.iris-light .mode-whisper{top:calc(var(--eye-y) - var(--eye-r) - 24px)}
+  #app.iris-light .metric{top:calc(var(--eye-y) + var(--eye-r) + 31px)}
+}
+@media(max-width:380px){#app.iris-light{--eye-r:124px}}

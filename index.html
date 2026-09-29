@@ -98,9 +98,7 @@
 </main>
 <script src="./iris-data.js?v=iris46"></script>
 <script src="./iris-motion.js?v=iris76"></script>
-<script src="./iris-field-engine.js?v=iris81"></script>
-<script src="./iris-gpu-renderer.js?v=iris83"></script>
-<script src="./iris-engine.js?v=iris83"></script>
+<script src="./iris-engine.js?v=iris75"></script>
 <script src="./iris-v11.js?v=iris46"></script>
 <script src="./iris-v24.js?v=iris60"></script>
 <script src="./iris-journal.js?v=iris56"></script>
@@ -112,7 +110,7 @@
 if('serviceWorker' in navigator){
   addEventListener('load',async()=>{
     try{
-      const registration=await navigator.serviceWorker.register('./sw.js?v=iris83',{updateViaCache:'none'});
+      const registration=await navigator.serviceWorker.register('./sw.js?v=iris84',{updateViaCache:'none'});
       await registration.update();
     }catch(e){}
   },{once:true});

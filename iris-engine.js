@@ -21,10 +21,10 @@ function tick(now){
  animationId=0;if(!visible()){lastTick=lastPaint=null;return}
  const dt=lastTick===null?16.667:clamp(now-lastTick,0,50);lastTick=now;clock+=dt;
  const active=p.down||Math.abs(mm-tmm)>.003||now<boostUntil;
- if(lastPaint===null||now-lastPaint>=(active?1000/60:1000/45)-.5){
+ if(lastPaint===null||now-lastPaint>=(active?1000/60:1000/30)-.5){
   const density=Math.min(rasterLimit,devicePixelRatio||1);
   if(density!==D){D=density;sizeCanvas()}
-  const started=performance.now();draw(clock,lastPaint===null?16.667:clamp(now-lastPaint,1,50));lastPaint=now;
+  const started=performance.now();draw(clock,lastPaint===null?16.667:clamp(now-lastPaint,1,50));lastPaint=now;tuneQuality(performance.now()-started,now);
   // Keep backing resolution constant between real viewport resizes; no adaptive DPR oscillation.
  }
  if(motion.intensity())animationId=requestAnimationFrame(tick);else lastTick=lastPaint=null;
@@ -195,13 +195,13 @@ function draw(t,dt){
  for(const v of rip){X.beginPath();X.arc(v.x,v.y,(1-v.l)*r*1.1,0,Math.PI*2);X.strokeStyle=rgba(col,v.l*.06*q.amount);X.lineWidth=.65;X.stroke();v.l*=Math.pow(.95,step)}
  X.save();X.translate(e.x,e.y);
  const isLight=A.classList.contains('iris-light');const base=X.createRadialGradient(0,0,r*.13,0,0,r);
- if(isLight){base.addColorStop(0,'#172b42');base.addColorStop(.18,'#557b9e');base.addColorStop(.34,'#9dc5e2');base.addColorStop(.51,'#6b9ec5');base.addColorStop(.68,'#b4d6ed');base.addColorStop(.83,'#8fb8d7');base.addColorStop(.94,'#c4ddec');base.addColorStop(.985,'rgba(192,219,236,.24)');base.addColorStop(1,'rgba(192,219,236,0)')}
+ if(isLight){base.addColorStop(0,rgba(low,.98));base.addColorStop(.18,rgba(low,.72));base.addColorStop(.34,rgba(col,.48));base.addColorStop(.51,rgba(low,.56));base.addColorStop(.68,rgba(col,.34));base.addColorStop(.83,rgba(col,.46));base.addColorStop(.94,rgba(col,.24));base.addColorStop(.985,rgba(col,.10));base.addColorStop(1,rgba(col,0))}
  else{base.addColorStop(0,'#000');base.addColorStop(.13,rgba(low,.85));base.addColorStop(.35,rgba(col,.29));base.addColorStop(.61,rgba(low,.61));base.addColorStop(.86,rgba(low,.22));base.addColorStop(1,rgba(low,0))}
  X.beginPath();X.arc(0,0,r,0,Math.PI*2);X.fillStyle=base;X.fill();
  X.save();X.beginPath();X.arc(0,0,r*.985,0,Math.PI*2);X.clip();
  // A shared circular fade softens every strand before it reaches the edge.
  const strandGradient=color=>{const g=X.createRadialGradient(0,0,0,0,0,r);g.addColorStop(0,rgba(color,0));g.addColorStop(.22,rgba(color,1));g.addColorStop(.70,rgba(color,1));g.addColorStop(.86,rgba(color,.72));g.addColorStop(.955,rgba(color,0));g.addColorStop(1,rgba(color,0));return g};
- const fineInk=strandGradient(isLight?[52,105,150]:col),deepInk=strandGradient(isLight?[38,81,119]:low);X.lineCap='round';X.lineJoin='round';
+ const fineInk=strandGradient(isLight?col:col),deepInk=strandGradient(isLight?low:low);X.lineCap='round';X.lineJoin='round';
  const springSteps=Math.ceil(step),springStep=step/springSteps,damping=Math.pow(.73,springStep);
  const touching=touchEnergy>.0001,touchDepth=touchEnergy*clamp(1.25-p.d/(r*1.3),0,1),echoing=q.touchEcho*q.amount>.0001;
  const lift=1+q.energy*(q.weights.food+q.weights.sleep)*.26+beat*.2;
@@ -226,7 +226,7 @@ function draw(t,dt){
  if(isLight){
   X.globalCompositeOperation='multiply';paintStrokes(strokes.deep,'deep',deepInk,1.25);
   paintStrokes(strokes.main,'main',fineInk,lift*.94);paintStrokes(strokes.branch,'branch',fineInk,lift*.86);
-  X.save();X.scale(r,r);X.lineWidth=.0024;X.globalAlpha=.15;X.strokeStyle='#4779a4';X.stroke(irisWeave[0]);X.globalAlpha=.11;X.strokeStyle='#2c5e88';X.stroke(irisWeave[1]);X.restore();
+  X.save();X.scale(r,r);X.lineWidth=.0024;X.globalAlpha=.18;X.strokeStyle=rgba(low,.9);X.stroke(irisWeave[0]);X.globalAlpha=.13;X.strokeStyle=rgba(col,.9);X.stroke(irisWeave[1]);X.restore();
   X.globalCompositeOperation='screen';paintStrokes(strokes.collar,'collar','rgba(240,250,255,.78)',1.4);
   X.save();X.scale(r,r);X.lineWidth=.0032;X.globalAlpha=.24;X.strokeStyle='#fff';X.stroke(irisWeave[2]);X.restore();
  }else{

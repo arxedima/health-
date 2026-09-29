@@ -180,7 +180,7 @@ function draw(t,dt){
  scale=lerp(scale,targetScale,ease(.06));yShift=lerp(yShift,targetShift,ease(.06));
  const idleX=p.down||menu?0:Math.sin(t*.00021)*R*.006*q.wander*q.amount;
  const idleY=p.down||menu?0:Math.sin(t*.00017+1.3)*R*.004*q.wander*q.amount;
- eyeX=lerp(eyeX,(targetX+idleX)*q.amount,ease(.08));eyeY=lerp(eyeY,(targetY+idleY)*q.amount,ease(.08));
+ eyeX=lerp(eyeX,targetX+idleX*q.amount,ease(.08));eyeY=lerp(eyeY,targetY+idleY*q.amount,ease(.08));
  mm=lerp(mm,tmm,ease(.11));pupil=lerp(pupil,0,ease(.05));transitionLight=lerp(transitionLight,0,ease(.026));
  waterLevel=lerp(waterLevel,clamp(waterMl/waterGoal,0,1),ease(.055));wave*=Math.pow(.95,step);
  const breath=q.breathing,beat=q.beat;
@@ -210,7 +210,7 @@ function draw(t,dt){
   const f=fib[i],flow=motion.fiber(f,t,q),a=f.a+flow+Math.sin(t*q.pace+f.s*18)*.003*q.amount;
   let delta=0;if(touching){delta=p.a-a;delta-=Math.round(delta/(Math.PI*2))*Math.PI*2}
   const influence=touching?touchDepth*Math.exp(-delta*delta/(isLight?.34:.12)):0;
-  const target=influence*((isLight?.28:.09)+clamp(delta,-.45,.45)*(isLight?1.35:.65))*(still?.3:1);
+  const target=influence*((isLight?.28:.09)+clamp(delta,-.45,.45)*(isLight?1.35:.65));
   if(still){f.bend=target;f.velocity=0}else if(target||Math.abs(f.bend)+Math.abs(f.velocity)>.000001){for(let j=0;j<springSteps;j++){f.velocity=(f.velocity+(target-f.bend)*.16*springStep)*damping;f.bend+=f.velocity*springStep}}else{f.bend=f.velocity=0}
   const r1=r*(f.ri-influence*(isLight?.035:.015)),r2=r*(f.ro+influence*(isLight?.075:.035)),mid=(r1+r2)*.52,ma=a+f.b*.4+f.bend;
   let echo=0;if(echoing){let da=q.touchAngle-a;da-=Math.round(da/(Math.PI*2))*Math.PI*2;echo=q.touchEcho*Math.exp(-da*da/.22)*.22*q.amount}

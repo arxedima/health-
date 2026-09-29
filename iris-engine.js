@@ -1,6 +1,6 @@
 (()=>{'use strict';
 const $=s=>document.querySelector(s),C=$('#irisCanvas'),X=C.getContext('2d',{alpha:false}),A=$('#app'),S=$('#stage'),ML=$('#metricLabel'),MV=$('#metricValue'),MC=$('#metricCaption'),MW=$('#modeWhisper'),RM=$('#radialMenu'),RI=[...document.querySelectorAll('.radial-item')],TR=$('#touchRing'),MH=$('#motionHint'),MD=$('#modeDots'),IP=$('#insightPanel'),SP=$('#settingsPanel'),ST=$('#settingsTrigger'),SO=$('#soundToggle'),SS=$('#soundSettings'),SW=$('#soundState');
-const M={home:['ГЛАВНАЯ','','КОСНИСЬ ГЛАЗА','IRIS НАБЛЮДАЕТ',[188,211,229],[73,108,135],55],sport:['СПОРТ','24:17','ТРЕНИРОВКА','ПУЛЬС · ДВИЖЕНИЕ',[214,78,65],[95,33,31],61.7],water:['ВОДА','','ДНЕВНОЙ БАЛАНС','ЖИДКОСТЬ · БАЛАНС',[80,162,224],[27,78,126],73.4],food:['ПИТАНИЕ','—','Нет записей','ЭНЕРГИЯ ИЗ ЕДЫ',[137,160,102],[54,75,43],82.4],sleep:['СОН','—','Нет записей','ВОССТАНОВЛЕНИЕ',[162,125,218],[65,43,99],49],insights:['ИТОГИ','84','ИНДЕКС ДНЯ','СВОДКА СОСТОЯНИЯ',[187,202,214],[62,80,96],65.4]},O=['home','sport','water','food','sleep'];
+const M={home:['ГЛАВНАЯ','','КОСНИСЬ ГЛАЗА','IRIS НАБЛЮДАЕТ',[116,168,214],[42,76,108],55],sport:['СПОРТ','24:17','ТРЕНИРОВКА','ПУЛЬС · ДВИЖЕНИЕ',[232,92,82],[128,45,42],61.7],water:['ВОДА','','ДНЕВНОЙ БАЛАНС','ЖИДКОСТЬ · БАЛАНС',[56,151,232],[20,82,143],73.4],food:['ПИТАНИЕ','—','Нет записей','ЭНЕРГИЯ ИЗ ЕДЫ',[72,177,108],[30,105,64],82.4],sleep:['СОН','—','Нет записей','ВОССТАНОВЛЕНИЕ',[145,103,224],[77,47,142],49],insights:['ИТОГИ','84','ИНДЕКС ДНЯ','СВОДКА СОСТОЯНИЯ',[187,202,214],[62,80,96],65.4]},O=['home','sport','water','food','sleep'];
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v)),lerp=(a,b,t)=>a+(b-a)*t,rnd=n=>{let q=Math.sin(n*12.9898+78.233)*43758.5453;return q-Math.floor(q)},rgba=(c,a=1)=>`rgba(${c[0]|0},${c[1]|0},${c[2]|0},${a})`;
 let mode='home',W=0,H=0,D=1,cx=0,cy=0,R=135,eyeX=0,eyeY=0,targetX=0,targetY=0,scale=1,targetScale=1,yShift=0,targetShift=0,fib=[],dots=[],rip=[],menu=false,sel=null,hold=0,mm=0,tmm=0,pupil=0;
 let p={id:null,down:false,sx:0,sy:0,x:0,y:0,st:0,lx:0,ly:0,lt:0,v:0,a:0,d:0};
@@ -204,13 +204,13 @@ function draw(t,dt){
  const fineInk=strandGradient(isLight?col:col),deepInk=strandGradient(isLight?low:low);X.lineCap='round';X.lineJoin='round';
  const springSteps=Math.ceil(step),springStep=step/springSteps,damping=Math.pow(.73,springStep);
  const touching=touchEnergy>.0001,touchDepth=touchEnergy*clamp(1.25-p.d/(r*1.3),0,1),echoing=q.touchEcho*q.amount>.0001;
- const lift=1+q.energy*(q.weights.food+q.weights.sleep)*.26+beat*.2;
+ const lift=(isLight?1.45:1)+q.energy*(q.weights.food+q.weights.sleep)*.26+beat*.2;
  // Calculate each spring once. Reused numeric buffers avoid thousands of temporary paths.
  for(let i=0;i<fib.length;i++){
   const f=fib[i],flow=motion.fiber(f,t,q),a=f.a+flow+Math.sin(t*q.pace+f.s*18)*.003*q.amount;
   let delta=0;if(touching){delta=p.a-a;delta-=Math.round(delta/(Math.PI*2))*Math.PI*2}
-  const influence=touching?touchDepth*Math.exp(-delta*delta/.12):0;
-  const target=influence*(.09+clamp(delta,-.35,.35)*.65)*(still?.3:1);
+  const influence=touching?touchDepth*Math.exp(-delta*delta/(isLight?.20:.12)):0;
+  const target=influence*((isLight?.16:.09)+clamp(delta,-.35,.35)*(isLight?.92:.65))*(still?.3:1);
   if(still){f.bend=target;f.velocity=0}else if(target||Math.abs(f.bend)+Math.abs(f.velocity)>.000001){for(let j=0;j<springSteps;j++){f.velocity=(f.velocity+(target-f.bend)*.16*springStep)*damping;f.bend+=f.velocity*springStep}}else{f.bend=f.velocity=0}
   const r1=r*(f.ri-influence*.015),r2=r*(f.ro+influence*.035),mid=(r1+r2)*.52,ma=a+f.b*.4+f.bend;
   let echo=0;if(echoing){let da=q.touchAngle-a;da-=Math.round(da/(Math.PI*2))*Math.PI*2;echo=q.touchEcho*Math.exp(-da*da/.22)*.22*q.amount}

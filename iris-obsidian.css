@@ -202,3 +202,28 @@ html:has(#app.iris-light),body:has(#app.iris-light){background:#F3F1EC!important
 #app.iris-light .week-row span:nth-child(2),#app.iris-light .week-row span:nth-child(3),#app.iris-light .week-row span:nth-child(4){background:#E8EBE8!important;color:#365F7E!important}
 @media(max-width:430px){#app.iris-light{--eye-r:128px}#app.iris-light .metric{top:calc(var(--eye-y) + var(--eye-r) + 34px)}}
 @media(max-width:380px){#app.iris-light{--eye-r:121px}}
+
+
+/* v69 Light minimal — implement approved direction, without generated mockup excess. */
+#app.iris-light{
+ --clean-bg:#F6FAFE;--clean-ink:#142235;--clean-muted:#71839A;--clean-line:rgba(71,104,139,.10);
+ background:radial-gradient(circle at 50% 32%,rgba(198,224,248,.28),transparent 31%),linear-gradient(155deg,#FAFCFF 0%,#F2F8FE 55%,#F8FBFF 100%)!important;
+ color:#142235;
+}
+html:has(#app.iris-light),body:has(#app.iris-light){background:#F6FAFE!important}
+#app.iris-light .stage,#app.iris-light .topbar{background:transparent!important}
+#app.iris-light .brand{color:#142235!important;font-weight:300;letter-spacing:.68em}
+#app.iris-light .metric-label{color:#61758E!important}
+#app.iris-light .metric-value{color:#142235!important}
+#app.iris-light .metric-caption{color:#71839A!important}
+#app.iris-light .bottom-nav{background:rgba(246,250,254,.82)!important;border-top:1px solid var(--clean-line)!important;box-shadow:none!important;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+#app.iris-light .bottom-nav button{color:#7D8DA2!important}
+#app.iris-light .bottom-nav button[aria-current="page"],#app.iris-light .bottom-nav button.active{color:#3978C5!important}
+#app.iris-light .bottom-nav button[aria-current="page"]::before{background:#3978C5!important;width:28px!important;height:2px!important}
+#app.iris-light .home-links{border:0!important;padding-top:4px!important}
+#app.iris-light .home-links .quiet-action{color:#60758E!important}
+#app.iris-light .journal-actions button,#app.iris-light .water-actions button,#app.iris-light .v24-sport button,#app.iris-light .primary-action{background:rgba(255,255,255,.55)!important;border-color:rgba(71,104,139,.12)!important;color:#356DAE!important;box-shadow:none!important}
+#app.iris-light #irisCanvas{filter:saturate(.98) brightness(1.005) contrast(1.09)!important}
+#app.iris-light.mode-food .journal-actions{display:none!important}
+#app.iris-light.mode-food .home-links{margin-top:10px!important}
+@media(max-width:430px){#app.iris-light{--eye-r:128px}}

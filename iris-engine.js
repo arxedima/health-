@@ -207,17 +207,19 @@ function draw(t,dt){
  const lift=(isLight?1.45:1)+q.energy*(q.weights.food+q.weights.sleep)*.26+beat*.2;
  // Calculate each spring once. Reused numeric buffers avoid thousands of temporary paths.
  for(let i=0;i<fib.length;i++){
-  const f=fib[i],flow=motion.fiber(f,t,q)*(isLight?2.8:1),a=f.a+flow+Math.sin(t*q.pace+f.s*18)*.003*q.amount*(isLight?2.2:1);
+  const f=fib[i],flow=motion.fiber(f,t,q),a=f.a+flow+Math.sin(t*q.pace+f.s*18)*.003*q.amount;
   let delta=0;if(touching){delta=p.a-a;delta-=Math.round(delta/(Math.PI*2))*Math.PI*2}
-  const influence=touching?touchDepth*Math.exp(-delta*delta/(isLight?.34:.12)):0;
-  const dragTurn=p.down&&isLight?p.drag:0;
-  const target=influence*(clamp(delta,-.55,.55)*(isLight?2.15:.65)+dragTurn);
+  const influence=touching?touchDepth*Math.exp(-delta*delta/.12):0;
+  const dragTurn=p.down?p.drag:0;
+  const target=influence*(clamp(delta,-.55,.55)*.65+dragTurn);
   if(still){f.bend=target;f.velocity=0}else if(target||Math.abs(f.bend)+Math.abs(f.velocity)>.000001){for(let j=0;j<springSteps;j++){f.velocity=(f.velocity+(target-f.bend)*.16*springStep)*damping;f.bend+=f.velocity*springStep}}else{f.bend=f.velocity=0}
-  const radialPull=isLight&&p.down?clamp((p.d/r)-.58,-.22,.22)*influence*.16:0;
+  const radialPull=0;
   const r1=r*(f.ri-influence*(isLight?.018:.015)),r2=r*(f.ro+influence*(isLight?.025:.035)+radialPull),mid=(r1+r2)*.52,ma=a+f.b*.4+f.bend;
   let echo=0;if(echoing){let da=q.touchAngle-a;da-=Math.round(da/(Math.PI*2))*Math.PI*2;echo=q.touchEcho*Math.exp(-da*da/.22)*.22*q.amount}
   f.glow=influence*(isLight?1.8:.95)+echo;f.influence=influence;
   const v=f.main,cm=Math.cos(ma),sm=Math.sin(ma);v[0]=Math.cos(a)*r1;v[1]=Math.sin(a)*r1;v[2]=cm*mid;v[3]=sm*mid;v[4]=Math.cos(a+f.b+f.bend*.65)*r2;v[5]=Math.sin(a+f.b+f.bend*.65)*r2;
+  // In light mode move the actual strand geometry, not a highlight painted over it.
+  if(isLight&&p.down&&influence>.002){const push=r*influence*.075,tx=-Math.sin(p.a),ty=Math.cos(p.a);v[2]+=tx*push;v[3]+=ty*push;v[4]+=tx*push*.72;v[5]+=ty*push*.72}
   if(f.s>.48){
    const v=f.branch,split=r*(.47+f.s*.15),end=r2*(.88+f.s*.1),turn=ma+f.b*.45;
    v[0]=cm*split;v[1]=sm*split;v[2]=Math.cos(turn)*r*.73;v[3]=Math.sin(turn)*r*.73;v[4]=Math.cos(a+f.b*1.2+f.bend*.7)*end;v[5]=Math.sin(a+f.b*1.2+f.bend*.7)*end;

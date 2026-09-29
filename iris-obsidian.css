@@ -152,3 +152,53 @@ html:has(#app.iris-light),body:has(#app.iris-light){background:#F7F9FC!important
   #app.iris-light .metric{top:calc(var(--eye-y) + var(--eye-r) + 31px)}
 }
 @media(max-width:380px){#app.iris-light{--eye-r:124px}}
+
+
+/* v68 IRIS Pearl — independent light identity: editorial, airy, clinical-premium. */
+#app.iris-light{
+ --pearl:#F3F1EC;--pearl-hi:#FBFAF7;--pearl-ink:#18232C;--pearl-muted:#75818A;--pearl-line:rgba(45,62,74,.10);--pearl-blue:#537FA2;
+ --light-bg:#F3F1EC;--light-surface:#FBFAF7;--light-soft:#EEECE6;--light-line:rgba(45,62,74,.10);--light-ink:#18232C;--light-muted:#75818A;--light-accent:#537FA2;
+ --editorial-bg:#F3F1EC;--editorial-ink:#18232C;--editorial-muted:#75818A;--text:#18232C;--muted:#75818A;
+ background:#F3F1EC!important;color:#18232C;
+}
+html:has(#app.iris-light),body:has(#app.iris-light){background:#F3F1EC!important}
+#app.iris-light .stage,#app.iris-light .topbar,#app.iris-light .journal-view,#app.iris-light .statistics-view,#app.iris-light .plans-view,#app.iris-light .bottom-nav{background:#F3F1EC!important;background-image:none!important}
+#app.iris-light .topbar{height:82px}
+#app.iris-light .brand{font-weight:300;letter-spacing:.72em;color:#18232C!important}
+#app.iris-light .sound-trigger{background:transparent!important;border:1px solid rgba(45,62,74,.10)!important;box-shadow:none!important}
+#app.iris-light .sound-dot{background:#7894A8!important;box-shadow:none!important}
+#app.iris-light .settings-trigger{color:#75818A!important}
+#app.iris-light #irisCanvas{filter:saturate(.9) brightness(1.015) contrast(1.055)!important}
+#app.iris-light .metric-label{color:#526A7C!important;font-size:10px;letter-spacing:.38em;font-weight:550}
+#app.iris-light .metric-value{color:#18232C!important;font-weight:260;letter-spacing:-.055em;text-shadow:none!important}
+#app.iris-light .metric-caption{color:#75818A!important;font-weight:450;letter-spacing:.025em}
+#app.iris-light .mode-whisper{color:#84909A!important}
+#app.iris-light .home-links{border-top:1px solid var(--pearl-line);padding-top:8px}
+#app.iris-light .home-links .quiet-action{color:#65737E!important;font-weight:500}
+#app.iris-light .journal-actions button,#app.iris-light .water-actions button,#app.iris-light .v24-sport button,#app.iris-light .primary-action{background:transparent!important;border:1px solid rgba(45,62,74,.14)!important;color:#365F7E!important;box-shadow:none!important}
+#app.iris-light .journal-view,#app.iris-light .statistics-view,#app.iris-light .plans-view{color:#18232C!important}
+#app.iris-light .journal-heading h1,#app.iris-light .stats-heading h1,#app.iris-light .plans-overview-label{color:#18232C!important;font-weight:300}
+#app.iris-light .eyebrow,#app.iris-light .journal-heading>p:last-child,#app.iris-light .stats-heading p{color:#75818A!important}
+#app.iris-light .journal-date input,#app.iris-light .quick-grid button,#app.iris-light .comparison-card,#app.iris-light .period-tabs,#app.iris-light .plans-quick,#app.iris-light .plans-empty-state,#app.iris-light .plans-shortcuts button{background:rgba(251,250,247,.68)!important;background-image:none!important;border:1px solid var(--pearl-line)!important;color:#18232C!important;box-shadow:none!important}
+#app.iris-light .journal-filters button,#app.iris-light .plans-filters button{background:transparent!important;border-color:rgba(45,62,74,.12)!important;color:#75818A!important}
+#app.iris-light .journal-filters button[aria-pressed="true"],#app.iris-light .plans-filters button.active,#app.iris-light .period-tabs button[aria-pressed="true"]{background:#E7E9E7!important;border-color:rgba(83,127,162,.28)!important;color:#365F7E!important;box-shadow:none!important}
+#app.iris-light .plans-overview strong,#app.iris-light .plans-group-today h2{color:#537FA2!important}
+#app.iris-light .plans-group h2{color:#697984!important}
+#app.iris-light .plans-row-title{color:#26343D!important}
+#app.iris-light .plans-row-title small,#app.iris-light .plans-empty,#app.iris-light .plans-overview p{color:#7A858D!important}
+#app.iris-light .plans-row,#app.iris-light .plans-group,#app.iris-light .plans-top{border-color:var(--pearl-line)!important}
+#app.iris-light .plans-check{border-color:#8197A7!important}
+#app.iris-light .plans-fab,#app.iris-light .plans-save{background:#365F7E!important;background-image:none!important;color:#FBFAF7!important;box-shadow:0 8px 24px rgba(39,65,84,.12)!important}
+#app.iris-light .plans-menu,#app.iris-light .plans-dialog,#app.iris-light .settings-sheet,#app.iris-light .iris-dialog{background:#FBFAF7!important;background-image:none!important;color:#18232C!important;border-color:var(--pearl-line)!important;box-shadow:0 24px 70px rgba(37,49,57,.10)!important}
+#app.iris-light .settings-list button{color:#26343D!important;border-color:var(--pearl-line)!important}
+#app.iris-light .settings-note,#app.iris-light .settings-signature{color:#7A858D!important}
+#app.iris-light .iris-dialog textarea,#app.iris-light .iris-dialog input:not([type="range"]):not([type="checkbox"]):not([type="radio"]):not([type="file"]),#app.iris-light .iris-dialog select,#app.iris-light .plans-dialog input,#app.iris-light .plans-dialog textarea,#app.iris-light .plans-dialog select{background:#F1F0EC!important;color:#18232C!important;border-color:rgba(45,62,74,.12)!important}
+#app.iris-light .bottom-nav{background:#F3F1EC!important;border-top:1px solid var(--pearl-line)!important;box-shadow:none!important;width:min(94%,420px)}
+#app.iris-light .bottom-nav button{color:#7E8991!important;opacity:1!important}
+#app.iris-light .bottom-nav button.active,#app.iris-light .bottom-nav button[aria-current="page"],#app.iris-light .bottom-nav button[aria-selected="true"]{color:#365F7E!important}
+#app.iris-light .bottom-nav button[aria-current="page"]::before{background:#708C72!important;box-shadow:none!important;width:30px!important;height:1px!important}
+#app.iris-light .insight-panel{background:rgba(251,250,247,.90)!important;border-color:var(--pearl-line)!important;color:#18232C!important;box-shadow:0 20px 60px rgba(37,49,57,.07)!important}
+#app.iris-light .week-row span{background:transparent!important;border-color:var(--pearl-line)!important;color:#75818A!important}
+#app.iris-light .week-row span:nth-child(2),#app.iris-light .week-row span:nth-child(3),#app.iris-light .week-row span:nth-child(4){background:#E8EBE8!important;color:#365F7E!important}
+@media(max-width:430px){#app.iris-light{--eye-r:128px}#app.iris-light .metric{top:calc(var(--eye-y) + var(--eye-r) + 34px)}}
+@media(max-width:380px){#app.iris-light{--eye-r:121px}}

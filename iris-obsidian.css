@@ -51,3 +51,37 @@ html:has(#app:not(.iris-light)),body:has(#app:not(.iris-light)){background:#090A
 #app:not(.iris-light) .bottom-nav{box-shadow:none!important;border-top:1px solid #20252B}
 #app:not(.iris-light) .ambient,
 #app:not(.iris-light) .noise{display:none!important}
+
+
+/* v65 Polish Update — one visual rhythm across dark IRIS. */
+#app:not(.iris-light){--polish-surface:#111419;--polish-raised:#15191F;--polish-line:#242A31;--polish-muted:#929BA8;--polish-accent:#8CAEF0}
+#app:not(.iris-light) .brand{color:#F5F7FA;text-shadow:none}
+#app:not(.iris-light) .metric-label{color:#B8C0CA}
+#app:not(.iris-light) .metric-caption,#app:not(.iris-light) .mode-whisper{color:#929BA8}
+#app:not(.iris-light) .settings-trigger,#app:not(.iris-light) .sound-trigger{color:#929BA8}
+#app:not(.iris-light) .journal-view,#app:not(.iris-light) .statistics-view{padding-left:22px;padding-right:22px}
+#app:not(.iris-light) .journal-heading h1,#app:not(.iris-light) .stats-heading h1{color:#F5F7FA;font-weight:300;letter-spacing:-.04em}
+#app:not(.iris-light) .eyebrow,#app:not(.iris-light) .journal-heading>p:last-child,#app:not(.iris-light) .stats-heading p{color:#929BA8}
+#app:not(.iris-light) .journal-date input{background:#111419;color:#F5F7FA;border:1px solid #242A31}
+#app:not(.iris-light) .journal-filters button{background:#090A0C;border-color:#242A31;color:#929BA8}
+#app:not(.iris-light) .journal-filters button[aria-pressed="true"]{background:#15191F;border-color:#46576D;color:#DCE8F8}
+#app:not(.iris-light) .quick-grid button,#app:not(.iris-light) .comparison-card,#app:not(.iris-light) .period-tabs{background:#111419;background-image:none;border-color:#242A31}
+#app:not(.iris-light) .period-tabs button[aria-pressed="true"]{background:#15191F;border-color:#3B4652}
+#app:not(.iris-light) .iris-dialog{background:#15191F;background-image:none;border-color:#2B323B;color:#F5F7FA}
+#app:not(.iris-light) .iris-dialog textarea,#app:not(.iris-light) .iris-dialog input:not([type="range"]):not([type="checkbox"]):not([type="radio"]):not([type="file"]),#app:not(.iris-light) .iris-dialog select{background:#0F1216;border-color:#303741;color:#F5F7FA}
+#app:not(.iris-light) .settings-list button{border-color:#292F36;color:#E8EBEF}
+#app:not(.iris-light) .settings-note,#app:not(.iris-light) .settings-signature{color:#929BA8}
+#app:not(.iris-light) .plans-overview-label{color:#F5F7FA}
+#app:not(.iris-light) .plans-quick,#app:not(.iris-light) .plans-empty-state,#app:not(.iris-light) .plans-shortcuts button{border-color:#242A31}
+#app:not(.iris-light) .plans-filters button{border-color:#242A31}
+#app:not(.iris-light) .plans-filters button.active{border-color:#607BA7}
+#app:not(.iris-light) .plans-row-title{color:#E8EBEF}
+#app:not(.iris-light) .plans-group h2{color:#AAB5C2}
+#app:not(.iris-light) .plans-check{border-color:#708DBB}
+#app:not(.iris-light) .bottom-nav{background:#090A0C!important;border-top:1px solid rgba(146,155,168,.12)!important;padding-top:6px}
+#app:not(.iris-light) .bottom-nav button{color:#7F8995;transition:color .18s ease,transform .18s ease}
+#app:not(.iris-light) .bottom-nav button.active,#app:not(.iris-light) .bottom-nav button[aria-current="page"],#app:not(.iris-light) .bottom-nav button[aria-selected="true"]{color:#DCE8F8}
+#app:not(.iris-light) .bottom-nav button:active{transform:scale(.96)}
+#app:not(.iris-light) .journal-view,#app:not(.iris-light) .statistics-view,#app:not(.iris-light) .plans-view{scroll-behavior:smooth}
+@media(max-width:360px){#app:not(.iris-light) .journal-view,#app:not(.iris-light) .statistics-view,#app:not(.iris-light) .plans-view{padding-left:17px;padding-right:17px}}
+@media(prefers-reduced-motion:reduce){#app:not(.iris-light) .bottom-nav button{transition:none}#app:not(.iris-light) .journal-view,#app:not(.iris-light) .statistics-view,#app:not(.iris-light) .plans-view{scroll-behavior:auto}}

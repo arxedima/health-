@@ -22,7 +22,7 @@
   <link rel="stylesheet" href="./polish-v47.css?v=iris48">
   <link rel="stylesheet" href="./iris-plans.css?v=iris56">
   <link rel="stylesheet" href="./iris-editorial.css?v=iris61">
-  <link rel="stylesheet" href="./iris-obsidian.css?v=iris73">
+  <link rel="stylesheet" href="./iris-obsidian.css?v=iris74">
 </head>
 <body>
 <main id="app" class="app mode-home">
@@ -55,10 +55,10 @@
 
     <div id="radialMenu" class="radial-menu" role="group" aria-label="Разделы" aria-hidden="true">
       <div class="menu-orbit" aria-hidden="true"></div>
-      <button class="radial-item radial-top" data-mode="sport" type="button"><span>СПОРТ</span></button>
-      <button class="radial-item radial-right" data-mode="food" type="button"><span>ПИТАНИЕ</span></button>
-      <button class="radial-item radial-bottom" data-mode="sleep" type="button"><span>СОН</span></button>
-      <button class="radial-item radial-left" data-mode="water" type="button"><span>ВОДА</span></button>
+      <button class="radial-item radial-top" data-mode="sport" type="button"><b class="mode-icon">↗</b><span>СПОРТ</span></button>
+      <button class="radial-item radial-right" data-mode="food" type="button"><b class="mode-icon">⌁</b><span>ПИТАНИЕ</span></button>
+      <button class="radial-item radial-bottom" data-mode="sleep" type="button"><b class="mode-icon">☾</b><span>СОН</span></button>
+      <button class="radial-item radial-left" data-mode="water" type="button"><b class="mode-icon">◉</b><span>ВОДА</span></button>
       <div class="radial-core" aria-hidden="true"></div>
     </div>
 
@@ -98,7 +98,7 @@
 </main>
 <script src="./iris-data.js?v=iris46"></script>
 <script src="./iris-motion.js?v=iris61"></script>
-<script src="./iris-engine.js?v=iris73"></script>
+<script src="./iris-engine.js?v=iris74"></script>
 <script src="./iris-v11.js?v=iris46"></script>
 <script src="./iris-v24.js?v=iris60"></script>
 <script src="./iris-journal.js?v=iris56"></script>
@@ -110,7 +110,7 @@
 if('serviceWorker' in navigator){
   addEventListener('load',async()=>{
     try{
-      const registration=await navigator.serviceWorker.register('./sw.js?v=iris73',{updateViaCache:'none'});
+      const registration=await navigator.serviceWorker.register('./sw.js?v=iris74',{updateViaCache:'none'});
       await registration.update();
     }catch(e){}
   },{once:true});

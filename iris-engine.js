@@ -228,11 +228,12 @@ function draw(t,dt){
   if(i%3===0){const v=f.collar,ri=r*(.222+f.s*.015),ro=r*(.29+f.s*.09),aa=f.a+f.b*.3+f.bend*.2,ca=Math.cos(aa),sa=Math.sin(aa);v[0]=Math.cos(f.a)*ri;v[1]=Math.sin(f.a)*ri;v[2]=ca*r*.26;v[3]=sa*r*.26;v[4]=ca*ro;v[5]=sa*ro}
  }
  if(isLight){
-  X.globalCompositeOperation='source-over';paintStrokes(strokes.deep,'deep',deepInk,1.55);
-  paintStrokes(strokes.main,'main',fineInk,lift*1.18);paintStrokes(strokes.branch,'branch',fineInk,lift*1.05);
-  X.save();X.scale(r,r);X.lineWidth=.0024;X.globalAlpha=.18;X.strokeStyle=rgba(low,.9);X.stroke(irisWeave[0]);X.globalAlpha=.13;X.strokeStyle=rgba(col,.9);X.stroke(irisWeave[1]);X.restore();
-  X.globalCompositeOperation='source-over';paintStrokes(strokes.collar,'collar',rgba(col,.48),1.25);
-  X.save();X.scale(r,r);X.lineWidth=.0032;X.globalAlpha=.24;X.strokeStyle='#fff';X.stroke(irisWeave[2]);X.restore();
+  // Keep the cached weave as background texture. The live fibers must remain the visible top layer.
+  X.globalCompositeOperation='source-over';
+  X.save();X.scale(r,r);X.lineWidth=.0022;X.globalAlpha=.055;X.strokeStyle=rgba(low,.72);X.stroke(irisWeave[0]);X.globalAlpha=.04;X.strokeStyle=rgba(col,.72);X.stroke(irisWeave[1]);X.globalAlpha=.055;X.strokeStyle='#fff';X.stroke(irisWeave[2]);X.restore();
+  paintStrokes(strokes.deep,'deep',deepInk,1.72);
+  paintStrokes(strokes.main,'main',fineInk,lift*1.62);paintStrokes(strokes.branch,'branch',fineInk,lift*1.38);
+  paintStrokes(strokes.collar,'collar',rgba(col,.56),1.32);
  }else{
   paintStrokes(strokes.deep,'deep',deepInk);X.globalCompositeOperation='screen';
   paintStrokes(strokes.main,'main',fineInk,lift);paintStrokes(strokes.branch,'branch',fineInk,lift);
